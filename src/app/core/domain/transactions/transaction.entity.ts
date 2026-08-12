@@ -4,6 +4,10 @@ export type TransactionStatus = "pending" | "posted" | "voided";
 
 export type RecurringFrequency = "daily" | "weekly" | "monthly" | "yearly";
 
+export type PaymentMethod = "pix" | "cash" | "card";
+
+export type CardType = "credit" | "debit";
+
 export type Transaction = {
   id: string;
   user_id: string;
@@ -18,6 +22,8 @@ export type Transaction = {
   recurring_transaction_id: string | null;
   created_at: string;
   updated_at: string;
+  payment_method: PaymentMethod;
+  card_type: CardType | null;
 };
 
 export type RecurringTransaction = {
@@ -36,6 +42,8 @@ export type RecurringTransaction = {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  payment_method: PaymentMethod;
+  card_type: CardType | null;
 };
 
 export type Category = {

@@ -1,7 +1,17 @@
-import { RecurringFrequency } from "@/app/core/domain/transactions/transaction.entity";
+import {
+  PaymentMethod,
+  RecurringFrequency,
+} from "@/app/core/domain/transactions/transaction.entity";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { isValid, parse } from "date-fns";
-import { BanknoteArrowDown, BanknoteArrowUp, Repeat2 } from "lucide-react";
+import {
+  BanknoteArrowDown,
+  BanknoteArrowUp,
+  PlusIcon,
+  Repeat2,
+} from "lucide-react";
+import Image from "next/image";
 import { getDashboardData } from "./actions";
 
 function formatDate(dateStr: string) {
@@ -43,8 +53,20 @@ export default async function DashboardPage({
     yearly: "Anual",
   };
 
+  const paymentTypeIcons: Record<PaymentMethod, { src: string; alt: string }> =
+    {
+      pix: { src: "images/icons/pix.svg", alt: "PIX" },
+      card: { src: "images/icons/credit-card.svg", alt: "Cartão de crédito" },
+      cash: { src: "images/icons/money.svg", alt: "Dinheiro" },
+    };
+
   return (
-    <div className="mx-auto grid max-w-7xl">
+    <div className="mx-auto max-w-7xl">
+      <section className="mb-6 flex items-center justify-end">
+        <Button variant="secondary">
+          <PlusIcon /> Novo item
+        </Button>
+      </section>
       <section>
         <ul className="divide-y divide-border rounded-2xl border border-border bg-background">
           {recurringTransactions.map((transaction) => (
@@ -53,7 +75,7 @@ export default async function DashboardPage({
               className="flex items-center justify-between gap-3 p-3"
             >
               <div className="flex min-w-0 items-center gap-4">
-                <span className="dark:text-emerald-40 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-purple-600 dark:bg-purple-900/30">
+                <span className="dark:text-emerald-40 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30">
                   <Repeat2 className="h-5 w-5" />
                 </span>
                 <div className="min-w-0 flex-1">
@@ -66,10 +88,10 @@ export default async function DashboardPage({
                 </div>
               </div>
 
-              <div className="grid w-60 shrink-0 grid-cols-2 items-center gap-2">
+              <div className="grid w-45 shrink-0 grid-cols-2 items-center gap-2 md:w-60">
                 {transaction.category ? (
                   <Badge
-                    className="w-fit max-w-full justify-self-end truncate"
+                    className="line-clamp-1 w-fit max-w-full justify-self-end truncate"
                     variant="secondary"
                     style={{ ...transaction.category?.style }}
                   >
@@ -78,10 +100,23 @@ export default async function DashboardPage({
                 ) : (
                   <div />
                 )}
+                <div className="flex flex-col items-end gap-1">
+                  <span className="text-right text-sm font-medium">
+                    {formatCurrency(transaction.amount)}
+                  </span>
 
-                <span className="text-right text-sm font-medium">
-                  {formatCurrency(transaction.amount)}
-                </span>
+                  <div className="flex items-center justify-end gap-1.5">
+                    <Image
+                      src={paymentTypeIcons[transaction.payment_method].src}
+                      alt={paymentTypeIcons[transaction.payment_method].alt}
+                      width={16}
+                      height={16}
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      {paymentTypeIcons[transaction.payment_method].alt}
+                    </span>
+                  </div>
+                </div>
               </div>
             </li>
           ))}
@@ -120,10 +155,10 @@ export default async function DashboardPage({
                   </div>
                 </div>
 
-                <div className="grid w-60 shrink-0 grid-cols-2 items-center gap-2">
+                <div className="grid w-45 shrink-0 grid-cols-2 items-center gap-2 md:w-60">
                   {transaction.category ? (
                     <Badge
-                      className="w-fit max-w-full justify-self-end truncate"
+                      className="line-clamp-1 w-fit max-w-full justify-self-end truncate"
                       variant="secondary"
                       style={{ ...transaction.category?.style }}
                     >
@@ -133,9 +168,23 @@ export default async function DashboardPage({
                     <div />
                   )}
 
-                  <span className="text-right text-sm font-medium">
-                    {formatCurrency(transaction.amount)}
-                  </span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="text-right text-sm font-medium">
+                      {formatCurrency(transaction.amount)}
+                    </span>
+
+                    <div className="flex items-center justify-end gap-1.5">
+                      <Image
+                        src={paymentTypeIcons[transaction.payment_method].src}
+                        alt={paymentTypeIcons[transaction.payment_method].alt}
+                        width={16}
+                        height={16}
+                      />
+                      <span className="text-xs text-muted-foreground">
+                        {paymentTypeIcons[transaction.payment_method].alt}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </li>
             );
