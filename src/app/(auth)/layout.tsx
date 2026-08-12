@@ -1,7 +1,7 @@
 import { ToggleThemeButton } from "@/components/action-buttons"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { HeaderMenu } from "@/components/layout/header-menu"
+import { Logo } from "@/components/logo"
 import { createClient } from "@/lib/supabase/server"
-import { CircleDollarSign } from "lucide-react"
 import { redirect } from "next/navigation"
 import { ReactNode } from "react"
 
@@ -24,28 +24,15 @@ export default async function DashboardRootLayout({ children }: LayoutProps) {
   const name = (metadata.full_name ?? metadata.name ?? "Usuário") as string
   const email = (claims.email ?? "") as string
   const avatarUrl = metadata.avatar_url as string | undefined
-  const initials = name.charAt(0).toUpperCase()
 
   return (
     <div className="min-h-screen bg-neutral-100 dark:bg-neutral-950">
       <header className="flex flex-row items-center justify-between border-b border-border bg-neutral-50 p-4 dark:bg-neutral-950">
-        <span className="flex items-center gap-1 font-bold">
-          <CircleDollarSign className="size-6 text-primary" />
-          Órbita
-        </span>
+        <Logo />
 
         <div className="flex items-center gap-4">
           <ToggleThemeButton />
-          <div className="flex items-center gap-2">
-            <Avatar>
-              {avatarUrl ? <AvatarImage src={avatarUrl} /> : null}
-              <AvatarFallback>{initials}</AvatarFallback>
-            </Avatar>
-            <div className="text-xs">
-              <p className="font-bold text-foreground">{name}</p>
-              <p className="text-muted-foreground">{email}</p>
-            </div>
-          </div>
+          <HeaderMenu name={name} email={email} avatarUrl={avatarUrl} />
         </div>
       </header>
       <main>{children}</main>
