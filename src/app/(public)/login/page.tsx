@@ -1,7 +1,7 @@
 import { CircleDollarSign } from "lucide-react"
 import Image from "next/image"
 
-import { GoogleSignInButton } from "@/components/google-sign-in-button"
+import { GoogleSignInButton } from "@/components/action-buttons/google-sign-in-button"
 
 export default async function LOginPage() {
   return (
