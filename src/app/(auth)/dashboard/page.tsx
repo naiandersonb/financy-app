@@ -1,5 +1,7 @@
+import { RecurringFrequency } from "@/app/core/domain/transactions/transaction.entity";
+import { Badge } from "@/components/ui/badge";
 import { isValid, parse } from "date-fns";
-import { BanknoteArrowDown, BanknoteArrowUp } from "lucide-react";
+import { BanknoteArrowDown, BanknoteArrowUp, Repeat2 } from "lucide-react";
 import { getDashboardData } from "./actions";
 
 function formatDate(dateStr: string) {
@@ -34,41 +36,64 @@ export default async function DashboardPage({
     }).format(value);
   }
 
+  const frequencyLabels: Record<RecurringFrequency, string> = {
+    daily: "Diário",
+    monthly: "Mensal",
+    weekly: "Semanal",
+    yearly: "Anual",
+  };
+
   return (
-    <div className="grid gap-6 p-6">
+    <div className="mx-auto grid max-w-7xl">
       <section>
-        <h2 className="mb-3 text-lg font-semibold">
-          Transações recorrentes ({recurringTransactions.length})
-        </h2>
         <ul className="divide-y divide-border rounded-2xl border border-border bg-background">
           {recurringTransactions.map((transaction) => (
             <li
               key={transaction.id}
-              className="flex items-center justify-between p-3"
+              className="flex items-center justify-between gap-3 p-3"
             >
-              <span>{transaction.title}</span>
-              <span className="text-sm text-muted-foreground">
-                {transaction.frequency}
-              </span>
+              <div className="flex min-w-0 items-center gap-4">
+                <span className="dark:text-emerald-40 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-purple-600 dark:bg-purple-900/30">
+                  <Repeat2 className="h-5 w-5" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold">
+                    {transaction.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {frequencyLabels[transaction.frequency]}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid w-60 shrink-0 grid-cols-2 items-center gap-2">
+                {transaction.category ? (
+                  <Badge
+                    className="w-fit max-w-full justify-self-end truncate"
+                    variant="secondary"
+                    style={{ ...transaction.category?.style }}
+                  >
+                    {transaction.category.name}
+                  </Badge>
+                ) : (
+                  <div />
+                )}
+
+                <span className="text-right text-sm font-medium">
+                  {formatCurrency(transaction.amount)}
+                </span>
+              </div>
             </li>
           ))}
-        </ul>
-      </section>
-
-      <section>
-        {/* <h2 className="mb-3 text-lg font-semibold">
-          Transações ({transactions.length})
-        </h2> */}
-        <ul className="divide-y divide-border rounded-2xl border border-border bg-background">
           {transactions.map((transaction) => {
             const isExpense = transaction.type === "expense";
-            console.log({ transaction });
+
             return (
               <li
                 key={transaction.id}
-                className="flex items-center justify-between p-3"
+                className="flex items-center justify-between gap-3 p-3"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex min-w-0 items-center gap-4">
                   <span
                     className={`flex h-10 w-10 items-center justify-center rounded-lg ${
                       isExpense
@@ -83,17 +108,35 @@ export default async function DashboardPage({
                     )}
                   </span>
 
-                  <div>
-                    <p className="text-sm font-semibold">{transaction.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDate(transaction.transaction_date)}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold">
+                      {transaction.title}
                     </p>
+                    <div className="flex items-center gap-1">
+                      <p className="text-xs text-muted-foreground">
+                        {formatDate(transaction.transaction_date)}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                <span className="text-sm">
-                  {formatCurrency(transaction.amount)}
-                </span>
+                <div className="grid w-60 shrink-0 grid-cols-2 items-center gap-2">
+                  {transaction.category ? (
+                    <Badge
+                      className="w-fit max-w-full justify-self-end truncate"
+                      variant="secondary"
+                      style={{ ...transaction.category?.style }}
+                    >
+                      {transaction.category.name}
+                    </Badge>
+                  ) : (
+                    <div />
+                  )}
+
+                  <span className="text-right text-sm font-medium">
+                    {formatCurrency(transaction.amount)}
+                  </span>
+                </div>
               </li>
             );
           })}
