@@ -2,15 +2,10 @@ import {
   PaymentMethod,
   RecurringFrequency,
 } from "@/app/core/domain/transactions/transaction.entity";
+import { TransactionFormDialog } from "@/components/transactions/transaction-form-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { isValid, parse } from "date-fns";
-import {
-  BanknoteArrowDown,
-  BanknoteArrowUp,
-  PlusIcon,
-  Repeat2,
-} from "lucide-react";
+import { BanknoteArrowDown, BanknoteArrowUp, Repeat2 } from "lucide-react";
 import Image from "next/image";
 import { getDashboardData } from "./actions";
 
@@ -32,7 +27,7 @@ export default async function DashboardPage({
 
   const month = isValid(parsedMonth) ? parsedMonth : new Date();
 
-  const { transactions, recurringTransactions, error } =
+  const { transactions, recurringTransactions, categories, error } =
     await getDashboardData(month);
 
   if (error) {
@@ -63,9 +58,7 @@ export default async function DashboardPage({
   return (
     <div className="mx-auto max-w-7xl">
       <section className="mb-6 flex items-center justify-end">
-        <Button variant="secondary">
-          <PlusIcon /> Novo item
-        </Button>
+        <TransactionFormDialog categories={categories} />
       </section>
       <section>
         <ul className="divide-y divide-border rounded-2xl border border-border bg-background">
