@@ -14,7 +14,7 @@ export const HeaderMenu = ({ email, name, avatarUrl }: HeaderMenuProps) => {
         {avatarUrl ? <AvatarImage src={avatarUrl} /> : null}
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
-      <div className="text-xs">
+      <div className="hidden text-xs md:block">
         <p className="font-bold text-foreground">{name}</p>
         <p className="text-muted-foreground">{email}</p>
       </div>
