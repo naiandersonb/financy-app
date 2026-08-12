@@ -3,6 +3,7 @@
 import { endOfMonth, format, startOfMonth } from "date-fns"
 import { redirect } from "next/navigation"
 
+import { Transaction } from "@/app/core/domain/transactions/transaction.entity"
 import { createClient } from "@/lib/supabase/server"
 
 export async function getDashboardData(month: Date) {
@@ -35,8 +36,11 @@ export async function getDashboardData(month: Date) {
 
   return {
     month: format(start, "yyyy-MM"),
-    transactions: transactionsResult.data ?? [],
+    transactions: (transactionsResult.data ?? []) as Transaction[],
     recurringTransactions: recurringResult.data ?? [],
-    error: transactionsResult.error?.message ?? recurringResult.error?.message ?? null,
+    error:
+      transactionsResult.error?.message ??
+      recurringResult.error?.message ??
+      null,
   }
 }

@@ -8,7 +8,7 @@ export type Transaction = {
   id: string
   user_id: string
   title: string
-  amount: string
+  amount: number
   transaction_date: string
   category_id: string
   type: TransactionType
@@ -24,7 +24,7 @@ export type RecurringTransaction = {
   id: string
   user_id: string
   title: string
-  amount: string
+  amount: number
   category_id: string
   type: TransactionType
   frequency: RecurringFrequency
@@ -38,23 +38,45 @@ export type RecurringTransaction = {
   updated_at: string
 }
 
-export interface Database {
-  public: {
-    Tables: {
-      transactions: {
-        Row: Transaction
-        Insert: Partial<Transaction> & Pick<Transaction, "user_id" | "title" | "amount" | "transaction_date" | "category_id" | "type" | "status" | "currency">
-        Update: Partial<Transaction>
-        Relationships: []
-      }
-      recurring_transactions: {
-        Row: RecurringTransaction
-        Insert: Partial<RecurringTransaction> & Pick<RecurringTransaction, "user_id" | "title" | "amount" | "category_id" | "type" | "frequency" | "interval_count" | "is_active">
-        Update: Partial<RecurringTransaction>
-        Relationships: []
-      }
-    }
-    Views: Record<string, never>
-    Functions: Record<string, never>
-  }
-}
+// export interface Database {
+//   public: {
+//     Tables: {
+//       transactions: {
+//         Row: Transaction
+//         Insert: Partial<Transaction> &
+//           Pick<
+//             Transaction,
+//             | "user_id"
+//             | "title"
+//             | "amount"
+//             | "transaction_date"
+//             | "category_id"
+//             | "type"
+//             | "status"
+//             | "currency"
+//           >
+//         Update: Partial<Transaction>
+//         Relationships: []
+//       }
+//       recurring_transactions: {
+//         Row: RecurringTransaction
+//         Insert: Partial<RecurringTransaction> &
+//           Pick<
+//             RecurringTransaction,
+//             | "user_id"
+//             | "title"
+//             | "amount"
+//             | "category_id"
+//             | "type"
+//             | "frequency"
+//             | "interval_count"
+//             | "is_active"
+//           >
+//         Update: Partial<RecurringTransaction>
+//         Relationships: []
+//       }
+//     }
+//     Views: Record<string, never>
+//     Functions: Record<string, never>
+//   }
+// }
