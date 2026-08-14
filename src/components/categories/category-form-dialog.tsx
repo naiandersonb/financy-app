@@ -1,13 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, Palette } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import { createCategory } from "@/app/(auth)/dashboard/actions";
 import type { Category } from "@/app/core/domain/transactions/transaction.entity";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,6 +37,8 @@ const CATEGORY_COLORS = [
   { label: "Rosa", value: "#ec4899" },
   { label: "Cinza", value: "#64748b" },
 ] as const;
+
+const isHexColor = (value: string) => /^#[0-9a-fA-F]{6}$/.test(value);
 
 const categorySchema = z.object({
   name: z
@@ -72,6 +75,7 @@ export function CategoryFormDialog({
   });
 
   const selectedColor = useWatch({ control, name: "color" });
+  const selectedName = useWatch({ control, name: "name" });
 
   const closeDialog = () => {
     reset();
@@ -171,12 +175,58 @@ export function CategoryFormDialog({
                         </button>
                       );
                     })}
+
+                    <label
+                      title="Cor personalizada"
+                      className={cn(
+                        "relative flex size-8 cursor-pointer items-center justify-center overflow-hidden rounded-full transition-transform outline-none focus-within:ring-3 focus-within:ring-ring/30 hover:scale-110",
+                        !CATEGORY_COLORS.some(
+                          (color) => color.value === selectedColor
+                        ) &&
+                          "ring-2 ring-ring ring-offset-2 ring-offset-background"
+                      )}
+                      style={{
+                        backgroundColor: isHexColor(selectedColor)
+                          ? selectedColor
+                          : "hsl(0 0% 92%)",
+                      }}
+                    >
+                      <input
+                        type="color"
+                        aria-label="Cor personalizada"
+                        value={
+                          isHexColor(selectedColor) ? selectedColor : "#000000"
+                        }
+                        onChange={(event) => field.onChange(event.target.value)}
+                        className="absolute inset-0 size-full cursor-pointer opacity-0"
+                      />
+                      <Palette className="size-4 text-muted-foreground" />
+                    </label>
                   </div>
                   <FieldError errors={[errors.color]} />
                 </FieldContent>
               </Field>
             )}
           />
+
+          <Field>
+            <FieldLabel>Pré-visualização</FieldLabel>
+            <FieldContent className="flex items-center justify-center rounded-md border border-border bg-background p-4">
+              {isHexColor(selectedColor) ? (
+                <Badge
+                  className="line-clamp-1 w-fit max-w-full truncate bg-neutral-100 dark:bg-neutral-900"
+                  variant="secondary"
+                  style={{ color: selectedColor }}
+                >
+                  {selectedName.trim() || "Nome da categoria"}
+                </Badge>
+              ) : (
+                <span className="text-sm text-muted-foreground">
+                  Escolha uma cor para ver a pré-visualização.
+                </span>
+              )}
+            </FieldContent>
+          </Field>
 
           {submitError && (
             <p className="text-sm font-normal text-destructive">

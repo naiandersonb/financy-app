@@ -84,7 +84,7 @@ export default async function DashboardPage({
               <div className="grid w-45 shrink-0 grid-cols-2 items-center gap-2 md:w-60">
                 {transaction.category ? (
                   <Badge
-                    className="line-clamp-1 w-fit max-w-full justify-self-end truncate"
+                    className="line-clamp-1 w-fit max-w-full justify-self-end truncate bg-neutral-100 dark:bg-neutral-900"
                     variant="secondary"
                     style={{ ...transaction.category?.style }}
                   >
@@ -151,7 +151,7 @@ export default async function DashboardPage({
                 <div className="grid w-45 shrink-0 grid-cols-2 items-center gap-2 md:w-60">
                   {transaction.category ? (
                     <Badge
-                      className="line-clamp-1 w-fit max-w-full justify-self-end truncate"
+                      className="line-clamp-1 w-fit max-w-full justify-self-end truncate bg-neutral-100 dark:bg-neutral-900"
                       variant="secondary"
                       style={{ ...transaction.category?.style }}
                     >
