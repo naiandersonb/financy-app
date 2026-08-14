@@ -19,6 +19,8 @@ import type {
   Category,
   PaymentMethod,
 } from "@/app/core/domain/transactions/transaction.entity";
+import { CategoryPicker } from "@/components/categories/category-picker";
+import { CurrencyInput } from "@/components/currency-input";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,11 +39,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -50,7 +47,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { CategoryPicker } from "@/components/categories/category-picker";
 
 const paymentMethodLabels: Record<PaymentMethod, string> = {
   pix: "PIX",
@@ -122,7 +118,7 @@ export function TransactionFormDialog({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
       title: "",
-      amount: undefined,
+      amount: "",
       transaction_date: format(new Date(), "yyyy-MM-dd"),
       category_id: "",
       type: "expense",
@@ -165,7 +161,7 @@ export function TransactionFormDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button variant="secondary">
+          <Button>
             <Plus /> Nova transação
           </Button>
         }
@@ -208,11 +204,17 @@ export function TransactionFormDialog({
                     }
                     variant="outline"
                   >
-                    <ToggleGroupItem value="expense">
+                    <ToggleGroupItem
+                      value="expense"
+                      className="data-pressed:bg-red-100 data-pressed:text-red-600 dark:data-pressed:bg-red-900/30 dark:data-pressed:text-red-400"
+                    >
                       <BanknoteArrowUp />
                       Despesa
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="income">
+                    <ToggleGroupItem
+                      value="income"
+                      className="data-pressed:bg-emerald-100 data-pressed:text-emerald-600 dark:data-pressed:bg-emerald-900/30 dark:data-pressed:text-emerald-400"
+                    >
                       <BanknoteArrowDown />
                       Receita
                     </ToggleGroupItem>
@@ -224,25 +226,24 @@ export function TransactionFormDialog({
           />
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <Field>
-              <FieldLabel htmlFor="transaction-amount">Valor</FieldLabel>
-              <FieldContent>
-                <InputGroup>
-                  <InputGroupAddon align="inline-start">R$</InputGroupAddon>
-                  <InputGroupInput
-                    id="transaction-amount"
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    inputMode="decimal"
-                    placeholder="0,00"
-                    aria-invalid={errors.amount ? true : undefined}
-                    {...register("amount")}
-                  />
-                </InputGroup>
-                <FieldError errors={[errors.amount]} />
-              </FieldContent>
-            </Field>
+            <Controller
+              control={control}
+              name="amount"
+              render={({ field }) => (
+                <Field>
+                  <FieldLabel htmlFor="transaction-amount">Valor</FieldLabel>
+                  <FieldContent>
+                    <CurrencyInput
+                      id="transaction-amount"
+                      value={field.value ?? ""}
+                      onValueChange={field.onChange}
+                      invalid={errors.amount ? true : undefined}
+                    />
+                    <FieldError errors={[errors.amount]} />
+                  </FieldContent>
+                </Field>
+              )}
+            />
 
             <Field>
               <FieldLabel htmlFor="transaction-date">Data</FieldLabel>
