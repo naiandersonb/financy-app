@@ -237,7 +237,7 @@ export function TransactionFormDialog({
                       id="transaction-amount"
                       value={field.value ?? ""}
                       onValueChange={field.onChange}
-                      invalid={errors.amount ? true : undefined}
+                      aria-invalid={!!errors.amount}
                     />
                     <FieldError errors={[errors.amount]} />
                   </FieldContent>

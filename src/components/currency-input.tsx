@@ -1,5 +1,7 @@
 "use client";
 
+import type * as React from "react";
+
 import {
   InputGroup,
   InputGroupAddon,
@@ -21,29 +23,29 @@ function formatAsCurrency(value: string): string {
 export function CurrencyInput({
   value,
   onValueChange,
-  invalid,
-  id,
-}: {
+  onFocus,
+  ...props
+}: Omit<React.ComponentProps<"input">, "value" | "onChange"> & {
   value: string;
   onValueChange: (value: string) => void;
-  invalid?: boolean;
-  id?: string;
 }) {
   return (
     <InputGroup>
       <InputGroupAddon align="inline-start">R$</InputGroupAddon>
       <InputGroupInput
-        id={id}
         inputMode="decimal"
         placeholder="0,00"
-        aria-invalid={invalid}
         value={formatAsCurrency(value)}
         onChange={(event) => {
           const digits = event.target.value.replace(/\D/g, "");
           const cents = Number(digits) / 100;
           onValueChange(cents ? String(cents) : "");
         }}
-        onFocus={(event) => event.target.select()}
+        onFocus={(event) => {
+          event.target.select();
+          onFocus?.(event);
+        }}
+        {...props}
       />
     </InputGroup>
   );
