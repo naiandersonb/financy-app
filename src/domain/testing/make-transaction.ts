@@ -1,4 +1,4 @@
-import type { Transaction } from "./transaction.types";
+import type { Transaction } from "../transaction.types";
 
 /** Fábrica de lançamentos para testes; preenche o que o teste não precisa especificar. */
 export function makeTransaction(overrides: Partial<Transaction> = {}): Transaction {

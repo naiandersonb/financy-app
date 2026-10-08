@@ -1,6 +1,6 @@
 /** @jest-environment node */
 import { summarizeMonth } from "./month-summary";
-import { makeTransaction } from "./test-transactions";
+import { makeTransaction } from "./testing/make-transaction";
 
 describe("summarizeMonth", () => {
   it("retorna zeros para um mês sem lançamentos", () => {

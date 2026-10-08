@@ -1,6 +1,6 @@
 /** @jest-environment node */
 import { budgetStatuses } from "./budget-status";
-import { makeTransaction } from "./test-transactions";
+import { makeTransaction } from "./testing/make-transaction";
 
 describe("budgetStatuses", () => {
   it("calcula gasto e restante dentro do limite", () => {

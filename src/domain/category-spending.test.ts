@@ -1,6 +1,6 @@
 /** @jest-environment node */
 import { spendingByCategory } from "./category-spending";
-import { makeTransaction } from "./test-transactions";
+import { makeTransaction } from "./testing/make-transaction";
 
 describe("spendingByCategory", () => {
   it("retorna lista vazia sem despesas", () => {
