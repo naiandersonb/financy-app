@@ -103,7 +103,8 @@ Regras complementares:
   - componentes gerados pelo shadcn, listados um a um em `coveragePathIgnorePatterns` no
     `jest.config.ts` (todo `npx shadcn add` atualiza essa lista; um componente do shadcn editado à
     mão sai da lista e passa a precisar de testes);
-  - arquivos só de tipos/interfaces e barrels (`index.ts` que só reexporta);
+  - arquivos só de tipos (sufixo `.types.ts`), portas (`src/application/ports/`, que só declaram
+    interfaces) e barrels (`index.ts` que só reexporta);
   - arquivos de rota do Next (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`), que devem
     continuar finos (ver Arquitetura);
   - `src/main/**` (só composição, sem lógica).
@@ -168,6 +169,7 @@ Regras complementares:
 | Factories de `main` | prefixo `make` | `makeCreateTransaction()` |
 | Schemas zod | camelCase com sufixo `Schema` | `transactionInputSchema` |
 | Testes | mesmo nome do arquivo + `.test.ts(x)` | `create-transaction.test.ts` |
+| Arquivos só de tipos | sufixo `.types.ts` (fica fora da cobertura) | `transaction.types.ts` |
 
 ### Código
 
@@ -200,4 +202,4 @@ Regras complementares:
 
 ---
 
-**Versão:** 1.0.0 · **Ratificada em:** 2026-10-08 · **Última emenda:** 2026-10-08
+**Versão:** 1.0.1 · **Ratificada em:** 2026-10-08 · **Última emenda:** 2026-10-08

@@ -16,10 +16,15 @@ import {
 import { Input } from "@/presentation/components/input";
 import { Label } from "@/presentation/components/label";
 import { NativeSelect, NativeSelectOption } from "@/presentation/components/native-select";
-import { categoriesFor } from "@/lib/finance/categories";
-import { centsToInputValue } from "@/lib/finance/money";
-import { defaultDateInMonth, type MonthKey } from "@/lib/finance/month";
-import type { FormResult, Transaction, TransactionKind } from "@/lib/finance/types";
+import {
+  categoriesFor,
+  defaultDateInMonth,
+  type MonthKey,
+  type Transaction,
+  type TransactionKind,
+} from "@/domain";
+import { centsToInputValue } from "@/presentation/formatters";
+import type { Result } from "@/shared";
 import { cn } from "@/shared/cn";
 
 type TransactionDialogProps = {
@@ -67,7 +72,7 @@ function TransactionForm({
 }: TransactionDialogProps & { onSaved: () => void }) {
   const [kind, setKind] = useState<TransactionKind>(transaction?.kind ?? "expense");
   const [state, formAction, pending] = useActionState(
-    async (previous: FormResult | null, formData: FormData) => {
+    async (previous: Result | null, formData: FormData) => {
       const result = await saveTransaction(previous, formData);
       if (result.ok) onSaved();
       return result;
@@ -123,7 +128,7 @@ function TransactionForm({
             name="occurredOn"
             type="date"
             required
-            defaultValue={transaction?.occurredOn ?? defaultDateInMonth(month)}
+            defaultValue={transaction?.occurredOn ?? defaultDateInMonth(month, new Date())}
           />
         </div>
       </div>

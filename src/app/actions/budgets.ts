@@ -2,13 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { parseBudgetForm } from "@/lib/finance/form-parsing";
-import type { FormResult } from "@/lib/finance/types";
+import type { Result } from "@/shared";
 import { createSupabaseServerClient, getCurrentUserId } from "@/lib/supabase/server";
 
 export async function saveBudget(
-  _previous: FormResult | null,
+  _previous: Result | null,
   formData: FormData,
-): Promise<FormResult> {
+): Promise<Result> {
   const parsed = parseBudgetForm(formData);
   if (!parsed.ok) return parsed;
 
@@ -29,10 +29,10 @@ export async function saveBudget(
   }
 
   revalidatePath("/");
-  return { ok: true };
+  return { ok: true, value: undefined };
 }
 
-export async function deleteBudget(category: string): Promise<FormResult> {
+export async function deleteBudget(category: string): Promise<Result> {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.from("budgets").delete().eq("category", category);
 
@@ -42,5 +42,5 @@ export async function deleteBudget(category: string): Promise<FormResult> {
   }
 
   revalidatePath("/");
-  return { ok: true };
+  return { ok: true, value: undefined };
 }

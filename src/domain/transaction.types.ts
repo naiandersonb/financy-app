@@ -9,10 +9,3 @@ export type Transaction = {
   /** Data no formato YYYY-MM-DD. */
   occurredOn: string;
 };
-
-export type Budget = {
-  category: string;
-  limitCents: number;
-};
-
-export type FormResult = { ok: true } | { ok: false; error: string };

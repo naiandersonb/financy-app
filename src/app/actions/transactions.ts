@@ -2,13 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { parseTransactionForm } from "@/lib/finance/form-parsing";
-import type { FormResult } from "@/lib/finance/types";
+import type { Result } from "@/shared";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function saveTransaction(
-  _previous: FormResult | null,
+  _previous: Result | null,
   formData: FormData,
-): Promise<FormResult> {
+): Promise<Result> {
   const parsed = parseTransactionForm(formData);
   if (!parsed.ok) return parsed;
 
@@ -34,10 +34,10 @@ export async function saveTransaction(
   }
 
   revalidatePath("/");
-  return { ok: true };
+  return { ok: true, value: undefined };
 }
 
-export async function deleteTransaction(id: string): Promise<FormResult> {
+export async function deleteTransaction(id: string): Promise<Result> {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.from("transactions").delete().eq("id", id);
 
@@ -47,5 +47,5 @@ export async function deleteTransaction(id: string): Promise<FormResult> {
   }
 
   revalidatePath("/");
-  return { ok: true };
+  return { ok: true, value: undefined };
 }

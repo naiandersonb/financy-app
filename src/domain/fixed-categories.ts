@@ -1,4 +1,4 @@
-import type { TransactionKind } from "./types";
+import type { TransactionKind } from "./transaction.types";
 
 export const EXPENSE_CATEGORIES = [
   "Moradia",

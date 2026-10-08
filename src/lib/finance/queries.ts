@@ -1,8 +1,7 @@
 import "server-only";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { monthDateRange, type MonthKey } from "./month";
-import type { Budget, Transaction } from "./types";
+import { monthDateRange, type Budget, type MonthKey, type Transaction } from "@/domain";
 
 type TransactionRow = {
   id: string;

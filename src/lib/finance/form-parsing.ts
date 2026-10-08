@@ -1,6 +1,4 @@
-import { isValidCategory } from "./categories";
-import { parseAmountToCents } from "./money";
-import type { Budget, Transaction, TransactionKind } from "./types";
+import { isValidCategory, type Budget, type Transaction, type TransactionKind } from "@/domain";
 
 type Parsed<T> = { ok: true; value: T } | { ok: false; error: string };
 
@@ -49,6 +47,13 @@ export function parseBudgetForm(formData: FormData): Parsed<Budget> {
   }
 
   return { ok: true, value: { category, limitCents } };
+}
+
+/** Converte o valor de um <input type="number"> ("1234.5") em centavos. */
+function parseAmountToCents(raw: string): number | null {
+  if (!/^\d+(\.\d{1,2})?$/.test(raw.trim())) return null;
+  const cents = Math.round(Number(raw) * 100);
+  return cents > 0 ? cents : null;
 }
 
 function field(formData: FormData, name: string): string {
