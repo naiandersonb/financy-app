@@ -73,7 +73,7 @@ também deixavam passar datas inexistentes como `2026-02-30`.
 
   | Arquivos em | Não podem importar |
   |-------------|--------------------|
-  | `src/domain/**` | `@/application/*`, `@/infrastructure/*`, `@/presentation/*`, `@/main/*`, `@/app/*`, `react`, `next/*`, `@supabase/*`, `zod` |
+  | `src/domain/**` | `@/application/*`, `@/infrastructure/*`, `@/presentation/*`, `@/main/*`, `@/app/*`, `react`, `next/*`, `@supabase/*`, `zod`, `date-fns` |
   | `src/application/**` | `@/infrastructure/*`, `@/presentation/*`, `@/main/*`, `@/app/*`, `react`, `next/*`, `@supabase/*` |
   | `src/infrastructure/**` | `@/presentation/*`, `@/main/*`, `@/app/*`, `react` |
   | `src/presentation/**` | `@/infrastructure/*`, `@/main/*`, `@/app/*`, `@supabase/*` |
