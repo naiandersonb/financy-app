@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { refreshSessionAndGuard } from "@/lib/supabase/proxy";
+import { refreshSessionAndGuard } from "@/infrastructure";
 
 export function proxy(request: NextRequest) {
   return refreshSessionAndGuard(request);

@@ -2,7 +2,6 @@
 
 import { useActionState, useState } from "react";
 import { Pencil, Plus } from "lucide-react";
-import { saveTransaction } from "@/app/actions/transactions";
 import { Button } from "@/presentation/components/button";
 import {
   Dialog,
@@ -24,16 +23,21 @@ import {
   type TransactionKind,
 } from "@/domain";
 import { centsToInputValue } from "@/presentation/formatters";
-import type { Result } from "@/shared";
-import { cn } from "@/shared/cn";
+import { cn, type Result } from "@/shared";
+
+export type SaveTransactionAction = (
+  previous: Result | null,
+  formData: FormData,
+) => Promise<Result>;
 
 type TransactionDialogProps = {
   month: MonthKey;
+  onSave: SaveTransactionAction;
   /** Quando informado, o diálogo edita este lançamento. */
   transaction?: Transaction;
 };
 
-export function TransactionDialog({ month, transaction }: TransactionDialogProps) {
+export function TransactionDialog({ month, onSave, transaction }: TransactionDialogProps) {
   const [open, setOpen] = useState(false);
   const isEditing = Boolean(transaction);
 
@@ -57,6 +61,7 @@ export function TransactionDialog({ month, transaction }: TransactionDialogProps
         </DialogHeader>
         <TransactionForm
           month={month}
+          onSave={onSave}
           transaction={transaction}
           onSaved={() => setOpen(false)}
         />
@@ -67,13 +72,14 @@ export function TransactionDialog({ month, transaction }: TransactionDialogProps
 
 function TransactionForm({
   month,
+  onSave,
   transaction,
   onSaved,
 }: TransactionDialogProps & { onSaved: () => void }) {
   const [kind, setKind] = useState<TransactionKind>(transaction?.kind ?? "expense");
   const [state, formAction, pending] = useActionState(
     async (previous: Result | null, formData: FormData) => {
-      const result = await saveTransaction(previous, formData);
+      const result = await onSave(previous, formData);
       if (result.ok) onSaved();
       return result;
     },

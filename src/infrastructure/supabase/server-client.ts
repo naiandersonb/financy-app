@@ -1,10 +1,11 @@
 import "server-only";
 
 import { createServerClient } from "@supabase/ssr";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { supabasePublishableKey, supabaseUrl } from "./env";
 
-export async function createSupabaseServerClient() {
+export async function createSupabaseServerClient(): Promise<SupabaseClient> {
   const cookieStore = await cookies();
 
   return createServerClient(supabaseUrl, supabasePublishableKey, {
@@ -23,11 +24,4 @@ export async function createSupabaseServerClient() {
       },
     },
   });
-}
-
-export async function getCurrentUserId(): Promise<string | null> {
-  const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data) return null;
-  return data.claims.sub;
 }

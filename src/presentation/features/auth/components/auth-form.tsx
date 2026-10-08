@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { Lock, Mail } from "lucide-react";
-import type { AuthFormState } from "@/app/auth/actions";
 import { Button } from "@/presentation/components/button";
 import { Input } from "@/presentation/components/input";
 import { Label } from "@/presentation/components/label";
+
+export type AuthFormState = { error?: string; notice?: string };
 
 type AuthFormProps = {
   title: string;
