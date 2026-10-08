@@ -1,0 +1,196 @@
+"use client";
+
+import { useActionState, useState } from "react";
+import { Pencil, Plus } from "lucide-react";
+import { saveTransaction } from "@/app/actions/transactions";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { categoriesFor } from "@/lib/finance/categories";
+import { centsToInputValue } from "@/lib/finance/money";
+import { defaultDateInMonth, type MonthKey } from "@/lib/finance/month";
+import type { FormResult, Transaction, TransactionKind } from "@/lib/finance/types";
+import { cn } from "@/lib/utils";
+
+type TransactionDialogProps = {
+  month: MonthKey;
+  /** Quando informado, o diálogo edita este lançamento. */
+  transaction?: Transaction;
+};
+
+export function TransactionDialog({ month, transaction }: TransactionDialogProps) {
+  const [open, setOpen] = useState(false);
+  const isEditing = Boolean(transaction);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      {isEditing ? (
+        <DialogTrigger
+          render={<Button variant="ghost" size="icon-sm" aria-label="Editar lançamento" />}
+        >
+          <Pencil />
+        </DialogTrigger>
+      ) : (
+        <DialogTrigger render={<Button />}>
+          <Plus /> Novo lançamento
+        </DialogTrigger>
+      )}
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{isEditing ? "Editar lançamento" : "Novo lançamento"}</DialogTitle>
+          <DialogDescription>Registre uma receita ou despesa.</DialogDescription>
+        </DialogHeader>
+        <TransactionForm
+          month={month}
+          transaction={transaction}
+          onSaved={() => setOpen(false)}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function TransactionForm({
+  month,
+  transaction,
+  onSaved,
+}: TransactionDialogProps & { onSaved: () => void }) {
+  const [kind, setKind] = useState<TransactionKind>(transaction?.kind ?? "expense");
+  const [state, formAction, pending] = useActionState(
+    async (previous: FormResult | null, formData: FormData) => {
+      const result = await saveTransaction(previous, formData);
+      if (result.ok) onSaved();
+      return result;
+    },
+    null,
+  );
+
+  const categories = categoriesFor(kind);
+  const defaultCategory =
+    transaction?.kind === kind ? transaction.category : categories[0];
+
+  return (
+    <form action={formAction} className="flex flex-col gap-4">
+      {transaction && <input type="hidden" name="id" value={transaction.id} />}
+
+      <fieldset className="grid grid-cols-2 gap-2">
+        <legend className="sr-only">Tipo</legend>
+        <KindOption kind="expense" label="Despesa" selected={kind} onSelect={setKind} />
+        <KindOption kind="income" label="Receita" selected={kind} onSelect={setKind} />
+      </fieldset>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="description">Descrição</Label>
+        <Input
+          id="description"
+          name="description"
+          required
+          maxLength={120}
+          defaultValue={transaction?.description}
+          placeholder="Ex.: Supermercado"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="amount">Valor (R$)</Label>
+          <Input
+            id="amount"
+            name="amount"
+            type="number"
+            inputMode="decimal"
+            min="0.01"
+            step="0.01"
+            required
+            defaultValue={transaction ? centsToInputValue(transaction.amountCents) : undefined}
+            placeholder="0,00"
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="occurredOn">Data</Label>
+          <Input
+            id="occurredOn"
+            name="occurredOn"
+            type="date"
+            required
+            defaultValue={transaction?.occurredOn ?? defaultDateInMonth(month)}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="category">Categoria</Label>
+        {/* key reinicia o valor padrão quando o tipo muda e a lista de categorias troca. */}
+        <NativeSelect
+          key={kind}
+          id="category"
+          name="category"
+          defaultValue={defaultCategory}
+          className="w-full"
+        >
+          {categories.map((category) => (
+            <NativeSelectOption key={category} value={category}>
+              {category}
+            </NativeSelectOption>
+          ))}
+        </NativeSelect>
+      </div>
+
+      {state && !state.ok && (
+        <p role="alert" className="text-sm text-destructive">
+          {state.error}
+        </p>
+      )}
+
+      <DialogFooter showCloseButton>
+        <Button type="submit" disabled={pending}>
+          {pending ? "Salvando…" : "Salvar"}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+}
+
+function KindOption({
+  kind,
+  label,
+  selected,
+  onSelect,
+}: {
+  kind: TransactionKind;
+  label: string;
+  selected: TransactionKind;
+  onSelect: (kind: TransactionKind) => void;
+}) {
+  const isSelected = kind === selected;
+  return (
+    <label
+      className={cn(
+        "flex h-9 cursor-pointer items-center justify-center rounded-md border text-sm font-medium transition-colors has-focus-visible:ring-3 has-focus-visible:ring-ring/50",
+        isSelected && kind === "expense" && "border-destructive/40 bg-destructive/10 text-destructive",
+        isSelected && kind === "income" && "border-primary/40 bg-primary/10 text-primary",
+        !isSelected && "text-muted-foreground hover:bg-muted",
+      )}
+    >
+      <input
+        type="radio"
+        name="kind"
+        value={kind}
+        checked={isSelected}
+        onChange={() => onSelect(kind)}
+        className="sr-only"
+      />
+      {label}
+    </label>
+  );
+}

@@ -1,0 +1,55 @@
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
+import { supabasePublishableKey, supabaseUrl } from "./env";
+
+const PUBLIC_PATHS = ["/login", "/cadastro"];
+
+export async function refreshSessionAndGuard(request: NextRequest) {
+  let response = NextResponse.next({ request });
+
+  const supabase = createServerClient(supabaseUrl, supabasePublishableKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet, headers) {
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+        response = NextResponse.next({ request });
+        cookiesToSet.forEach(({ name, value, options }) =>
+          response.cookies.set(name, value, options),
+        );
+        Object.entries(headers).forEach(([key, value]) =>
+          response.headers.set(key, value),
+        );
+      },
+    },
+  });
+
+  // getClaims valida o JWT e renova o token expirado; não remova esta chamada.
+  const { data } = await supabase.auth.getClaims();
+  const isAuthenticated = Boolean(data?.claims);
+  const isPublicPath = PUBLIC_PATHS.some((path) =>
+    request.nextUrl.pathname.startsWith(path),
+  );
+
+  if (!isAuthenticated && !isPublicPath) {
+    return redirectPreservingCookies(request, response, "/login");
+  }
+  if (isAuthenticated && isPublicPath) {
+    return redirectPreservingCookies(request, response, "/");
+  }
+  return response;
+}
+
+function redirectPreservingCookies(
+  request: NextRequest,
+  response: NextResponse,
+  pathname: string,
+) {
+  const url = request.nextUrl.clone();
+  url.pathname = pathname;
+  url.search = "";
+  const redirect = NextResponse.redirect(url);
+  response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+  return redirect;
+}
