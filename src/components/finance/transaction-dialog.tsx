@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import { Pencil, Plus } from "lucide-react";
 import { saveTransaction } from "@/app/actions/transactions";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/presentation/components/button";
 import {
   Dialog,
   DialogContent,
@@ -12,15 +12,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+} from "@/presentation/components/dialog";
+import { Input } from "@/presentation/components/input";
+import { Label } from "@/presentation/components/label";
+import { NativeSelect, NativeSelectOption } from "@/presentation/components/native-select";
 import { categoriesFor } from "@/lib/finance/categories";
 import { centsToInputValue } from "@/lib/finance/money";
 import { defaultDateInMonth, type MonthKey } from "@/lib/finance/month";
 import type { FormResult, Transaction, TransactionKind } from "@/lib/finance/types";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/cn";
 
 type TransactionDialogProps = {
   month: MonthKey;
