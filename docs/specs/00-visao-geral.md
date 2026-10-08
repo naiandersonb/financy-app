@@ -11,13 +11,14 @@ limites que definiu.
 | # | Feature | Spec | Depende de |
 |---|---------|------|------------|
 | 1 | Fundação (camadas em `src/`, Jest, zod, conformidade) | [01-fundacao.md](01-fundacao.md) | — |
-| 2 | Autenticação | [02-autenticacao.md](02-autenticacao.md) | 1 |
-| 3 | Lançamentos (receitas e despesas) | [03-lancamentos.md](03-lancamentos.md) | 2 |
-| 4 | Resumo mensal | [04-resumo-mensal.md](04-resumo-mensal.md) | 3 |
-| 5 | Gastos por categoria | [05-gastos-por-categoria.md](05-gastos-por-categoria.md) | 3, 4 |
-| 6 | Orçamento por categoria | [06-orcamento-por-categoria.md](06-orcamento-por-categoria.md) | 3, 4 |
+| 2 | Autenticação (e-mail/senha e Google) | [02-autenticacao.md](02-autenticacao.md) | 1 |
+| 3 | Categorias personalizadas (nome e cores) | [03-categorias.md](03-categorias.md) | 2 |
+| 4 | Lançamentos (receitas e despesas) | [04-lancamentos.md](04-lancamentos.md) | 3 |
+| 5 | Resumo mensal | [05-resumo-mensal.md](05-resumo-mensal.md) | 4 |
+| 6 | Gastos por categoria | [06-gastos-por-categoria.md](06-gastos-por-categoria.md) | 3, 4, 5 |
+| 7 | Orçamento por categoria | [07-orcamento-por-categoria.md](07-orcamento-por-categoria.md) | 3, 4, 5 |
 
-Ordem sugerida de implementação: 1 → 2 → 3 → 4 → 5 → 6.
+Ordem sugerida de implementação: 1 → 2 → 3 → 4 → 5 → 6 → 7.
 
 ## Decisões transversais
 
@@ -35,7 +36,8 @@ Ordem sugerida de implementação: 1 → 2 → 3 → 4 → 5 → 6.
 - **Mês de referência:** a tela principal trabalha com um mês por vez,
   identificado na URL por `?mes=AAAA-MM` (compartilhável, funciona com
   voltar/avançar do navegador). Sem parâmetro, ou com valor inválido, usa o mês atual.
-- **Categorias:** lista fixa definida no código nesta versão (ver spec 03).
+- **Categorias:** cada usuário tem as próprias, com nome, cor de fundo e cor do texto; começa com
+  um conjunto padrão (ver spec 03).
 - **Idioma:** interface toda em português do Brasil.
 - **Estrutura de pastas:** todo código da aplicação fica em `src/`, dividido nas camadas
   `domain`, `application`, `infrastructure`, `presentation`, `main`, `app` e `shared`; na raiz
@@ -45,19 +47,28 @@ Ordem sugerida de implementação: 1 → 2 → 3 → 4 → 5 → 6.
 ## Modelo de dados (resumo)
 
 ```
+categories
+  id                uuid  PK
+  user_id           uuid  FK auth.users (cascade)
+  kind              'income' | 'expense'
+  name              text  (1–30, único por usuário+tipo, sem diferenciar maiúsculas)
+  background_color  text  '#rrggbb'
+  text_color        text  '#rrggbb'
+  created_at        timestamptz
+
 transactions
   id            uuid  PK
   user_id       uuid  FK auth.users (cascade)
   kind          'income' | 'expense'
   description   text  (1–120 caracteres)
   amount_cents  bigint > 0
-  category      text
+  category_id   uuid  FK (category_id, user_id, kind) → categories (restrict)
   occurred_on   date
   created_at    timestamptz
 
 budgets
   user_id       uuid  FK auth.users (cascade)  ┐ PK
-  category      text                          ┘
+  category_id   uuid  FK → categories          ┘ (só categorias de despesa)
   limit_cents   bigint > 0
 ```
 
@@ -65,5 +76,5 @@ budgets
 
 Contas bancárias e cartões, transferências, parcelamentos, lançamentos
 recorrentes, importação de extrato (OFX/CSV), múltiplas moedas, metas de
-economia, compartilhamento entre usuários, categorias personalizadas,
+economia, compartilhamento entre usuários,
 exportação de relatórios e app offline.

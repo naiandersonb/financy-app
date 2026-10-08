@@ -1,4 +1,4 @@
-# Spec 03 — Lançamentos (receitas e despesas)
+# Spec 04 — Lançamentos (receitas e despesas)
 
 ## Objetivo
 
@@ -19,14 +19,14 @@ Registrar cada entrada e saída de dinheiro para que os resumos do mês reflitam
 | Tipo | sim | `Despesa` ou `Receita`. Padrão: Despesa. |
 | Descrição | sim | 1 a 120 caracteres, sem espaços nas pontas. |
 | Valor | sim | Maior que zero, até 2 casas decimais. Guardado em centavos. |
-| Categoria | sim | Uma das categorias do tipo escolhido (lista abaixo). |
+| Categoria | sim | Uma das categorias **do usuário** do tipo escolhido (ver [spec 03](03-categorias.md)). |
 | Data | sim | Data válida. Padrão: hoje, se o mês exibido for o atual; senão, dia 1º do mês exibido. |
 
-### Categorias (fixas na v1)
+### Categorias
 
-- **Despesa:** Moradia, Alimentação, Transporte, Saúde, Educação, Lazer, Compras,
-  Contas e serviços, Outros.
-- **Receita:** Salário, Freelance, Investimentos, Outros.
+As categorias vêm do cadastro do próprio usuário ([spec 03](03-categorias.md)), em ordem alfabética.
+O seletor nativo lista os nomes; ao lado dele aparece o selo da categoria escolhida, com as cores
+dela.
 
 Ao trocar o tipo, a lista de categorias muda e a seleção volta para a primeira
 categoria do novo tipo.
@@ -46,7 +46,7 @@ categoria do novo tipo.
 - Botão **"Novo lançamento"** ao lado do seletor de mês: abre um diálogo com o formulário.
 - **Lista do mês**: ordenada por data (mais recente primeiro) e, no mesmo dia, pela ordem
   de criação. Cada linha mostra:
-  data curta (ex.: `08 de out.`), descrição, categoria e valor (`+ R$` em verde para
+  data curta (ex.: `08 de out.`), descrição, selo da categoria (com as cores dela) e valor (`+ R$` em verde para
   receita, `− R$` em vermelho para despesa), além das ações **Editar** e **Excluir**.
 - **Editar** abre o mesmo diálogo já preenchido.
 - **Estado vazio**: "Nenhum lançamento neste mês", com chamada para criar o primeiro.
@@ -58,7 +58,8 @@ categoria do novo tipo.
 - [ ] Dado o formulário preenchido corretamente, quando salvo, então o lançamento aparece na lista do mês da sua data.
 - [ ] Dado um valor `0`, negativo ou com mais de 2 casas, quando salvo, então vejo um erro e nada é gravado.
 - [ ] Dado uma descrição vazia ou com mais de 120 caracteres, quando salvo, então vejo um erro.
-- [ ] Dado uma categoria que não pertence ao tipo escolhido (requisição forjada), então o servidor rejeita.
+- [ ] Dado uma categoria que não pertence ao tipo escolhido ou a outro usuário (requisição forjada), então o servidor rejeita.
+- [ ] Quando renomeio ou recolorizo uma categoria, então os lançamentos dela mostram o novo nome e as novas cores.
 - [ ] Dado um lançamento existente, quando edito o valor e salvo, então a lista e os totais refletem o novo valor.
 - [ ] Dado um lançamento existente, quando mudo a data para outro mês, então ele some do mês atual.
 - [ ] Dado um lançamento, quando clico em excluir e confirmo, então ele some; se cancelo, nada muda.
@@ -69,14 +70,15 @@ categoria do novo tipo.
 
 | Camada | Arquivos |
 |--------|----------|
-| `domain` | `transaction.ts` (`Transaction`, `TransactionKind`); `category.ts` (categorias por tipo, `isValidCategory`) |
-| `application` | Porta `ports/transaction-repository.ts` (`listByMonth`, `create`, `update`, `delete`); schemas `schemas/amount-schema.ts` e `schemas/transaction-input-schema.ts` (valida a categoria contra o tipo); casos de uso `use-cases/list-month-transactions.ts`, `save-transaction.ts`, `delete-transaction.ts` |
-| `infrastructure` | `supabase/supabase-transaction-repository.ts` (mapeia `amount_cents`/`occurred_on` ↔ entidade) |
+| `domain` | `transaction.ts` (`Transaction` com `categoryId`, `TransactionKind`) |
+| `application` | Porta `ports/transaction-repository.ts` (`listByMonth`, `create`, `update`, `delete`); schemas `schemas/amount-schema.ts` e `schemas/transaction-input-schema.ts` (`categoryId` como uuid); `save-transaction` confere, pelo `CategoryRepository` da spec 03, que a categoria é do usuário e do mesmo tipo; casos de uso `use-cases/list-month-transactions.ts`, `save-transaction.ts`, `delete-transaction.ts` |
+| `infrastructure` | `supabase/supabase-transaction-repository.ts` (mapeia `amount_cents`/`occurred_on`/`category_id` ↔ entidade; a listagem traz a categoria junto, via `select` com relacionamento, para exibir o selo) |
 | `main` | `makeListMonthTransactions`, `makeSaveTransaction`, `makeDeleteTransaction` |
-| `presentation` | `features/transactions/components/transaction-dialog.tsx`, `transaction-list.tsx`, `delete-transaction-button.tsx`; `formatters/money.ts` e `formatters/date.ts` |
+| `presentation` | `features/transactions/components/transaction-dialog.tsx` (recebe a lista de categorias por prop), `transaction-list.tsx` (usa `CategoryBadge` do barrel de `features/categories`), `delete-transaction-button.tsx`; `formatters/money.ts` e `formatters/date.ts` |
 | `app` | `(finance)/actions.ts` (`saveTransaction`, `deleteTransaction`, seguidas de `revalidatePath("/")`) |
 
 - Tabela `transactions` (ver visão geral) com RLS `auth.uid() = user_id` e índice em `(user_id, occurred_on)`; migration em `supabase/migrations/`.
+- A FK composta `(category_id, user_id, kind)` da spec 03 é a barreira final contra categoria de outro usuário ou de outro tipo.
 - Consulta do mês: `occurred_on >= 'AAAA-MM-01' AND occurred_on < primeiro dia do mês seguinte` (intervalo vindo de `domain/month-key.ts`).
 - Ações chegam aos componentes de cliente por props (ex.: `<TransactionDialog onSave={saveTransaction} />`).
 
@@ -84,8 +86,8 @@ categoria do novo tipo.
 
 | Princípio | Como esta spec atende |
 |-----------|-----------------------|
-| Clean Architecture | Acesso ao banco só pela porta `TransactionRepository`; regras de categoria no `domain` |
-| Cobertura > 90% | Entrada `"./src/presentation/features/transactions/"` no `coverageThreshold`; testes de `category`, dos schemas (valores-limite: `0`, `0.001`, 120/121 caracteres, categoria de outro tipo), dos casos de uso (repositório fake), do repositório (Supabase mockado), dos componentes (criar, editar, excluir com confirmação/cancelamento, estado vazio) e das actions |
+| Clean Architecture | Acesso ao banco só pelas portas `TransactionRepository` e `CategoryRepository` |
+| Cobertura > 90% | Entrada `"./src/presentation/features/transactions/"` no `coverageThreshold`; testes dos schemas (valores-limite: `0`, `0.001`, 120/121 caracteres, `categoryId` inválido), dos casos de uso com categoria de outro tipo/usuário, dos casos de uso (repositório fake), do repositório (Supabase mockado), dos componentes (criar, editar, excluir com confirmação/cancelamento, estado vazio) e das actions |
 | Dinheiro em centavos | `amount-schema` converte para centavos inteiros; formatação só em `presentation/formatters` |
 | Validação com zod | `transactionInputSchema` no servidor |
 | RLS | Migration com política `auth.uid() = user_id` |
@@ -100,4 +102,3 @@ paginação (um mês costuma ter poucas dezenas de itens), notas/observações, 
 ## Questões em aberto
 
 - Precisa de filtro por tipo/categoria na lista já na v1?
-- As categorias devem ser personalizáveis pelo usuário (seria uma tabela `categories`)?

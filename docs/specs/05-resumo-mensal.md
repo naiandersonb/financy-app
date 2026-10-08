@@ -1,4 +1,4 @@
-# Spec 04 — Resumo mensal
+# Spec 05 — Resumo mensal
 
 ## Objetivo
 
@@ -56,7 +56,7 @@ mostra o sinal de menos).
 | Camada | Arquivos |
 |--------|----------|
 | `domain` | `month-key.ts` (`parseMonthKey`, `shiftMonth`, `monthDateRange`, `currentMonthKey(now)`, `defaultDateInMonth`); `month-summary.ts` (`summarizeMonth`) |
-| `application` | Caso de uso `use-cases/get-month-overview.ts`: recebe o mês, carrega os lançamentos e devolve o resumo (reaproveitado pelas specs 05 e 06) |
+| `application` | Caso de uso `use-cases/get-month-overview.ts`: recebe o mês, carrega os lançamentos e devolve o resumo (reaproveitado pelas specs 06 e 07) |
 | `presentation` | `features/monthly-summary/components/month-navigator.tsx`, `summary-cards.tsx`; `formatters/date.ts` (`formatMonthLabel`) |
 | `app` | `(finance)/page.tsx`: lê `searchParams` (uma Promise no Next 16), chama `makeGetMonthOverview()` e compõe os componentes |
 

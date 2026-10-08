@@ -31,7 +31,7 @@ npm install -D jest jest-environment-jsdom @testing-library/react @testing-libra
 | `setupFilesAfterEnv` | `["<rootDir>/jest.setup.ts"]`, que importa `@testing-library/jest-dom` |
 | `moduleNameMapper` | `{ "^@/(.*)$": "<rootDir>/src/$1" }` |
 | `collectCoverageFrom` | `["src/**/*.{ts,tsx}"]` |
-| `coveragePathIgnorePatterns` | arquivos de rota (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`), `src/main/`, barrels, arquivos só de tipos e cada componente gerado pelo shadcn, listado pelo nome |
+| `coveragePathIgnorePatterns` | arquivos de rota (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`), `src/main/`, barrels, arquivos só de tipos, cada componente gerado pelo shadcn, listado pelo nome, e `src/domain/fixed-categories.ts` (temporário, ver C2) |
 | `coverageProvider` | `v8` |
 | `coverageThreshold` | `global` com 90 em `lines`, `branches`, `functions` e `statements`, mais uma entrada por diretório de feature (ex.: `"./src/presentation/features/transactions/"`), para que nenhuma feature fique abaixo do limite escondida na média |
 
@@ -121,7 +121,7 @@ Mapa de cada arquivo existente para o seu destino e o que muda nele.
 | Hoje | Destino |
 |------|---------|
 | `app/layout.tsx`, `app/globals.css`, `app/favicon.ico` | `src/app/` |
-| `app/page.tsx` (template do Next) | `src/app/(finance)/page.tsx` (o conteúdo real vem na spec 04) |
+| `app/page.tsx` (template do Next) | `src/app/(finance)/page.tsx` (o conteúdo real vem na spec 05) |
 | `components/ui/*.tsx` (button, card, dialog, input, label, native-select, progress) | `src/presentation/components/*.tsx`; o import interno do `dialog.tsx` muda de `@/components/ui/button` para `@/presentation/components/button` |
 | `lib/utils.ts` | `src/shared/cn.ts` |
 | `proxy.ts` | `src/proxy.ts` |
@@ -132,7 +132,7 @@ Mapa de cada arquivo existente para o seu destino e o que muda nele.
 | Hoje | Problema em relação à constituição | Destino |
 |------|------------------------------------|---------|
 | `lib/finance/types.ts` | Mistura entidades com tipo de resultado de formulário | `src/domain/transaction.ts` (`Transaction`, `TransactionKind`), `src/domain/budget.ts` (`Budget`), `src/shared/result.ts` (`Result<T, E>` genérico, que substitui `FormResult`) |
-| `lib/finance/categories.ts` | — (regra de domínio pura) | `src/domain/category.ts` |
+| `lib/finance/categories.ts` | Lista fixa de categorias no código; pela spec 03 as categorias vêm do banco | **Temporário:** movido sem alterações para `src/domain/fixed-categories.ts` só para o código atual continuar compilando (a pasta `lib/` precisa sumir). Não ganha testes nem novos usos, fica fora da cobertura e é **apagado na spec 03**. O nome evita conflito com a entidade `category.ts` que a spec 03 cria |
 | `lib/finance/month.ts` | Mistura regra de mês com formatação de exibição | `src/domain/month-key.ts` (`parseMonthKey`, `shiftMonth`, `monthDateRange`, `currentMonthKey`, `defaultDateInMonth`); `formatMonthLabel` e `formatDayLabel` vão para `src/presentation/formatters/date.ts` |
 | `lib/finance/money.ts` | Mistura parsing de entrada com formatação | `parseAmountToCents` vira o schema zod `src/application/schemas/amount-schema.ts`; `formatCents` e `centsToInputValue` vão para `src/presentation/formatters/money.ts` |
 | `lib/finance/summary.ts` | Três regras num arquivo | `src/domain/month-summary.ts`, `src/domain/category-spending.ts`, `src/domain/budget-status.ts` |
@@ -153,7 +153,8 @@ Mapa de cada arquivo existente para o seu destino e o que muda nele.
 Todo arquivo de C1 e C2 que fica dentro da medição de cobertura ganha teste colocado, seguindo a
 tabela "Testes" da constituição:
 
-- `domain`: `month-key`, `category`, `month-summary`, `category-spending`, `budget-status`
+- `domain`: `month-key`, `month-summary`, `category-spending`, `budget-status` (`fixed-categories` fica sem
+  testes, pois é temporário)
   (incluindo virada de ano e meses de 28/29/30/31 dias);
 - `application`: os três schemas zod e cada caso de uso, com portas fake em memória;
 - `infrastructure`: repositórios, auth gateway e `session-proxy`, com cliente Supabase mockado;
@@ -194,11 +195,15 @@ tabela "Testes" da constituição:
 | Componentes sem `ui/` | Configura os aliases do shadcn para `@/presentation/components` |
 | Novas dependências justificadas | Jest/Testing Library: ferramentas de teste definidas na constituição. `ts-node`: exigido pelo `jest.config.ts`. zod: validação de entrada definida na constituição |
 
-**Exceções:** nenhuma.
+**Exceções:**
+
+| Exceção | Justificativa |
+|---------|---------------|
+| `src/domain/fixed-categories.ts` fora da cobertura e sem testes | Código temporário que será apagado na spec 03 (categorias passam a vir do banco). Escrever testes para ele seria trabalho descartado; ele não recebe novos usos até ser removido |
 
 ## Fora do escopo
 
-Implementar as features (specs 02–06), reorganizações além do mapa da parte C e testes E2E.
+Implementar as features (specs 02–07), reorganizações além do mapa da parte C e testes E2E.
 
 ## Riscos
 
