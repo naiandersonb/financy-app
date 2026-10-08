@@ -97,8 +97,9 @@ Regras complementares:
   e `npm run build` passando sem erros.
 - **Cobertura de testes por feature acima de 90%.** Toda feature entregue precisa ter cobertura
   de **linhas, branches, funções e statements maior que 90%** nos arquivos que ela cria ou altera, em
-  todas as camadas. Isso é garantido por `coverageThreshold` no `jest.config.ts`, e o gate falha
-  abaixo do limite. Ficam fora da medição apenas:
+  todas as camadas. Isso é garantido por `coverageThreshold` no `jest.config.ts` com valor **91**
+  (o Jest aceita valores iguais ao limite, então 91 é o menor inteiro que garante "maior que 90%"),
+  e o gate falha abaixo dele. Ficam fora da medição apenas:
   - componentes gerados pelo shadcn, listados um a um em `coveragePathIgnorePatterns` no
     `jest.config.ts` (todo `npx shadcn add` atualiza essa lista; um componente do shadcn editado à
     mão sai da lista e passa a precisar de testes);

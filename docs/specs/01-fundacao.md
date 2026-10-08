@@ -33,7 +33,7 @@ npm install -D jest jest-environment-jsdom @testing-library/react @testing-libra
 | `collectCoverageFrom` | `["src/**/*.{ts,tsx}"]` |
 | `coveragePathIgnorePatterns` | arquivos de rota (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`), `src/main/`, barrels, arquivos só de tipos, cada componente gerado pelo shadcn, listado pelo nome, e `src/domain/fixed-categories.ts` (temporário, ver C2) |
 | `coverageProvider` | `v8` |
-| `coverageThreshold` | `global` com 90 em `lines`, `branches`, `functions` e `statements`, mais uma entrada por diretório de feature (ex.: `"./src/presentation/features/transactions/"`), para que nenhuma feature fique abaixo do limite escondida na média |
+| `coverageThreshold` | `global` com 91 em `lines`, `branches`, `functions` e `statements`, mais uma entrada por diretório de feature com os mesmos 91 (ex.: `"./src/presentation/features/transactions/"`), para que nenhuma feature fique abaixo do limite escondida na média |
 
 `server-only` lança erro fora do servidor: mapear para um módulo vazio no `moduleNameMapper`
 (`"^server-only$": "<rootDir>/jest.server-only-stub.ts"`).
