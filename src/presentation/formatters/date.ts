@@ -1,20 +1,13 @@
-import { splitMonthKey, type MonthKey } from "@/domain";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import type { MonthKey } from "@/domain";
+import { parseIsoDate, parseIsoMonth } from "@/shared";
 
 export function formatMonthLabel(month: MonthKey): string {
-  const [year, monthNumber] = splitMonthKey(month);
-  const label = new Intl.DateTimeFormat("pt-BR", {
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(Date.UTC(year, monthNumber - 1, 1)));
+  const label = format(parseIsoMonth(month), "MMMM 'de' yyyy", { locale: ptBR });
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
 export function formatDayLabel(isoDate: string): string {
-  const [year, month, day] = isoDate.split("-").map(Number);
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    timeZone: "UTC",
-  }).format(new Date(Date.UTC(year, month - 1, day)));
+  return format(parseIsoDate(isoDate), "dd 'de' MMM", { locale: ptBR });
 }

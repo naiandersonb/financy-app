@@ -60,7 +60,8 @@ mostra o sinal de menos).
 | `presentation` | `features/monthly-summary/components/month-navigator.tsx`, `summary-cards.tsx`; `formatters/date.ts` (`formatMonthLabel`) |
 | `app` | `(finance)/page.tsx`: lê `searchParams` (uma Promise no Next 16), chama `makeGetMonthOverview()` e compõe os componentes |
 
-- Datas montadas em UTC para não haver erro de um dia por causa do fuso.
+- Aritmética de meses (`shiftMonth`, virada de ano) com date-fns via `src/shared/calendar-date.ts`, em horário local,
+  para não haver erro de um dia por causa do fuso.
 - `currentMonthKey` recebe `now` por parâmetro para os testes serem determinísticos.
 
 ## Conformidade com a constituição

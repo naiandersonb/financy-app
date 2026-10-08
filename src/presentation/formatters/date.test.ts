@@ -10,7 +10,7 @@ describe("formatMonthLabel", () => {
 
 describe("formatDayLabel", () => {
   it("mostra dia e mês abreviado sem deslocar o dia pelo fuso", () => {
-    expect(formatDayLabel("2026-10-08")).toBe("08 de out.");
-    expect(formatDayLabel("2026-01-01")).toBe("01 de jan.");
+    expect(formatDayLabel("2026-10-08")).toBe("08 de out");
+    expect(formatDayLabel("2026-01-01")).toBe("01 de jan");
   });
 });

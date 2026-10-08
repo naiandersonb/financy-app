@@ -55,6 +55,17 @@ npm install zod
 Usado só em `src/application/schemas/` para validar a entrada dos casos de uso (Server Actions).
 Substitui o parsing manual que existe hoje em `lib/finance/form-parsing.ts`.
 
+### A2b. date-fns
+
+```bash
+npm install date-fns
+```
+
+Usado só em `src/shared/calendar-date.ts` (conversão e aritmética de datas de calendário) e em
+`src/presentation/formatters/date.ts` (exibição com o locale `ptBR`). O `domain` não importa o
+date-fns diretamente: usa as funções de `shared`. Substitui as contas manuais com `Date.UTC`, que
+também deixavam passar datas inexistentes como `2026-02-30`.
+
 ### A3. Travas automáticas da constituição
 
 - **Regra de dependência entre camadas** no `eslint.config.mjs`, com a regra nativa
@@ -191,9 +202,9 @@ tabela "Testes" da constituição:
 |-----------|-----------------------|
 | Clean Architecture / regra de dependência | Cria as camadas, migra todo o código existente para elas e trava as importações via ESLint |
 | Cobertura > 90% por feature | Configura `coverageThreshold` global e por feature; escreve os testes do código existente |
-| Stack (Jest, zod) | Instala e configura |
+| Stack (Jest, zod, date-fns) | Instala e configura |
 | Componentes sem `ui/` | Configura os aliases do shadcn para `@/presentation/components` |
-| Novas dependências justificadas | Jest/Testing Library: ferramentas de teste definidas na constituição. `ts-node`: exigido pelo `jest.config.ts`. zod: validação de entrada definida na constituição |
+| Novas dependências justificadas | Jest/Testing Library: ferramentas de teste definidas na constituição. `ts-node`: exigido pelo `jest.config.ts`. zod: validação de entrada definida na constituição. date-fns: datas definidas na constituição |
 
 **Exceções:**
 

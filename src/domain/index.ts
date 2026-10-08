@@ -13,7 +13,6 @@ export {
   monthDateRange,
   parseMonthKey,
   shiftMonth,
-  splitMonthKey,
   type MonthKey,
 } from "./month-key";
 export { summarizeMonth, type MonthSummary } from "./month-summary";

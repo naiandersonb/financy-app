@@ -46,7 +46,7 @@ categoria do novo tipo.
 - Botão **"Novo lançamento"** ao lado do seletor de mês: abre um diálogo com o formulário.
 - **Lista do mês**: ordenada por data (mais recente primeiro) e, no mesmo dia, pela ordem
   de criação. Cada linha mostra:
-  data curta (ex.: `08 de out.`), descrição, selo da categoria (com as cores dela) e valor (`+ R$` em verde para
+  data curta (ex.: `08 de out`), descrição, selo da categoria (com as cores dela) e valor (`+ R$` em verde para
   receita, `− R$` em vermelho para despesa), além das ações **Editar** e **Excluir**.
 - **Editar** abre o mesmo diálogo já preenchido.
 - **Estado vazio**: "Nenhum lançamento neste mês", com chamada para criar o primeiro.

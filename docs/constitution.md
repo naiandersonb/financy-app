@@ -13,6 +13,7 @@ justificadas por escrito na própria spec.
 - **UI:** Tailwind CSS 4 + shadcn/ui (estilo `base-vega`, sobre Base UI) + ícones `lucide-react`.
 - **Backend:** Supabase (Auth + Postgres) via `@supabase/ssr` e `@supabase/supabase-js`.
 - **Validação de entrada:** zod.
+- **Datas:** date-fns (com o locale `ptBR` para exibição).
 - **Testes:** Jest configurado via `next/jest` (`jest.config.ts`), com `jest-environment-jsdom`,
   Testing Library (`@testing-library/react`, `@testing-library/dom`, `@testing-library/user-event`) e
   `@testing-library/jest-dom`. A cobertura usa o próprio Jest (`coverageProvider: "v8"`).
@@ -86,8 +87,10 @@ Regras complementares:
 
 - **Dinheiro** é sempre inteiro em centavos (`bigint` no banco, `number` inteiro no TS), nunca
   `float`. A formatação (`R$ 1.234,56`, `pt-BR`/BRL) acontece só em `presentation`.
-- **Datas de lançamento** são datas de calendário (`AAAA-MM-DD`, sem hora nem fuso). Cálculos com
-  `Date` usam UTC para evitar erro de um dia.
+- **Datas de lançamento** são datas de calendário (`AAAA-MM-DD`, sem hora nem fuso). Toda conversão
+  e aritmética de datas usa **date-fns** em horário local, através de `src/shared/calendar-date.ts`;
+  nunca `new Date("AAAA-MM-DD")`, que o JavaScript interpreta como UTC e desloca o dia no Brasil.
+  Formatação para exibição usa o date-fns com o locale `ptBR`.
 - **Isolamento por usuário:** toda tabela com dados de usuário tem `user_id` e **Row Level Security**
   habilitada com política `auth.uid() = user_id`. A UI nunca é a única barreira.
 
@@ -202,4 +205,4 @@ Regras complementares:
 
 ---
 
-**Versão:** 1.0.1 · **Ratificada em:** 2026-10-08 · **Última emenda:** 2026-10-08
+**Versão:** 1.1.0 · **Ratificada em:** 2026-10-08 · **Última emenda:** 2026-10-08

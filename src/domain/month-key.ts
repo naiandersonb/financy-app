@@ -1,10 +1,12 @@
+import { formatIsoDate, formatIsoMonth, shiftIsoMonth } from "@/shared";
+
 /** Mês no formato YYYY-MM, usado na URL (?mes=2026-10). */
 export type MonthKey = string;
 
 const MONTH_KEY_PATTERN = /^(\d{4})-(0[1-9]|1[0-2])$/;
 
 export function currentMonthKey(now: Date): MonthKey {
-  return toMonthKey(now.getFullYear(), now.getMonth() + 1);
+  return formatIsoMonth(now);
 }
 
 export function parseMonthKey(value: string | string[] | undefined): MonthKey | null {
@@ -12,9 +14,7 @@ export function parseMonthKey(value: string | string[] | undefined): MonthKey | 
 }
 
 export function shiftMonth(month: MonthKey, delta: number): MonthKey {
-  const [year, monthNumber] = splitMonthKey(month);
-  const date = new Date(Date.UTC(year, monthNumber - 1 + delta, 1));
-  return toMonthKey(date.getUTCFullYear(), date.getUTCMonth() + 1);
+  return shiftIsoMonth(month, delta);
 }
 
 /** Intervalo [início, fim) em datas YYYY-MM-DD, para filtrar por occurred_on. */
@@ -24,19 +24,6 @@ export function monthDateRange(month: MonthKey): { start: string; endExclusive: 
 
 /** Data padrão para um novo lançamento: hoje, se estiver no mês exibido; senão o dia 1º. */
 export function defaultDateInMonth(month: MonthKey, now: Date): string {
-  const today = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, "0"),
-    String(now.getDate()).padStart(2, "0"),
-  ].join("-");
+  const today = formatIsoDate(now);
   return today.startsWith(month) ? today : `${month}-01`;
-}
-
-export function splitMonthKey(month: MonthKey): [year: number, monthNumber: number] {
-  const [year, monthNumber] = month.split("-").map(Number);
-  return [year, monthNumber];
-}
-
-function toMonthKey(year: number, monthNumber: number): MonthKey {
-  return `${year}-${String(monthNumber).padStart(2, "0")}`;
 }

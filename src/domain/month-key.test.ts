@@ -5,7 +5,6 @@ import {
   monthDateRange,
   parseMonthKey,
   shiftMonth,
-  splitMonthKey,
 } from "./month-key";
 
 describe("currentMonthKey", () => {
@@ -69,11 +68,5 @@ describe("defaultDateInMonth", () => {
   it("usa o dia 1º quando o mês exibido é outro", () => {
     expect(defaultDateInMonth("2026-09", now)).toBe("2026-09-01");
     expect(defaultDateInMonth("2027-10", now)).toBe("2027-10-01");
-  });
-});
-
-describe("splitMonthKey", () => {
-  it("separa ano e mês como números", () => {
-    expect(splitMonthKey("2026-03")).toEqual([2026, 3]);
   });
 });
