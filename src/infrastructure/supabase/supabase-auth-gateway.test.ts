@@ -77,10 +77,21 @@ describe("SupabaseAuthGateway", () => {
     });
   });
 
-  describe("currentUserId", () => {
-    it("retorna o sub das claims validadas", async () => {
+  describe("currentUser", () => {
+    it("retorna id e e-mail das claims validadas", async () => {
+      const getClaims = jest.fn().mockResolvedValue({
+        data: { claims: { sub: "user-1", email: "ana@exemplo.com" } },
+        error: null,
+      });
+      expect(await gatewayWith({ getClaims }).currentUser()).toEqual({
+        id: "user-1",
+        email: "ana@exemplo.com",
+      });
+    });
+
+    it("retorna e-mail nulo quando a conta não tem e-mail nas claims", async () => {
       const getClaims = jest.fn().mockResolvedValue({ data: { claims: { sub: "user-1" } }, error: null });
-      expect(await gatewayWith({ getClaims }).currentUserId()).toBe("user-1");
+      expect(await gatewayWith({ getClaims }).currentUser()).toEqual({ id: "user-1", email: null });
     });
 
     it.each([
@@ -88,7 +99,7 @@ describe("SupabaseAuthGateway", () => {
       [{ data: null, error: null }],
     ])("retorna null sem sessão válida (%p)", async (response) => {
       const getClaims = jest.fn().mockResolvedValue(response);
-      expect(await gatewayWith({ getClaims }).currentUserId()).toBeNull();
+      expect(await gatewayWith({ getClaims }).currentUser()).toBeNull();
     });
   });
 });

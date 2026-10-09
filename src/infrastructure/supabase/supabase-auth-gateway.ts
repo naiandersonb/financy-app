@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { AuthGateway, Credentials, SignUpOutcome } from "@/application";
+import type { AuthGateway, Credentials, CurrentUser, SignUpOutcome } from "@/application";
 import { fail, succeed, type Result } from "@/shared";
 
 export class SupabaseAuthGateway implements AuthGateway {
@@ -22,10 +22,10 @@ export class SupabaseAuthGateway implements AuthGateway {
     if (error) throw new Error("Falha ao encerrar a sessão.", { cause: error });
   }
 
-  async currentUserId(): Promise<string | null> {
+  async currentUser(): Promise<CurrentUser | null> {
     // getClaims valida o JWT; getSession não é confiável no servidor.
     const { data, error } = await this.client.auth.getClaims();
     if (error || !data) return null;
-    return data.claims.sub;
+    return { id: data.claims.sub, email: data.claims.email ?? null };
   }
 }

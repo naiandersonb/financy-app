@@ -1,6 +1,6 @@
 import "server-only";
 
-import { signIn, signOut, signUp } from "@/application";
+import { getCurrentUser, signIn, signOut, signUp } from "@/application";
 import { createRequestContext } from "./request-context";
 
 export async function makeSignIn() {
@@ -16,4 +16,9 @@ export async function makeSignUp() {
 export async function makeSignOut() {
   const { auth } = await createRequestContext();
   return () => signOut(auth);
+}
+
+export async function makeGetCurrentUser() {
+  const { auth } = await createRequestContext();
+  return () => getCurrentUser(auth);
 }

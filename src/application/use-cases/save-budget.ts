@@ -11,9 +11,9 @@ export async function saveBudget(
   const parsed = budgetInputSchema.safeParse(input);
   if (!parsed.success) return fail(firstIssueMessage(parsed.error));
 
-  const userId = await deps.auth.currentUserId();
-  if (!userId) return fail("Sua sessão expirou. Entre novamente.");
+  const user = await deps.auth.currentUser();
+  if (!user) return fail("Sua sessão expirou. Entre novamente.");
 
-  await deps.budgets.upsert(userId, parsed.data);
+  await deps.budgets.upsert(user.id, parsed.data);
   return succeed();
 }

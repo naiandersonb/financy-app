@@ -7,6 +7,6 @@ describe("signOut", () => {
     const auth = new FakeAuthGateway();
     auth.sessionUserId = "ana@exemplo.com";
     await signOut(auth);
-    expect(await auth.currentUserId()).toBeNull();
+    expect(await auth.currentUser()).toBeNull();
   });
 });

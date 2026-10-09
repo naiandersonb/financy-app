@@ -1,5 +1,10 @@
 import { fail, succeed, type Result } from "@/shared";
-import type { AuthGateway, Credentials, SignUpOutcome } from "../ports/auth-gateway";
+import type {
+  AuthGateway,
+  Credentials,
+  CurrentUser,
+  SignUpOutcome,
+} from "../ports/auth-gateway";
 
 export class FakeAuthGateway implements AuthGateway {
   readonly accounts = new Map<string, string>();
@@ -24,7 +29,8 @@ export class FakeAuthGateway implements AuthGateway {
     this.sessionUserId = null;
   }
 
-  async currentUserId(): Promise<string | null> {
-    return this.sessionUserId;
+  /** Na sessão falsa, o id do usuário é o próprio e-mail. */
+  async currentUser(): Promise<CurrentUser | null> {
+    return this.sessionUserId ? { id: this.sessionUserId, email: this.sessionUserId } : null;
   }
 }

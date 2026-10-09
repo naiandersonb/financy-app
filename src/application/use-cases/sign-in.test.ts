@@ -13,7 +13,7 @@ describe("signIn", () => {
   it("entra com credenciais corretas (e-mail com espaços nas pontas)", async () => {
     const result = await signIn(auth, { email: " ana@exemplo.com ", password: "segredo123" });
     expect(result.ok).toBe(true);
-    expect(await auth.currentUserId()).toBe("ana@exemplo.com");
+    expect((await auth.currentUser())?.id).toBe("ana@exemplo.com");
   });
 
   it("recusa senha errada com mensagem genérica", async () => {
