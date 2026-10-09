@@ -7,10 +7,16 @@ export type SignUpOutcome = "signed-in" | "confirmation-required";
 
 export type CurrentUser = { id: string; email: string | null };
 
+export type OAuthProvider = "google";
+
 export interface AuthGateway {
   signIn(credentials: Credentials): Promise<Result>;
   signUp(credentials: Credentials): Promise<Result<SignUpOutcome>>;
   signOut(): Promise<void>;
+  /** Inicia o OAuth e devolve a URL do provedor para onde o usuário deve ir. */
+  startOAuthSignIn(provider: OAuthProvider, redirectTo: string): Promise<Result<string>>;
+  /** Troca o `code` recebido no retorno do provedor por uma sessão. */
+  completeOAuthSignIn(code: string): Promise<Result>;
   /** Usuário da sessão atual, com a identidade já validada; `null` sem sessão. */
   currentUser(): Promise<CurrentUser | null>;
 }

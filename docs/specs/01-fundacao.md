@@ -110,7 +110,7 @@ finance-app/
     jest.setup.ts, eslint.config.mjs, postcss.config.mjs, components.json, .env*)
 ```
 
-Os grupos de rota `(auth)` e `(finance)` não mudam as URLs (`/login`, `/cadastro`, `/`).
+Os grupos de rota `(auth)` e `(finance)` não mudam as URLs (`/login`, `/signup`, `/`).
 
 ### Ajustes de configuração
 
@@ -154,7 +154,7 @@ Mapa de cada arquivo existente para o seu destino e o que muda nele.
 | `app/auth/actions.ts` | Chama Supabase direto e contém regra (tamanho mínimo da senha) | `src/app/(auth)/actions.ts` (controller fino) + casos de uso `src/application/use-cases/sign-in.ts`, `sign-up.ts`, `sign-out.ts` + schema `credentials-schema.ts` |
 | `app/actions/transactions.ts` | Chama Supabase direto | `src/app/(finance)/actions.ts` + casos de uso `save-transaction.ts`, `delete-transaction.ts`, `list-month-transactions.ts` |
 | `app/actions/budgets.ts` | Chama Supabase direto e busca o `user_id` | `src/app/(finance)/actions.ts` + casos de uso `save-budget.ts`, `delete-budget.ts`, `list-budgets.ts` (o `user_id` vem do `AuthGateway`, injetado pela factory) |
-| `app/login/page.tsx`, `app/cadastro/page.tsx` | — | `src/app/(auth)/login/page.tsx`, `src/app/(auth)/cadastro/page.tsx` |
+| `app/login/page.tsx`, `app/cadastro/page.tsx` | — | `src/app/(auth)/login/page.tsx`, `src/app/(auth)/signup/page.tsx` |
 | `components/auth/auth-form.tsx` | Importa o tipo `AuthFormState` de `app` (presentation não pode importar `app`) | `src/presentation/features/auth/components/auth-form.tsx`; o tipo do estado passa a vir de `application` |
 | `components/finance/transaction-dialog.tsx` | Importa `saveTransaction` direto de `app` | `src/presentation/features/transactions/components/transaction-dialog.tsx`; recebe a ação por prop (`onSave`) |
 | — (novo) | Composição | `src/main/` com `makeSignIn`, `makeSaveTransaction` etc. |
@@ -183,7 +183,7 @@ tabela "Testes" da constituição:
 - [ ] Nenhum arquivo de `presentation` importa de `app`, `main` ou `infrastructure`.
 - [ ] Nenhuma Server Action ou rota chama o Supabase diretamente; toda chamada passa por um caso de uso.
 - [ ] `npm run lint`, `npx tsc --noEmit` e `npm run build` passam.
-- [ ] `/login` e `/cadastro` funcionam como antes; `/` continua protegida pelo proxy.
+- [ ] `/login` e `/signup` funcionam como antes; `/` continua protegida pelo proxy.
 
 ## Passo a passo sugerido (um commit por passo)
 
@@ -230,4 +230,4 @@ Encontrados ao implementar esta spec e ainda não resolvidos:
 | Risco | Impacto | Tarefa |
 |-------|---------|--------|
 | A trava de camadas do ESLint só reconhece imports com `@/`; um import relativo entre camadas (ex.: `../../infrastructure`) passa no lint | A regra de dependência pode ser violada sem aviso | [T-002](../tasks/T-002-lint-imports-relativos.md) |
-| ~~O proxy considera pública qualquer rota que **comece** com `/login` ou `/cadastro` (ex.: `/loginx`)~~ | Resolvido | [T-003](../tasks/T-003-proxy-rotas-publicas.md) (concluída) |
+| ~~O proxy considera pública qualquer rota que **comece** com `/login` ou `/signup` (ex.: `/loginx`)~~ | Resolvido | [T-003](../tasks/T-003-proxy-rotas-publicas.md) (concluída) |

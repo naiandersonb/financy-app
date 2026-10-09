@@ -77,6 +77,58 @@ describe("SupabaseAuthGateway", () => {
     });
   });
 
+  describe("startOAuthSignIn", () => {
+    it("pede o OAuth com o redirectTo e devolve a URL do provedor", async () => {
+      const signInWithOAuth = jest.fn().mockResolvedValue({
+        data: { provider: "google", url: "https://accounts.google.com/o/oauth2/auth?x=1" },
+        error: null,
+      });
+      const result = await gatewayWith({ signInWithOAuth }).startOAuthSignIn(
+        "google",
+        "http://localhost:3000/auth/callback",
+      );
+
+      expect(result).toEqual({ ok: true, value: "https://accounts.google.com/o/oauth2/auth?x=1" });
+      expect(signInWithOAuth).toHaveBeenCalledWith({
+        provider: "google",
+        options: { redirectTo: "http://localhost:3000/auth/callback" },
+      });
+    });
+
+    it("falha com o código ou a mensagem do erro", async () => {
+      const withCode = gatewayWith({
+        signInWithOAuth: jest.fn().mockResolvedValue({ data: {}, error: { code: "provider_disabled", message: "x" } }),
+      });
+      const withoutCode = gatewayWith({
+        signInWithOAuth: jest.fn().mockResolvedValue({ data: {}, error: { message: "x" } }),
+      });
+      expect(await withCode.startOAuthSignIn("google", "r")).toEqual({ ok: false, error: "provider_disabled" });
+      expect(await withoutCode.startOAuthSignIn("google", "r")).toEqual({ ok: false, error: "x" });
+    });
+  });
+
+  describe("completeOAuthSignIn", () => {
+    it("troca o code por sessão", async () => {
+      const exchangeCodeForSession = jest.fn().mockResolvedValue({ data: {}, error: null });
+      expect(await gatewayWith({ exchangeCodeForSession }).completeOAuthSignIn("abc")).toEqual({
+        ok: true,
+        value: undefined,
+      });
+      expect(exchangeCodeForSession).toHaveBeenCalledWith("abc");
+    });
+
+    it("falha com o código ou a mensagem do erro", async () => {
+      const withCode = gatewayWith({
+        exchangeCodeForSession: jest.fn().mockResolvedValue({ error: { code: "bad_code_verifier", message: "x" } }),
+      });
+      const withoutCode = gatewayWith({
+        exchangeCodeForSession: jest.fn().mockResolvedValue({ error: { message: "x" } }),
+      });
+      expect(await withCode.completeOAuthSignIn("abc")).toEqual({ ok: false, error: "bad_code_verifier" });
+      expect(await withoutCode.completeOAuthSignIn("abc")).toEqual({ ok: false, error: "x" });
+    });
+  });
+
   describe("currentUser", () => {
     it("retorna id e e-mail das claims validadas", async () => {
       const getClaims = jest.fn().mockResolvedValue({

@@ -1,6 +1,15 @@
 import "server-only";
 
-import { getCurrentUser, signIn, signOut, signUp } from "@/application";
+import {
+  completeOAuthSignIn,
+  getCurrentUser,
+  signIn,
+  signOut,
+  signUp,
+  startGoogleSignIn,
+  type OAuthCallbackParams,
+} from "@/application";
+import { siteUrl } from "@/infrastructure";
 import { createRequestContext } from "./request-context";
 
 export async function makeSignIn() {
@@ -21,4 +30,14 @@ export async function makeSignOut() {
 export async function makeGetCurrentUser() {
   const { auth } = await createRequestContext();
   return () => getCurrentUser(auth);
+}
+
+export async function makeStartGoogleSignIn() {
+  const { auth } = await createRequestContext();
+  return () => startGoogleSignIn(auth, siteUrl);
+}
+
+export async function makeCompleteOAuthSignIn() {
+  const { auth } = await createRequestContext();
+  return (params: OAuthCallbackParams) => completeOAuthSignIn(auth, params);
 }

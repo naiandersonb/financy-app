@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { supabasePublishableKey, supabaseUrl } from "./env";
 
-const PUBLIC_PATHS = ["/login", "/cadastro"];
+const PUBLIC_PATHS = ["/login", "/signup", "/auth/callback"];
 
 export async function refreshSessionAndGuard(request: NextRequest) {
   let response = NextResponse.next({ request });

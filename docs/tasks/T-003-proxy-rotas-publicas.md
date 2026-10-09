@@ -10,8 +10,8 @@
 ## Problema
 
 `src/infrastructure/supabase/session-proxy.ts` decide se uma rota é pública com
-`pathname.startsWith(path)` sobre `["/login", "/cadastro"]`. Assim, qualquer caminho que **comece**
-com esses textos também é tratado como público, por exemplo `/loginx` ou `/cadastro-antigo`:
+`pathname.startsWith(path)` sobre `["/login", "/signup"]`. Assim, qualquer caminho que **comece**
+com esses textos também é tratado como público, por exemplo `/loginx` ou `/signup-old`:
 
 - visitante sem sessão não é redirecionado para `/login` nessas rotas;
 - usuário logado é redirecionado para `/` ao acessá-las.
@@ -27,7 +27,7 @@ Considerar pública só a rota exata ou seus subcaminhos: `pathname === path` ou
 ## Passos
 
 - [x] Ajustar a comparação em `session-proxy.ts`.
-- [x] Testes em `session-proxy.test.ts`: `/login` e `/cadastro` continuam públicas; `/loginx` e `/cadastro-antigo` exigem sessão; `/login/algo` continua pública.
+- [x] Testes em `session-proxy.test.ts`: `/login` e `/signup` continuam públicas; `/loginx` e `/signup-old` exigem sessão; `/login/algo` continua pública.
 
 ## Pronto quando
 

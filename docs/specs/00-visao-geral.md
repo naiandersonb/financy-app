@@ -34,7 +34,7 @@ Ordem sugerida de implementação: 1 → 2 → 3 → 4 → 5 → 6 → 7.
 - **Datas:** a data de um lançamento é uma data de calendário (`date`, sem hora
   e sem fuso). O mês é sempre derivado dela.
 - **Mês de referência:** a tela principal trabalha com um mês por vez,
-  identificado na URL por `?mes=AAAA-MM` (compartilhável, funciona com
+  identificado na URL por `?month=AAAA-MM` (compartilhável, funciona com
   voltar/avançar do navegador). Sem parâmetro, ou com valor inválido, usa o mês atual.
 - **Categorias:** cada usuário tem as próprias, com nome, cor de fundo e cor do texto; começa com
   um conjunto padrão (ver spec 03).

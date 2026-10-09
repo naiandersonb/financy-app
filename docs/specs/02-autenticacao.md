@@ -17,22 +17,22 @@ Cada pessoa tem uma conta própria e acessa somente os próprios dados financeir
 2. Se o projeto Supabase exigir confirmação de e-mail, após o cadastro a pessoa
    vê uma mensagem pedindo para confirmar pelo link enviado; ela ainda não fica logada.
 3. Se a confirmação estiver desativada, o cadastro já leva direto à tela principal.
-4. Todas as rotas, exceto `/login` e `/cadastro`, exigem sessão.
+4. Todas as rotas, exceto `/login` e `/signup`, exigem sessão.
 5. Visitante sem sessão que acessa uma rota protegida é redirecionado para `/login`.
-6. Usuário logado que acessa `/login` ou `/cadastro` é redirecionado para `/`.
+6. Usuário logado que acessa `/login` ou `/signup` é redirecionado para `/`.
 7. A sessão é renovada de forma transparente (refresh de token no `src/proxy.ts`).
 8. Mensagens de erro de login não revelam se o e-mail existe ("E-mail ou senha inválidos").
 
 ### Login social com Google
 
-9. O botão "Continuar com Google" aparece em `/login` e em `/cadastro`. O mesmo fluxo serve para
+9. O botão "Continuar com Google" aparece em `/login` e em `/signup`. O mesmo fluxo serve para
    entrar e para criar a conta: no primeiro acesso, a conta é criada automaticamente.
 10. O fluxo é OAuth com PKCE, feito pelo Supabase Auth: o app redireciona para o Google, o Google
     volta para o Supabase, e o Supabase volta para `/auth/callback?code=...`. Essa rota troca o
     `code` por uma sessão e redireciona para `/`.
 11. A rota `/auth/callback` é pública (o proxy não exige sessão nela).
 12. Se o usuário cancelar no Google, ou se a troca do `code` falhar, ele volta para
-    `/login?erro=google` e vê "Não foi possível entrar com o Google. Tente novamente."
+    `/login?error=google` e vê "Não foi possível entrar com o Google. Tente novamente."
     O erro técnico não aparece na tela.
 13. A URL de retorno é montada a partir de `NEXT_PUBLIC_SITE_URL`, nunca do cabeçalho `Host` da
     requisição, que pode ser forjado.
@@ -48,9 +48,9 @@ Cada pessoa tem uma conta própria e acessa somente os próprios dados financeir
 ## Telas
 
 - **`/login`**: botão "Continuar com Google" no topo, divisor "ou", campos e-mail e senha,
-  botão "Entrar" e link "Cadastre-se" para `/cadastro`. Mostra o erro do Google quando a URL tem
-  `?erro=google`.
-- **`/cadastro`**: mesmo layout; botão "Continuar com Google", divisor, botão "Criar conta" e link
+  botão "Entrar" e link "Cadastre-se" para `/signup`. Mostra o erro do Google quando a URL tem
+  `?error=google`.
+- **`/signup`**: mesmo layout; botão "Continuar com Google", divisor, botão "Criar conta" e link
   "Entrar" para `/login`.
 - **Botão do Google**: segue as diretrizes de marca do Google (logo "G" oficial em SVG, texto
   "Continuar com Google", fundo branco com borda no tema claro). Fica desabilitado e mostra estado de
@@ -71,12 +71,12 @@ Cada pessoa tem uma conta própria e acessa somente os próprios dados financeir
 
 ### Google
 
-- [ ] Quando clico em "Continuar com Google" em `/login` ou `/cadastro`, então sou levado à tela de consentimento do Google.
+- [ ] Quando clico em "Continuar com Google" em `/login` ou `/signup`, então sou levado à tela de consentimento do Google.
 - [ ] Dado que autorizo no Google pela primeira vez, então uma conta é criada e chego em `/` logado.
 - [ ] Dado que já entrei com o Google antes, quando entro de novo, então vejo os mesmos dados de antes.
 - [ ] Dado uma conta com senha e e-mail confirmado, quando entro com o Google usando o mesmo e-mail, então vejo os dados dessa conta.
 - [ ] Dado que cancelo no Google, então volto para `/login` e vejo "Não foi possível entrar com o Google. Tente novamente."
-- [ ] Dado um `code` inválido ou ausente em `/auth/callback`, então sou redirecionado para `/login?erro=google`, sem sessão.
+- [ ] Dado um `code` inválido ou ausente em `/auth/callback`, então sou redirecionado para `/login?error=google`, sem sessão.
 - [ ] Dado `/auth/callback?code=...&next=https://site-malicioso.com` (ou `//site-malicioso.com`), então sou redirecionado para `/`, nunca para fora do app.
 - [ ] Dado que estou logado com o Google, quando clico em "Sair", então a sessão do app termina (sem deslogar do Google).
 
@@ -89,7 +89,7 @@ Cada pessoa tem uma conta própria e acessa somente os próprios dados financeir
 | `infrastructure` | `supabase/server-client.ts` (`createServerClient` do `@supabase/ssr`, cookies via `next/headers`); `supabase/supabase-auth-gateway.ts` (`signInWithOAuth({ provider: "google", options: { redirectTo } })` e `exchangeCodeForSession(code)`); `supabase/session-proxy.ts` (inclui `/auth/callback` nas rotas públicas); `supabase/env.ts` (passa a exigir `NEXT_PUBLIC_SITE_URL`) |
 | `main` | `makeSignIn`, `makeSignUp`, `makeSignOut`, `makeStartGoogleSignIn`, `makeCompleteOAuthSignIn` |
 | `presentation` | `features/auth/components/auth-form.tsx` (`useActionState`, recebe a ação por prop); `features/auth/components/google-sign-in-button.tsx` (recebe a ação por prop); `features/auth/components/sign-out-button.tsx` |
-| `app` | `(auth)/login/page.tsx` (lê `?erro=google`), `(auth)/cadastro/page.tsx`, `(auth)/actions.ts` (inclui `signInWithGoogle`, que chama o caso de uso e faz `redirect(url)`); `auth/callback/route.ts` (Route Handler `GET`, controller fino que chama `completeOAuthSignIn` e redireciona) |
+| `app` | `(auth)/login/page.tsx` (lê `?error=google`), `(auth)/signup/page.tsx`, `(auth)/actions.ts` (inclui `signInWithGoogle`, que chama o caso de uso e faz `redirect(url)`); `auth/callback/route.ts` (Route Handler `GET`, controller fino que chama `completeOAuthSignIn` e redireciona) |
 | raiz de `src` | `proxy.ts`: renova a sessão e faz os redirecionamentos |
 
 - Identidade verificada com `supabase.auth.getClaims()`, não com `getSession()`.

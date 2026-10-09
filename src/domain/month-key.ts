@@ -1,6 +1,6 @@
 import { formatIsoDate, formatIsoMonth, shiftIsoMonth } from "@/shared";
 
-/** Mês no formato YYYY-MM, usado na URL (?mes=2026-10). */
+/** Mês no formato YYYY-MM, usado na URL (?month=2026-10). */
 export type MonthKey = string;
 
 const MONTH_KEY_PATTERN = /^(\d{4})-(0[1-9]|1[0-2])$/;

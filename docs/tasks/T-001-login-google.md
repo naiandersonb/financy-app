@@ -9,7 +9,7 @@
 
 ## Objetivo
 
-Permitir entrar e criar conta com o Google em `/login` e `/cadastro`, cumprindo todos os
+Permitir entrar e criar conta com o Google em `/login` e `/signup`, cumprindo todos os
 critérios de aceite da seção "Google" da spec 02 e a [constituição](../constitution.md).
 
 ## Pré-requisitos externos (feitos por uma pessoa, não pelo código)
@@ -37,9 +37,9 @@ Cada passo escreve o teste primeiro e vai em um commit próprio (Conventional Co
 4. **`main`**
    - [ ] `makeStartGoogleSignIn` e `makeCompleteOAuthSignIn`.
 5. **`app`**
-   - [ ] Action `signInWithGoogle` em `(auth)/actions.ts`: chama o caso de uso e faz `redirect(url)`; em falha, `redirect("/login?erro=google")`. Testes com a factory mockada.
+   - [ ] Action `signInWithGoogle` em `(auth)/actions.ts`: chama o caso de uso e faz `redirect(url)`; em falha, `redirect("/login?error=google")`. Testes com a factory mockada.
    - [ ] `auth/callback/route.ts` (`GET`): lê `code`, `next` e `error`, chama o caso de uso e redireciona. Testes do handler (sucesso, cancelamento, `code` inválido, `next` malicioso).
-   - [ ] `(auth)/login/page.tsx`: lê `?erro=google` e passa a mensagem para o formulário.
+   - [ ] `(auth)/login/page.tsx`: lê `?error=google` e passa a mensagem para o formulário.
 6. **`presentation`**
    - [ ] `features/auth/components/google-sign-in-button.tsx`: logo "G" em SVG inline, "Continuar com Google", estado de carregamento, recebe a ação por prop. Testes de clique e estado desabilitado.
    - [ ] `auth-form.tsx`: botão do Google + divisor "ou" e exibição do erro do Google. Testes de render com e sem erro.

@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { makeSignIn, makeSignOut, makeSignUp } from "@/main";
+import { makeSignIn, makeSignOut, makeSignUp, makeStartGoogleSignIn } from "@/main";
 import type { AuthFormState } from "@/presentation/features/auth";
 
 export async function signIn(
@@ -25,6 +25,12 @@ export async function signUp(
     return { notice: "Conta criada! Confirme pelo link enviado ao seu e-mail e depois entre." };
   }
   redirect("/");
+}
+
+export async function signInWithGoogle() {
+  const startGoogleSignIn = await makeStartGoogleSignIn();
+  const result = await startGoogleSignIn();
+  redirect(result.ok ? result.value : "/login?error=google");
 }
 
 export async function signOut() {

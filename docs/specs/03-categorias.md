@@ -78,7 +78,7 @@ O selo sempre mostra o nome; a cor nunca é a única forma de identificar a cate
 
 ## Telas e interações
 
-- **`/categorias`**: acessível pelo menu do cabeçalho ("Categorias"). Duas seções, "Despesas" e
+- **`/categories`**: acessível pelo menu do cabeçalho ("Categorias"). Duas seções, "Despesas" e
   "Receitas", com as categorias em ordem alfabética. Cada item mostra o selo e as ações **Editar**
   e **Remover**.
 - Botão **"Nova categoria"**: abre um diálogo com:
@@ -95,7 +95,7 @@ O selo sempre mostra o nome; a cor nunca é a única forma de identificar a cate
 
 ## Critérios de aceite
 
-- [ ] Dado um usuário recém-cadastrado (por senha ou Google), quando abro `/categorias`, então vejo as 13 categorias padrão com as cores da tabela.
+- [ ] Dado um usuário recém-cadastrado (por senha ou Google), quando abro `/categories`, então vejo as 13 categorias padrão com as cores da tabela.
 - [ ] Dado nome "Pets", tipo Despesa, fundo `#FDE68A` e texto `#78350F`, quando salvo, então "Pets" aparece em Despesas com essas cores.
 - [ ] Dado que já existe "Pets" em Despesas, quando crio "pets" em Despesas, então vejo "Já existe uma categoria com esse nome" e nada é criado.
 - [ ] Dado que já existe "Outros" em Despesas, quando crio "Outros" em Receitas, então é permitido.
@@ -155,7 +155,7 @@ Mudanças nas tabelas existentes (migration nova `0002_categories.sql`, sem edit
 | `infrastructure` | `supabase/supabase-category-repository.ts`; traduz a violação de `unique` (código `23505`) em erro de nome duplicado e a de FK (`23503`) em categoria em uso |
 | `main` | `makeListCategories`, `makeCreateCategory`, `makeUpdateCategory`, `makeDeleteCategory` |
 | `presentation` | `features/categories/components/category-badge.tsx` (exportado no barrel para as outras features), `category-list.tsx`, `category-dialog.tsx`, `color-field.tsx` (seletor + hex sincronizados), `contrast-indicator.tsx` |
-| `app` | `(finance)/categorias/page.tsx`, `(finance)/categorias/actions.ts` (`saveCategory`, `deleteCategory`, com `revalidatePath` de `/` e `/categorias`) |
+| `app` | `(finance)/categories/page.tsx`, `(finance)/categories/actions.ts` (`saveCategory`, `deleteCategory`, com `revalidatePath` de `/` e `/categories`) |
 
 - O cálculo de contraste existe em `shared` e é usado nos dois lados: no navegador, para a prévia e
   o aviso; no servidor, dentro do schema, como validação de verdade.

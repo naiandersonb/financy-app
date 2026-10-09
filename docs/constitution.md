@@ -178,6 +178,9 @@ Regras complementares:
 
 - Textos de UI, specs, README e mensagens de commit em português (pt-BR); identificadores de código
   em inglês.
+- **Rotas e parâmetros de URL em inglês**, em kebab-case, tratados como identificadores de código
+  (ex.: `/signup`, `/categories`, `/?month=2026-10`, `/login?error=google`). O texto exibido nas
+  telas continua em pt-BR.
 - Comentários explicam o porquê, nunca narram o quê.
 - Formatação e ordem de imports seguem o ESLint do projeto (`eslint.config.mjs`).
 - Commits seguem Conventional Commits (`feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`…).
@@ -205,4 +208,4 @@ Regras complementares:
 
 ---
 
-**Versão:** 1.1.0 · **Ratificada em:** 2026-10-08 · **Última emenda:** 2026-10-08
+**Versão:** 1.2.0 · **Ratificada em:** 2026-10-08 · **Última emenda:** 2026-10-09

@@ -40,12 +40,12 @@ function request(path: string) {
 describe("refreshSessionAndGuard", () => {
   it("redireciona visitante sem sessão para /login, sem query string", async () => {
     mockSession({ authenticated: false });
-    const response = await refreshSessionAndGuard(request("/?mes=2026-10"));
+    const response = await refreshSessionAndGuard(request("/?month=2026-10"));
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe("http://localhost:3000/login");
   });
 
-  it.each(["/login", "/cadastro"])("deixa visitante sem sessão acessar %s", async (path) => {
+  it.each(["/login", "/signup", "/auth/callback?code=abc"])("deixa visitante sem sessão acessar %s", async (path) => {
     mockSession({ authenticated: false });
     const response = await refreshSessionAndGuard(request(path));
     expect(response.headers.get("location")).toBeNull();
@@ -57,7 +57,7 @@ describe("refreshSessionAndGuard", () => {
     expect(response.headers.get("location")).toBeNull();
   });
 
-  it.each(["/loginx", "/cadastro-antigo"])(
+  it.each(["/loginx", "/signup-old"])(
     "exige sessão em %s, que só começa com o nome de uma rota pública",
     async (path) => {
       mockSession({ authenticated: false });
@@ -72,7 +72,7 @@ describe("refreshSessionAndGuard", () => {
     expect(response.headers.get("location")).toBeNull();
   });
 
-  it.each(["/login", "/cadastro"])("redireciona usuário logado de %s para /", async (path) => {
+  it.each(["/login", "/signup"])("redireciona usuário logado de %s para /", async (path) => {
     mockSession({ authenticated: true });
     const response = await refreshSessionAndGuard(request(path));
     expect(response.headers.get("location")).toBe("http://localhost:3000/");

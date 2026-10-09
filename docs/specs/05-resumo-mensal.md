@@ -22,8 +22,8 @@ Mostrar, de relance, como está o mês: quanto entrou, quanto saiu e o que sobro
 
 - Mostra o mês por extenso (ex.: "Outubro de 2026"), com botões ‹ anterior e próximo ›.
 - Quando o mês exibido não é o atual, aparece o link "Mês atual".
-- A navegação atualiza `?mes=AAAA-MM` na URL (são links reais, então voltar/avançar do navegador funciona).
-- Parâmetro ausente ou inválido (ex.: `?mes=2026-13`, `?mes=abc`) → mês atual.
+- A navegação atualiza `?month=AAAA-MM` na URL (são links reais, então voltar/avançar do navegador funciona).
+- Parâmetro ausente ou inválido (ex.: `?month=2026-13`, `?month=abc`) → mês atual.
 - É permitido navegar para meses futuros (para lançar contas já previstas).
 - O seletor e o mês escolhido valem para todas as seções da tela (lista, resumo, categorias, orçamentos).
 
@@ -48,7 +48,7 @@ mostra o sinal de menos).
 - [ ] Dado um mês sem lançamentos, então os três cartões mostram `R$ 0,00`.
 - [ ] Lançamentos de outros meses não entram nos totais (inclusive do último dia do mês anterior e do 1º dia do seguinte).
 - [ ] Quando clico em ‹ estando em janeiro de 2027, vou para dezembro de 2026 (virada de ano).
-- [ ] Quando acesso `/?mes=2026-13`, vejo o mês atual.
+- [ ] Quando acesso `/?month=2026-13`, vejo o mês atual.
 - [ ] Depois de criar, editar ou excluir um lançamento, os totais se atualizam sem recarregar a página.
 
 ## Notas técnicas

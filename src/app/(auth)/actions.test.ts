@@ -1,12 +1,13 @@
 /** @jest-environment node */
 import { redirect } from "next/navigation";
-import { makeSignIn, makeSignOut, makeSignUp } from "@/main";
-import { signIn, signOut, signUp } from "./actions";
+import { makeSignIn, makeSignOut, makeSignUp, makeStartGoogleSignIn } from "@/main";
+import { signIn, signInWithGoogle, signOut, signUp } from "./actions";
 
 jest.mock("@/main", () => ({
   makeSignIn: jest.fn(),
   makeSignUp: jest.fn(),
   makeSignOut: jest.fn(),
+  makeStartGoogleSignIn: jest.fn(),
 }));
 jest.mock("next/navigation", () => ({
   redirect: jest.fn((path: string) => {
@@ -66,6 +67,22 @@ describe("signUp", () => {
       jest.fn().mockResolvedValue({ ok: false, error: "Senha curta." }),
     );
     expect(await signUp({}, formWith(credentials))).toEqual({ error: "Senha curta." });
+  });
+});
+
+describe("signInWithGoogle", () => {
+  it("redireciona para a URL do Google", async () => {
+    jest.mocked(makeStartGoogleSignIn).mockResolvedValue(
+      jest.fn().mockResolvedValue({ ok: true, value: "https://accounts.google.com/x" }),
+    );
+    await expect(signInWithGoogle()).rejects.toThrow("redirect:https://accounts.google.com/x");
+  });
+
+  it("volta para o login com erro quando não consegue iniciar", async () => {
+    jest.mocked(makeStartGoogleSignIn).mockResolvedValue(
+      jest.fn().mockResolvedValue({ ok: false, error: "oauth_start_failed" }),
+    );
+    await expect(signInWithGoogle()).rejects.toThrow("redirect:/login?error=google");
   });
 });
 

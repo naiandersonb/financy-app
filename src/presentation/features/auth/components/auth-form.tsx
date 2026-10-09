@@ -6,6 +6,7 @@ import { Lock, Mail } from "lucide-react";
 import { Button } from "@/presentation/components/button";
 import { Input } from "@/presentation/components/input";
 import { Label } from "@/presentation/components/label";
+import { GoogleSignInButton } from "./google-sign-in-button";
 
 export type AuthFormState = { error?: string; notice?: string };
 
@@ -15,6 +16,9 @@ type AuthFormProps = {
   submitLabel: string;
   action: (previous: AuthFormState, formData: FormData) => Promise<AuthFormState>;
   passwordAutoComplete: "current-password" | "new-password";
+  onGoogleSignIn: () => Promise<void>;
+  /** Erro vindo de fora do formulário, como o retorno do login com Google. */
+  initialError?: string;
   alternative: { prompt: string; linkLabel: string; href: string };
 };
 
@@ -24,9 +28,11 @@ export function AuthForm({
   submitLabel,
   action,
   passwordAutoComplete,
+  onGoogleSignIn,
+  initialError,
   alternative,
 }: AuthFormProps) {
-  const [state, formAction, pending] = useActionState(action, {});
+  const [state, formAction, pending] = useActionState(action, { error: initialError });
 
   return (
     <main className="flex flex-1 items-center justify-center bg-background px-4">
@@ -34,7 +40,17 @@ export function AuthForm({
         <h1 className="text-xl font-semibold">{title}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{description}</p>
 
-        <form action={formAction} className="mt-6 flex flex-col gap-4">
+        <div className="mt-6">
+          <GoogleSignInButton onGoogleSignIn={onGoogleSignIn} />
+        </div>
+
+        <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          ou
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <form action={formAction} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="email">E-mail</Label>
             <div className="relative">
