@@ -6,6 +6,7 @@ export type {
   SignUpOutcome,
 } from "./ports/auth-gateway";
 export type { BudgetRepository } from "./ports/budget-repository";
+export type { CategoryRepository } from "./ports/category-repository";
 export type {
   DateRange,
   TransactionInput,
@@ -20,6 +21,7 @@ export { deleteBudget } from "./use-cases/delete-budget";
 export { getCurrentUser } from "./use-cases/get-current-user";
 export { deleteTransaction } from "./use-cases/delete-transaction";
 export { listBudgets } from "./use-cases/list-budgets";
+export { listCategories } from "./use-cases/list-categories";
 export { listMonthTransactions } from "./use-cases/list-month-transactions";
 export { saveBudget } from "./use-cases/save-budget";
 export { saveTransaction } from "./use-cases/save-transaction";

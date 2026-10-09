@@ -4,6 +4,7 @@ import {
   createSupabaseServerClient,
   SupabaseAuthGateway,
   SupabaseBudgetRepository,
+  SupabaseCategoryRepository,
   SupabaseTransactionRepository,
 } from "@/infrastructure";
 
@@ -14,5 +15,6 @@ export async function createRequestContext() {
     auth: new SupabaseAuthGateway(client),
     transactions: new SupabaseTransactionRepository(client),
     budgets: new SupabaseBudgetRepository(client),
+    categories: new SupabaseCategoryRepository(client),
   };
 }

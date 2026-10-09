@@ -7,6 +7,13 @@ describe("AppHeader", () => {
     expect(screen.getByRole("link", { name: "Finanças" })).toHaveAttribute("href", "/");
   });
 
+  it("tem o link para Categorias na navegação principal", () => {
+    render(<AppHeader />);
+    const nav = screen.getByRole("navigation", { name: "Principal" });
+    expect(nav).toContainElement(screen.getByRole("link", { name: "Categorias" }));
+    expect(screen.getByRole("link", { name: "Categorias" })).toHaveAttribute("href", "/categories");
+  });
+
   it("mostra o conteúdo recebido", () => {
     render(
       <AppHeader>

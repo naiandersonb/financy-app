@@ -1,5 +1,6 @@
 export type { Budget } from "./budget.types";
 export { budgetStatuses, type BudgetStatus } from "./budget-status";
+export type { Category } from "./category.types";
 export { spendingByCategory, type CategorySpending } from "./category-spending";
 export {
   EXPENSE_CATEGORIES,

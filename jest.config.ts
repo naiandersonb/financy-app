@@ -43,6 +43,7 @@ const config: Config = {
   coverageThreshold: {
     global: COVERAGE_MINIMUM,
     "./src/presentation/features/auth/": COVERAGE_MINIMUM,
+    "./src/presentation/features/categories/": COVERAGE_MINIMUM,
     "./src/presentation/features/transactions/": COVERAGE_MINIMUM,
   },
 };
