@@ -65,12 +65,12 @@ de verificação manual ou de um teste que ainda não existe.
 - [x] Dado um e-mail novo e uma senha válida, quando envio o cadastro, então a conta é criada
       e vejo a tela principal ou o aviso para confirmar o e-mail. _(teste manual)_
 - [x] Dado uma senha com menos de 6 caracteres, quando envio o cadastro, então vejo um erro e nada é criado. _(teste automatizado)_
-- [ ] Dado credenciais corretas, quando entro, então sou levado para `/`.
+- [x] Dado credenciais corretas, quando entro, então sou levado para `/`. _(teste automatizado e manual)_
 - [x] Dado credenciais incorretas, quando entro, então vejo "E-mail ou senha inválidos" e continuo em `/login`. _(teste automatizado)_
 - [x] Dado que não estou logado, quando acesso `/`, então sou redirecionado para `/login`. _(teste automatizado e manual)_
 - [x] Dado que estou logado, quando clico em "Sair", então a sessão termina e vou para `/login`. _(teste manual)_
 - [x] Enquanto o formulário é enviado, o botão fica desabilitado e mostra estado de carregamento. _(teste automatizado)_
-- [ ] O usuário A nunca consegue ler ou alterar dados do usuário B, nem chamando a API diretamente (RLS).
+- [ ] O usuário A nunca consegue ler ou alterar dados do usuário B, nem chamando a API diretamente (RLS). _(pendente: [T-004](../tasks/T-004-teste-integracao-rls.md))_
 
 ### Google
 
@@ -143,3 +143,5 @@ Outros provedores sociais (Apple, GitHub etc.), vincular ou desvincular manualme
 ## Tarefas
 
 - [T-001 — Login social com Google](../tasks/T-001-login-google.md)
+- [T-003 — Comparação exata das rotas públicas no proxy](../tasks/T-003-proxy-rotas-publicas.md)
+- [T-004 — Teste de integração do isolamento entre usuários (RLS)](../tasks/T-004-teste-integracao-rls.md)
