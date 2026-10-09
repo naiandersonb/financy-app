@@ -23,3 +23,4 @@ Nome do arquivo: `T-<número com 3 dígitos>-<slug>.md`. Status possíveis: A fa
 | [T-009 — Lançamentos e orçamentos referenciam a categoria por id](T-009-referencias-por-id.md) | 03 | A fazer |
 | [T-010 — Editar categoria](T-010-editar-categoria.md) | 03 | A fazer |
 | [T-011 — Remover categoria (com bloqueios)](T-011-remover-categoria.md) | 03 | A fazer |
+| [T-012 — Recusar chave secreta do Supabase na configuração do app](T-012-recusar-chave-secreta.md) | 01 | A fazer |
