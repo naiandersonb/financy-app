@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CategoryInput, CategoryRepository } from "@/application";
+import type { CategoryChanges, CategoryInput, CategoryRepository } from "@/application";
 import type { Category } from "@/domain";
 import { fail, succeed, type Result } from "@/shared";
 import { toDatabaseError } from "./database-error";
@@ -59,6 +59,20 @@ export class SupabaseCategoryRepository implements CategoryRepository {
     if (!error) return succeed();
     if (error.code === UNIQUE_VIOLATION) return fail("duplicate-name");
     throw toDatabaseError("Falha ao criar categoria", error);
+  }
+
+  async update(id: string, changes: CategoryChanges): Promise<Result<void, "duplicate-name">> {
+    const { error } = await this.client
+      .from("categories")
+      .update({
+        name: changes.name,
+        background_color: changes.backgroundColor,
+        text_color: changes.textColor,
+      })
+      .eq("id", id);
+    if (!error) return succeed();
+    if (error.code === UNIQUE_VIOLATION) return fail("duplicate-name");
+    throw toDatabaseError("Falha ao atualizar categoria", error);
   }
 }
 

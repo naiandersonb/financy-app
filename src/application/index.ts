@@ -6,7 +6,11 @@ export type {
   SignUpOutcome,
 } from "./ports/auth-gateway";
 export type { BudgetRepository } from "./ports/budget-repository";
-export type { CategoryInput, CategoryRepository } from "./ports/category-repository";
+export type {
+  CategoryChanges,
+  CategoryInput,
+  CategoryRepository,
+} from "./ports/category-repository";
 export type {
   DateRange,
   TransactionInput,
@@ -29,4 +33,5 @@ export { saveTransaction } from "./use-cases/save-transaction";
 export { signIn } from "./use-cases/sign-in";
 export { signOut } from "./use-cases/sign-out";
 export { signUp } from "./use-cases/sign-up";
+export { updateCategory } from "./use-cases/update-category";
 export { OAUTH_CALLBACK_PATH, startGoogleSignIn } from "./use-cases/start-google-sign-in";

@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Plus } from "lucide-react";
-import { hasReadableContrast, type TransactionKind } from "@/domain";
+import { Pencil, Plus } from "lucide-react";
+import { hasReadableContrast, type Category, type TransactionKind } from "@/domain";
 import { Button } from "@/presentation/components/button";
 import {
   Dialog,
@@ -27,34 +27,58 @@ export type SaveCategoryAction = (previous: Result | null, formData: FormData) =
 const DEFAULT_BACKGROUND = "#e5e7eb";
 const DEFAULT_TEXT = "#1f2937";
 
-type CategoryDialogProps = { onSave: SaveCategoryAction };
+type CategoryDialogProps = {
+  onSave: SaveCategoryAction;
+  /** Quando informada, o diálogo edita esta categoria (o tipo não muda). */
+  category?: Category;
+};
 
-export function CategoryDialog({ onSave }: CategoryDialogProps) {
+export function CategoryDialog({ onSave, category }: CategoryDialogProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button />}>
-        <Plus /> Nova categoria
-      </DialogTrigger>
+      {category ? (
+        <DialogTrigger
+          render={
+            <Button variant="ghost" size="icon-sm" aria-label={`Editar categoria ${category.name}`} />
+          }
+        >
+          <Pencil />
+        </DialogTrigger>
+      ) : (
+        <DialogTrigger render={<Button />}>
+          <Plus /> Nova categoria
+        </DialogTrigger>
+      )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Nova categoria</DialogTitle>
-          <DialogDescription>Escolha o nome, o tipo e as cores do selo.</DialogDescription>
+          <DialogTitle>{category ? "Editar categoria" : "Nova categoria"}</DialogTitle>
+          <DialogDescription>
+            {category
+              ? "Altere o nome e as cores do selo. O tipo não pode ser trocado."
+              : "Escolha o nome, o tipo e as cores do selo."}
+          </DialogDescription>
         </DialogHeader>
-        <CategoryForm onSave={onSave} onSaved={() => setOpen(false)} />
+        <CategoryForm onSave={onSave} category={category} onSaved={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
 }
 
-function CategoryForm({ onSave, onSaved }: CategoryDialogProps & { onSaved: () => void }) {
+function CategoryForm({
+  onSave,
+  category,
+  onSaved,
+}: CategoryDialogProps & { onSaved: () => void }) {
   // Campos controlados: o React 19 reseta os não controlados ao fim da action, e o usuário
   // perderia o que digitou quando o servidor devolve erro.
-  const [name, setName] = useState("");
-  const [backgroundColor, setBackgroundColor] = useState(DEFAULT_BACKGROUND);
-  const [textColor, setTextColor] = useState(DEFAULT_TEXT);
-  const [kind, setKind] = useState<TransactionKind>("expense");
+  const [name, setName] = useState(category?.name ?? "");
+  const [backgroundColor, setBackgroundColor] = useState(
+    category?.backgroundColor ?? DEFAULT_BACKGROUND,
+  );
+  const [textColor, setTextColor] = useState(category?.textColor ?? DEFAULT_TEXT);
+  const [kind, setKind] = useState<TransactionKind>(category?.kind ?? "expense");
   const [state, formAction, pending] = useActionState(
     async (previous: Result | null, formData: FormData) => {
       const result = await onSave(previous, formData);
@@ -66,6 +90,8 @@ function CategoryForm({ onSave, onSaved }: CategoryDialogProps & { onSaved: () =
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
+      {category && <input type="hidden" name="id" value={category.id} />}
+
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="category-name">Nome</Label>
         <Input
@@ -79,7 +105,7 @@ function CategoryForm({ onSave, onSaved }: CategoryDialogProps & { onSaved: () =
         />
       </div>
 
-      <KindSelector value={kind} onChange={setKind} />
+      <KindSelector value={kind} onChange={setKind} disabled={Boolean(category)} />
 
       <div className="grid gap-3 sm:grid-cols-2">
         <ColorField

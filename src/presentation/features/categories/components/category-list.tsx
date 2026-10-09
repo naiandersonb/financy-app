@@ -1,15 +1,19 @@
 import type { Category } from "@/domain";
 import { categoriesByKind } from "../view-models/categories-by-kind";
 import { CategoryBadge } from "./category-badge";
+import { CategoryDialog, type SaveCategoryAction } from "./category-dialog";
 
-type CategoryListProps = { categories: Category[] };
+type CategoryListProps = {
+  categories: Category[];
+  onUpdate: SaveCategoryAction;
+};
 
-export function CategoryList({ categories }: CategoryListProps) {
+export function CategoryList({ categories, onUpdate }: CategoryListProps) {
   const { expense, income } = categoriesByKind(categories);
   return (
     <div className="grid gap-6 sm:grid-cols-2">
-      <CategorySection title="Despesas" categories={expense} />
-      <CategorySection title="Receitas" categories={income} />
+      <CategorySection title="Despesas" categories={expense} onUpdate={onUpdate} />
+      <CategorySection title="Receitas" categories={income} onUpdate={onUpdate} />
     </div>
   );
 }
@@ -17,10 +21,8 @@ export function CategoryList({ categories }: CategoryListProps) {
 function CategorySection({
   title,
   categories,
-}: {
-  title: string;
-  categories: Category[];
-}) {
+  onUpdate,
+}: CategoryListProps & { title: string }) {
   const headingId = `categorias-${title.toLowerCase()}`;
   return (
     <section
@@ -35,8 +37,9 @@ function CategorySection({
       ) : (
         <ul className="flex flex-col gap-2">
           {categories.map((category) => (
-            <li key={category.id}>
+            <li key={category.id} className="flex items-center justify-between gap-2">
               <CategoryBadge category={category} />
+              <CategoryDialog category={category} onSave={onUpdate} />
             </li>
           ))}
         </ul>

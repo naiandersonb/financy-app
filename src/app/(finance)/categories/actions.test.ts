@@ -1,9 +1,9 @@
 /** @jest-environment node */
 import { revalidatePath } from "next/cache";
-import { makeCreateCategory } from "@/main";
-import { createCategory } from "./actions";
+import { makeCreateCategory, makeUpdateCategory } from "@/main";
+import { createCategory, updateCategory } from "./actions";
 
-jest.mock("@/main", () => ({ makeCreateCategory: jest.fn() }));
+jest.mock("@/main", () => ({ makeCreateCategory: jest.fn(), makeUpdateCategory: jest.fn() }));
 jest.mock("next/cache", () => ({ revalidatePath: jest.fn() }));
 
 describe("createCategory", () => {
@@ -30,5 +30,22 @@ describe("createCategory", () => {
       error: "Não foi possível criar a categoria.",
     });
     consoleError.mockRestore();
+  });
+});
+
+describe("updateCategory", () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it("repassa o formulário e revalida a tela principal e a de categorias", async () => {
+    const useCase = jest.fn().mockResolvedValue({ ok: true, value: undefined });
+    jest.mocked(makeUpdateCategory).mockResolvedValue(useCase);
+    const formData = new FormData();
+    formData.set("id", "c-1");
+    formData.set("name", "Diversão");
+
+    expect(await updateCategory(null, formData)).toEqual({ ok: true, value: undefined });
+    expect(useCase).toHaveBeenCalledWith({ id: "c-1", name: "Diversão" });
+    expect(revalidatePath).toHaveBeenCalledWith("/");
+    expect(revalidatePath).toHaveBeenCalledWith("/categories");
   });
 });

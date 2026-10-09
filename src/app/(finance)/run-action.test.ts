@@ -23,6 +23,15 @@ describe("runAndRevalidate", () => {
     expect(revalidatePath).toHaveBeenCalledWith("/categories");
   });
 
+  it("revalida cada caminho de uma lista", async () => {
+    await runAndRevalidate("Falhou.", ["/", "/categories"], async () => ({
+      ok: true,
+      value: undefined,
+    }));
+    expect(revalidatePath).toHaveBeenCalledWith("/");
+    expect(revalidatePath).toHaveBeenCalledWith("/categories");
+  });
+
   it("devolve a falha prevista sem revalidar", async () => {
     const result = await runAndRevalidate("Falhou.", "/", async () => ({
       ok: false,

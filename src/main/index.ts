@@ -8,7 +8,7 @@ export {
 } from "./auth";
 export { siteUrl } from "@/infrastructure";
 export { makeDeleteBudget, makeListBudgets, makeSaveBudget } from "./budgets";
-export { makeCreateCategory, makeListCategories } from "./categories";
+export { makeCreateCategory, makeListCategories, makeUpdateCategory } from "./categories";
 export {
   makeDeleteTransaction,
   makeListMonthTransactions,

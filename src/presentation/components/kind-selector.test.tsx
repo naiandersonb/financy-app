@@ -21,4 +21,11 @@ describe("KindSelector", () => {
     await userEvent.setup().click(screen.getByRole("radio", { name: "Receita" }));
     expect(onChange).toHaveBeenCalledWith("income");
   });
+
+  it("mostra o tipo sem permitir trocá-lo quando desabilitado", () => {
+    render(<KindSelector value="expense" onChange={jest.fn()} disabled />);
+    expect(screen.getByRole("radio", { name: "Despesa" })).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Despesa" })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: "Receita" })).toBeDisabled();
+  });
 });

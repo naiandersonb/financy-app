@@ -82,4 +82,27 @@ describe("lançamentos e orçamentos referenciam a categoria por id", () => {
     const { error } = await userA.client.from("categories").delete().eq("id", housingOfA);
     expect(error?.code).toBe(FOREIGN_KEY_VIOLATION);
   });
+
+  it("renomear a categoria se reflete em lançamentos e orçamentos já existentes", async () => {
+    const leisureOfA = await categoryIdOf(userA, "expense", "Lazer");
+    await userA.client.from("transactions").insert(transaction("expense", leisureOfA));
+    await userA.client.from("budgets").insert({ category_id: leisureOfA, limit_cents: 40_000 });
+
+    const renamed = await userA.client
+      .from("categories")
+      .update({ name: "Diversão" })
+      .eq("id", leisureOfA);
+    expect(renamed.error).toBeNull();
+
+    const transactions = await userA.client
+      .from("transactions")
+      .select("categories(name)")
+      .eq("category_id", leisureOfA);
+    const budgets = await userA.client
+      .from("budgets")
+      .select("categories(name)")
+      .eq("category_id", leisureOfA);
+    expect(transactions.data).toEqual([{ categories: { name: "Diversão" } }]);
+    expect(budgets.data).toEqual([{ categories: { name: "Diversão" } }]);
+  });
 });

@@ -111,4 +111,36 @@ describe("SupabaseCategoryRepository", () => {
       );
     });
   });
+
+  describe("update", () => {
+    const changes = { name: "Diversão", backgroundColor: "#fde68a", textColor: "#78350f" };
+
+    it("altera nome e cores pelo id, sem tocar no tipo", async () => {
+      const { client, calls } = createSupabaseClientMock({ error: null });
+      expect(await new SupabaseCategoryRepository(client).update("c-1", changes)).toEqual({
+        ok: true,
+        value: undefined,
+      });
+      expect(calls).toContainEqual([
+        "update",
+        [{ name: "Diversão", background_color: "#fde68a", text_color: "#78350f" }],
+      ]);
+      expect(calls).toContainEqual(["eq", ["id", "c-1"]]);
+    });
+
+    it("traduz a violação de unicidade em nome duplicado", async () => {
+      const { client } = createSupabaseClientMock({ error: { code: "23505", message: "duplicate" } });
+      expect(await new SupabaseCategoryRepository(client).update("c-1", changes)).toEqual({
+        ok: false,
+        error: "duplicate-name",
+      });
+    });
+
+    it("lança erro com contexto nas outras falhas", async () => {
+      const { client } = createSupabaseClientMock({ error: { code: "23514", message: "check" } });
+      await expect(new SupabaseCategoryRepository(client).update("c-1", changes)).rejects.toThrow(
+        "Falha ao atualizar categoria (código 23514)",
+      );
+    });
+  });
 });

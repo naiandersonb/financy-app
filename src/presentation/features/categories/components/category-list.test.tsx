@@ -9,7 +9,7 @@ function category(kind: Category["kind"], name: string): Category {
 describe("CategoryList", () => {
   it("mostra as categorias em seções de Despesas e Receitas, em ordem alfabética", () => {
     render(
-      <CategoryList
+      <CategoryList onUpdate={jest.fn()}
         categories={[
           category("expense", "Moradia"),
           category("income", "Salário"),
@@ -34,8 +34,19 @@ describe("CategoryList", () => {
   });
 
   it("avisa quando um tipo não tem categorias", () => {
-    render(<CategoryList categories={[category("expense", "Moradia")]} />);
+    render(<CategoryList onUpdate={jest.fn()} categories={[category("expense", "Moradia")]} />);
     const incomes = within(screen.getByRole("region", { name: "Receitas" }));
     expect(incomes.getByText("Nenhuma categoria.")).toBeInTheDocument();
+  });
+
+  it("oferece editar cada categoria", () => {
+    render(
+      <CategoryList
+        onUpdate={jest.fn()}
+        categories={[category("expense", "Moradia"), category("income", "Salário")]}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Editar categoria Moradia" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Editar categoria Salário" })).toBeInTheDocument();
   });
 });

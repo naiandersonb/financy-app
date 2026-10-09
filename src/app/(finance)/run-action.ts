@@ -7,12 +7,12 @@ import { fail, type Result } from "@/shared";
  */
 export async function runAndRevalidate(
   failureMessage: string,
-  revalidate: string,
+  revalidate: string | string[],
   run: () => Promise<Result>,
 ): Promise<Result> {
   try {
     const result = await run();
-    if (result.ok) revalidatePath(revalidate);
+    if (result.ok) [revalidate].flat().forEach((path) => revalidatePath(path));
     return result;
   } catch (error) {
     console.error(failureMessage, error);

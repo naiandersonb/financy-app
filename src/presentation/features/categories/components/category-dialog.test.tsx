@@ -121,4 +121,59 @@ describe("CategoryDialog", () => {
       expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
     });
   });
+
+  describe("edição", () => {
+    const leisure = {
+      id: "c-lazer",
+      kind: "income" as const,
+      name: "Lazer",
+      backgroundColor: "#dcfce7",
+      textColor: "#166534",
+    };
+
+    async function openEdit(onSave = jest.fn().mockResolvedValue(success)) {
+      const user = userEvent.setup();
+      render(<CategoryDialog category={leisure} onSave={onSave} />);
+      await user.click(screen.getByRole("button", { name: "Editar categoria Lazer" }));
+      await screen.findByRole("dialog", { name: "Editar categoria" });
+      return { user, onSave };
+    }
+
+    it("abre preenchido, com o tipo visível mas sem poder trocá-lo", async () => {
+      await openEdit();
+      expect(screen.getByLabelText("Nome")).toHaveValue("Lazer");
+      expect(screen.getByLabelText("Cor de fundo")).toHaveValue("#dcfce7");
+      expect(screen.getByLabelText("Cor do texto")).toHaveValue("#166534");
+      expect(screen.getByRole("radio", { name: "Receita" })).toBeChecked();
+      expect(screen.getByRole("radio", { name: "Receita" })).toBeDisabled();
+      expect(screen.getByRole("radio", { name: "Despesa" })).toBeDisabled();
+    });
+
+    it("envia o id e as alterações, sem o tipo, e fecha quando salva", async () => {
+      const { user, onSave } = await openEdit();
+      await user.clear(screen.getByLabelText("Nome"));
+      await user.type(screen.getByLabelText("Nome"), "Diversão");
+      await user.click(screen.getByRole("button", { name: "Salvar" }));
+
+      expect(Object.fromEntries(onSave.mock.calls[0][1] as FormData)).toEqual({
+        id: "c-lazer",
+        name: "Diversão",
+        backgroundColor: "#dcfce7",
+        textColor: "#166534",
+      });
+      await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    });
+
+    it("mantém as alterações e mostra o erro quando o nome já existe", async () => {
+      const { user } = await openEdit(
+        jest.fn().mockResolvedValue({ ok: false, error: "Já existe uma categoria com esse nome." }),
+      );
+      await user.clear(screen.getByLabelText("Nome"));
+      await user.type(screen.getByLabelText("Nome"), "Salário");
+      await user.click(screen.getByRole("button", { name: "Salvar" }));
+
+      expect(await screen.findByRole("alert")).toHaveTextContent("Já existe uma categoria");
+      expect(screen.getByLabelText("Nome")).toHaveValue("Salário");
+    });
+  });
 });
