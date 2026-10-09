@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [01 — Fundação](../specs/01-fundacao.md); constituição, seção Qualidade → Segurança ("a chave `service_role` nunca é usada no app") |
-| Status | A fazer |
+| Status | Concluída |
 | Depende de | — |
 | Bloqueia | — |
 
@@ -35,11 +35,11 @@ variável NEXT_PUBLIC_."
 
 ## Critérios de aceite
 
-- [ ] Com uma chave `sb_secret_...`, o app não sobe e mostra a mensagem acima.
-- [ ] Com um JWT legado de `service_role`, o app não sobe e mostra a mesma mensagem.
-- [ ] Com `sb_publishable_...` ou o JWT legado de `anon`, o app sobe normalmente.
-- [ ] A mensagem de erro nunca inclui o valor da chave.
-- [ ] Gate de qualidade verde, com a cobertura mantida.
+- [x] Com uma chave `sb_secret_...`, o app não sobe e mostra a mensagem acima.
+- [x] Com um JWT legado de `service_role`, o app não sobe e mostra a mesma mensagem.
+- [x] Com `sb_publishable_...` ou o JWT legado de `anon`, o app sobe normalmente.
+- [x] A mensagem de erro nunca inclui o valor da chave.
+- [x] Gate de qualidade verde, com a cobertura mantida.
 
 ## Tamanho
 
