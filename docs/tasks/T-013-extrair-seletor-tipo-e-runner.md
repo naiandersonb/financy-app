@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [03 — Categorias](../specs/03-categorias.md) (preparação para a T-007) |
-| Status | Implementada (aguardando revisão) |
+| Status | Concluída |
 | Depende de | — |
 | Bloqueia | [T-007](T-007-criar-categoria.md) |
 
