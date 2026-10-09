@@ -128,7 +128,9 @@ categories
   unique (id, user_id, kind)        ← alvo das FKs compostas abaixo
 ```
 
-Mudanças nas tabelas existentes (migration nova `0002_categories.sql`, sem editar a `0001`):
+A tabela `categories`, a RLS e as categorias padrão ficam na migration `0002_categories.sql`.
+As mudanças nas tabelas existentes ficam numa migration separada, `0003_category_references.sql`
+(sem editar a `0001`), para que cada uma acompanhe uma tarefa:
 
 - `transactions.category text` → `category_id uuid not null`, com FK composta
   `(category_id, user_id, kind) → categories (id, user_id, kind) on delete restrict`. Assim o banco
@@ -189,11 +191,25 @@ Passos:
 | Validação com zod | `categoryInputSchema` no servidor, incluindo o contraste |
 | Isolamento por usuário | RLS + FKs compostas com `user_id` |
 | Acessibilidade | Contraste mínimo WCAG AA obrigatório; o nome sempre aparece no selo |
-| Migrations versionadas | `0002_categories.sql` nova, sem alterar a `0001` |
+| Migrations versionadas | `0002_categories.sql` e `0003_category_references.sql` novas, sem alterar a `0001` |
 | Sem código morto / fonte única | Apaga a lista fixa do código e encerra a exceção de cobertura aberta na spec 01; categorias padrão só na migration |
 | Novas dependências | Nenhuma: seletor de cor nativo e fórmula de contraste própria |
 
 **Exceções:** nenhuma.
+
+## Tarefas
+
+Ordem de implementação:
+
+1. [T-005 — Tabela de categorias e categorias padrão](../tasks/T-005-tabela-categorias.md)
+2. [T-006 — Página de categorias (listagem)](../tasks/T-006-listar-categorias.md)
+3. [T-007 — Criar categoria (com validação no servidor)](../tasks/T-007-criar-categoria.md)
+4. [T-008 — Prévia ao vivo e indicador de contraste](../tasks/T-008-previa-contraste.md)
+5. [T-009 — Lançamentos e orçamentos referenciam a categoria por id](../tasks/T-009-referencias-por-id.md)
+6. [T-010 — Editar categoria](../tasks/T-010-editar-categoria.md)
+7. [T-011 — Remover categoria (com bloqueios)](../tasks/T-011-remover-categoria.md)
+
+Pré-requisito: [T-004 — Teste de integração do isolamento entre usuários (RLS)](../tasks/T-004-teste-integracao-rls.md).
 
 ## Fora do escopo
 
