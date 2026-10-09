@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CategoryDialog } from "./category-dialog";
 
@@ -71,5 +71,54 @@ describe("CategoryDialog", () => {
     await user.click(screen.getByRole("button", { name: "Cancelar" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(onSave).not.toHaveBeenCalled();
+  });
+
+  describe("prévia", () => {
+    function preview() {
+      return within(screen.getByRole("group", { name: "Prévia" }));
+    }
+
+    it("mostra um nome de exemplo e as cores padrão antes de digitar", async () => {
+      await openDialog();
+      expect(preview().getByText("Nome da categoria")).toHaveStyle({
+        backgroundColor: "#e5e7eb",
+        color: "#1f2937",
+      });
+      expect(preview().getByRole("status")).toHaveTextContent(/Contraste .* — bom/);
+    });
+
+    it("acompanha o nome e as cores enquanto o usuário edita", async () => {
+      const { user } = await openDialog();
+      await user.type(screen.getByLabelText("Nome"), "Pets");
+      await user.clear(screen.getByLabelText("Cor de fundo"));
+      await user.type(screen.getByLabelText("Cor de fundo"), "#fde68a");
+      await user.clear(screen.getByLabelText("Cor do texto"));
+      await user.type(screen.getByLabelText("Cor do texto"), "#78350f");
+
+      expect(preview().getByText("Pets")).toHaveStyle({
+        backgroundColor: "#fde68a",
+        color: "#78350f",
+      });
+      expect(preview().getByRole("status")).toHaveTextContent("Contraste 7,2:1 — bom");
+    });
+
+    it("usa a cor padrão na prévia enquanto o hexadecimal está incompleto", async () => {
+      const { user } = await openDialog();
+      await user.clear(screen.getByLabelText("Cor de fundo"));
+      await user.type(screen.getByLabelText("Cor de fundo"), "#fd");
+      expect(preview().getByText("Nome da categoria")).toHaveStyle({ backgroundColor: "#e5e7eb" });
+      expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
+    });
+
+    it("avisa e desabilita o salvar quando o contraste é baixo", async () => {
+      const { user } = await openDialog();
+      await user.clear(screen.getByLabelText("Cor de fundo"));
+      await user.type(screen.getByLabelText("Cor de fundo"), "#ffffff");
+      await user.clear(screen.getByLabelText("Cor do texto"));
+      await user.type(screen.getByLabelText("Cor do texto"), "#eeeeee");
+
+      expect(preview().getByRole("status")).toHaveTextContent("Pouco contraste");
+      expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
+    });
   });
 });

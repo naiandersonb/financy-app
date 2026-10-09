@@ -19,7 +19,7 @@ Nome do arquivo: `T-<número com 3 dígitos>-<slug>.md`. Status possíveis: A fa
 | [T-005 — Tabela de categorias e categorias padrão](T-005-tabela-categorias.md) | 03 | Concluída |
 | [T-006 — Página de categorias (listagem)](T-006-listar-categorias.md) | 03 | Concluída |
 | [T-007 — Criar categoria (com validação no servidor)](T-007-criar-categoria.md) | 03 | Concluída |
-| [T-008 — Prévia ao vivo e indicador de contraste](T-008-previa-contraste.md) | 03 | A fazer |
+| [T-008 — Prévia ao vivo e indicador de contraste](T-008-previa-contraste.md) | 03 | Implementada |
 | [T-009 — Lançamentos e orçamentos referenciam a categoria por id](T-009-referencias-por-id.md) | 03 | A fazer |
 | [T-010 — Editar categoria](T-010-editar-categoria.md) | 03 | A fazer |
 | [T-011 — Remover categoria (com bloqueios)](T-011-remover-categoria.md) | 03 | A fazer |

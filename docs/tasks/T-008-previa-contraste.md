@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [03 — Categorias](../specs/03-categorias.md), regra 2 e "Telas e interações" |
-| Status | A fazer |
+| Status | Implementada (aguardando revisão) |
 | Depende de | [T-007](T-007-criar-categoria.md) |
 | Bloqueia | — |
 
@@ -15,16 +15,22 @@ edita, e um indicador de contraste ("Contraste 7,2:1 — bom"). Abaixo de 4,5:1,
 
 ## Escopo
 
-Só `presentation`: `contrast-indicator.tsx` e ajustes em `category-dialog.tsx`, usando
+Só `presentation`: `contrast-indicator.tsx` e ajustes em `category-dialog.tsx` e `color-field.tsx`
+(que passa a ser controlado pelo formulário, para a prévia acompanhar as cores), usando
 `contrastRatio` de `shared` (o mesmo cálculo que o servidor usa).
+
+- A razão é arredondada **para baixo** (4,48:1 aparece como 4,4:1), para nunca exibir "4,5:1" num
+  contraste reprovado.
+- Enquanto um hexadecimal está incompleto, a prévia usa a cor padrão daquele campo, o indicador pede
+  cores válidas e o botão de salvar fica desabilitado.
 
 ## Critérios de aceite cobertos
 
-- [ ] Ao mudar a cor no seletor, o campo hexadecimal **e a prévia** se atualizam, e vice-versa. *(critério 8, completo)*
-- [ ] Fundo `#ffffff` e texto `#eeeeee` → aviso de pouco contraste e botão de salvar desabilitado. *(critério 7, parte da tela)*
-- [ ] O indicador mostra a razão com uma casa decimal, no formato pt-BR (`7,2:1`).
-- [ ] Gate de qualidade verde.
+- [x] Ao mudar a cor no seletor, o campo hexadecimal **e a prévia** se atualizam, e vice-versa. *(critério 8, completo)*
+- [x] Fundo `#ffffff` e texto `#eeeeee` → aviso de pouco contraste e botão de salvar desabilitado. *(critério 7, parte da tela)*
+- [x] O indicador mostra a razão com uma casa decimal, no formato pt-BR (`7,2:1`).
+- [x] Gate de qualidade verde.
 
 ## Tamanho
 
-~2 arquivos de produção, ~80 linhas.
+Medido: 3 arquivos de produção, ~110 linhas.

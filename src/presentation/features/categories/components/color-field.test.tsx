@@ -1,9 +1,15 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { ColorField } from "./color-field";
 
+function ControlledColorField() {
+  const [value, setValue] = useState("#e5e7eb");
+  return <ColorField label="Cor de fundo" name="backgroundColor" value={value} onChange={setValue} />;
+}
+
 function renderField() {
-  render(<ColorField label="Cor de fundo" name="backgroundColor" defaultValue="#e5e7eb" />);
+  render(<ControlledColorField />);
   return {
     hex: screen.getByLabelText("Cor de fundo") as HTMLInputElement,
     picker: screen.getByLabelText("Cor de fundo (seletor)") as HTMLInputElement,
@@ -11,7 +17,7 @@ function renderField() {
 }
 
 describe("ColorField", () => {
-  it("começa com o valor padrão nos dois campos", () => {
+  it("começa com o valor recebido nos dois campos", () => {
     const { hex, picker } = renderField();
     expect(hex).toHaveValue("#e5e7eb");
     expect(hex).toHaveAttribute("name", "backgroundColor");

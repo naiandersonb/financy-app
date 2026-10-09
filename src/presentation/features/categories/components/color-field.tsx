@@ -9,24 +9,24 @@ type ColorFieldProps = {
   label: string;
   /** Nome do campo hexadecimal no formulário. */
   name: string;
-  defaultValue: string;
+  value: string;
+  onChange: (hex: string) => void;
 };
 
 /** Seletor de cor nativo e campo hexadecimal, sempre sincronizados. */
-export function ColorField({ label, name, defaultValue }: ColorFieldProps) {
+export function ColorField({ label, name, value, onChange }: ColorFieldProps) {
   const id = useId();
-  const [hex, setHex] = useState(defaultValue);
   // O seletor nativo só aceita #rrggbb em minúsculas; enquanto o texto for inválido, mantém a última cor válida.
-  const [pickerValue, setPickerValue] = useState(defaultValue.toLowerCase());
+  const [pickerValue, setPickerValue] = useState(value.toLowerCase());
 
-  function handleHexChange(value: string) {
-    setHex(value);
-    if (parseHexColor(value)) setPickerValue(value.toLowerCase());
+  function handleHexChange(hex: string) {
+    onChange(hex);
+    if (parseHexColor(hex)) setPickerValue(hex.toLowerCase());
   }
 
-  function handlePickerChange(value: string) {
-    setPickerValue(value);
-    setHex(value);
+  function handlePickerChange(hex: string) {
+    setPickerValue(hex);
+    onChange(hex);
   }
 
   return (
@@ -43,7 +43,7 @@ export function ColorField({ label, name, defaultValue }: ColorFieldProps) {
         <Input
           id={id}
           name={name}
-          value={hex}
+          value={value}
           onChange={(event) => handleHexChange(event.target.value)}
           required
           maxLength={7}

@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { Plus } from "lucide-react";
-import type { TransactionKind } from "@/domain";
+import { hasReadableContrast, type TransactionKind } from "@/domain";
 import { Button } from "@/presentation/components/button";
 import {
   Dialog,
@@ -17,8 +17,10 @@ import {
 import { Input } from "@/presentation/components/input";
 import { KindSelector } from "@/presentation/components/kind-selector";
 import { Label } from "@/presentation/components/label";
-import type { Result } from "@/shared";
+import { parseHexColor, type Result } from "@/shared";
+import { CategoryBadge } from "./category-badge";
 import { ColorField } from "./color-field";
+import { ContrastIndicator } from "./contrast-indicator";
 
 export type SaveCategoryAction = (previous: Result | null, formData: FormData) => Promise<Result>;
 
@@ -50,6 +52,8 @@ function CategoryForm({ onSave, onSaved }: CategoryDialogProps & { onSaved: () =
   // Campos controlados: o React 19 reseta os não controlados ao fim da action, e o usuário
   // perderia o que digitou quando o servidor devolve erro.
   const [name, setName] = useState("");
+  const [backgroundColor, setBackgroundColor] = useState(DEFAULT_BACKGROUND);
+  const [textColor, setTextColor] = useState(DEFAULT_TEXT);
   const [kind, setKind] = useState<TransactionKind>("expense");
   const [state, formAction, pending] = useActionState(
     async (previous: Result | null, formData: FormData) => {
@@ -78,8 +82,39 @@ function CategoryForm({ onSave, onSaved }: CategoryDialogProps & { onSaved: () =
       <KindSelector value={kind} onChange={setKind} />
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <ColorField label="Cor de fundo" name="backgroundColor" defaultValue={DEFAULT_BACKGROUND} />
-        <ColorField label="Cor do texto" name="textColor" defaultValue={DEFAULT_TEXT} />
+        <ColorField
+          label="Cor de fundo"
+          name="backgroundColor"
+          value={backgroundColor}
+          onChange={setBackgroundColor}
+        />
+        <ColorField
+          label="Cor do texto"
+          name="textColor"
+          value={textColor}
+          onChange={setTextColor}
+        />
+      </div>
+
+      <div
+        role="group"
+        aria-labelledby="category-preview-label"
+        className="flex flex-col gap-2 rounded-lg border bg-muted/40 p-3"
+      >
+        <span id="category-preview-label" className="text-xs font-medium text-muted-foreground">
+          Prévia
+        </span>
+        <div>
+          <CategoryBadge
+            category={{
+              name: name.trim() || "Nome da categoria",
+              // Enquanto uma cor está incompleta, a prévia usa a cor padrão daquele campo.
+              backgroundColor: validColorOr(backgroundColor, DEFAULT_BACKGROUND),
+              textColor: validColorOr(textColor, DEFAULT_TEXT),
+            }}
+          />
+        </div>
+        <ContrastIndicator backgroundColor={backgroundColor} textColor={textColor} />
       </div>
 
       {state && !state.ok && (
@@ -90,10 +125,14 @@ function CategoryForm({ onSave, onSaved }: CategoryDialogProps & { onSaved: () =
 
       <DialogFooter>
         <DialogClose render={<Button type="button" variant="outline" />}>Cancelar</DialogClose>
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={pending || !hasReadableContrast(backgroundColor, textColor)}>
           {pending ? "Salvando…" : "Salvar"}
         </Button>
       </DialogFooter>
     </form>
   );
+}
+
+function validColorOr(hex: string, fallback: string): string {
+  return parseHexColor(hex) ? hex : fallback;
 }
