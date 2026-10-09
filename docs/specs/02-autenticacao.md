@@ -70,7 +70,7 @@ de verificação manual ou de um teste que ainda não existe.
 - [x] Dado que não estou logado, quando acesso `/`, então sou redirecionado para `/login`. _(teste automatizado e manual)_
 - [x] Dado que estou logado, quando clico em "Sair", então a sessão termina e vou para `/login`. _(teste manual)_
 - [x] Enquanto o formulário é enviado, o botão fica desabilitado e mostra estado de carregamento. _(teste automatizado)_
-- [ ] O usuário A nunca consegue ler ou alterar dados do usuário B, nem chamando a API diretamente (RLS). _(pendente: [T-004](../tasks/T-004-teste-integracao-rls.md))_
+- [x] O usuário A nunca consegue ler ou alterar dados do usuário B, nem chamando a API diretamente (RLS). _(teste de integração, [T-004](../tasks/T-004-teste-integracao-rls.md))_
 
 ### Google
 

@@ -19,6 +19,8 @@ const SHADCN_GENERATED_COMPONENTS = [
 const config: Config = {
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  // Testes de integração (supabase/tests) rodam à parte, com `npm run test:integration`.
+  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/supabase/"],
   moduleNameMapper: {
     "^server-only$": "<rootDir>/jest.server-only-stub.ts",
     "^@/(.*)$": "<rootDir>/src/$1",

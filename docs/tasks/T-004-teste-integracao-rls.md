@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [02 — Autenticação](../specs/02-autenticacao.md), critério "O usuário A nunca consegue ler ou alterar dados do usuário B" |
-| Status | A fazer |
+| Status | Concluída |
 | Depende de | Docker instalado (já disponível na máquina de desenvolvimento) |
 | Bloqueia | Fechamento da spec 02. Também serve de base para as specs 03, 04 e 07, que criam tabelas novas |
 
@@ -28,11 +28,14 @@ testes criam e apagam usuários.
 
 ## Escopo
 
-1. `npx supabase init` (cria `supabase/config.toml`; as migrations já estão no lugar certo).
+1. `npx supabase init` (cria `supabase/config.toml`; as migrations já estão no lugar certo). A CLI
+   entra como dependência de desenvolvimento (`supabase`), para fixar a versão usada por todos em vez
+   de baixá-la a cada `npx`.
 2. Configuração separada de Jest para integração (`jest.integration.config.ts`, ambiente `node`,
    arquivos `*.integration.test.ts`) e script `npm run test:integration`. Esses testes **não** rodam
    no `npm test` comum nem entram na medição de cobertura, porque precisam do Docker.
-3. Suíte `supabase/tests/rls.integration.test.ts`, com dois usuários (A e B) criados no `beforeAll`
+3. Suíte `supabase/tests/rls.integration.test.ts` (com os auxiliares em `local-supabase.ts` e o
+   `global-setup.ts`, que lê URL e chaves do `supabase status` e recusa URLs que não sejam locais), com dois usuários (A e B) criados no `beforeAll`
    e removidos no `afterAll`:
    - A cria um lançamento e um orçamento; B **não vê** nenhum dos dois (`select` volta vazio).
    - B não consegue **alterar** nem **excluir** os registros de A (0 linhas afetadas; os dados de A
@@ -50,12 +53,20 @@ migrations de categorias (spec 03), que entram junto com aquela spec.
 
 ## Pronto quando
 
-- [ ] `npx supabase start` sobe o banco local com as migrations aplicadas.
-- [ ] `npm run test:integration` passa, cobrindo leitura, alteração, exclusão e inserção cruzadas,
+- [x] `npx supabase start` sobe o banco local com as migrations aplicadas.
+- [x] `npm run test:integration` passa, cobrindo leitura, alteração, exclusão e inserção cruzadas,
       acesso anônimo e a checagem de RLS em todas as tabelas.
-- [ ] Remover temporariamente uma política de RLS faz a suíte falhar (prova de que o teste detecta o problema).
-- [ ] `npm test`, `npm run lint`, `npx tsc --noEmit` e `npm run build` continuam verdes.
-- [ ] Nenhuma chave `service_role` é importada fora de `supabase/tests/`.
+- [x] Remover temporariamente uma política de RLS faz a suíte falhar (prova de que o teste detecta o problema).
+- [x] `npm test`, `npm run lint`, `npx tsc --noEmit` e `npm run build` continuam verdes.
+- [x] Nenhuma chave `service_role` é importada fora de `supabase/tests/`.
+
+## Verificação (2026-10-09)
+
+- `npm run test:integration`: 8 testes passando.
+- Trocar a política de `transactions` por `using (true)`: 4 testes falham. Desligar o RLS de
+  `budgets`: 6 falham (inclusive a checagem de "toda tabela tem RLS"). Depois de `npm run db:reset`,
+  os 8 voltam a passar.
+- Scripts novos: `db:start`, `db:stop`, `db:reset` e `test:integration`.
 
 ## Tamanho
 

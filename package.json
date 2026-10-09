@@ -9,7 +9,11 @@
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest -c jest.integration.config.ts",
+    "db:start": "supabase start -x studio,storage-api,imgproxy,realtime,edge-runtime,logflare,vector,mailpit,postgres-meta,supavisor",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -41,6 +45,7 @@
     "eslint-config-next": "16.3.5",
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
+    "supabase": "^2.120.0",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5"

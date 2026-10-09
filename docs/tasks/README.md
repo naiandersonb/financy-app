@@ -15,7 +15,7 @@ Nome do arquivo: `T-<número com 3 dígitos>-<slug>.md`. Status possíveis: A fa
 | [T-001 — Login social com Google](T-001-login-google.md) | 02 | Concluída |
 | [T-002 — Barrar imports relativos entre camadas no ESLint](T-002-lint-imports-relativos.md) | 01 | A fazer |
 | [T-003 — Comparação exata das rotas públicas no proxy](T-003-proxy-rotas-publicas.md) | 02 | Concluída |
-| [T-004 — Teste de integração do isolamento entre usuários (RLS)](T-004-teste-integracao-rls.md) | 02 | A fazer |
+| [T-004 — Teste de integração do isolamento entre usuários (RLS)](T-004-teste-integracao-rls.md) | 02 | Concluída |
 | [T-005 — Tabela de categorias e categorias padrão](T-005-tabela-categorias.md) | 03 | A fazer |
 | [T-006 — Página de categorias (listagem)](T-006-listar-categorias.md) | 03 | A fazer |
 | [T-007 — Criar categoria (com validação no servidor)](T-007-criar-categoria.md) | 03 | A fazer |
