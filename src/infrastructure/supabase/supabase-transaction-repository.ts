@@ -8,7 +8,7 @@ type TransactionRow = {
   kind: Transaction["kind"];
   description: string;
   amount_cents: number;
-  category: string;
+  category_id: string;
   occurred_on: string;
 };
 
@@ -18,7 +18,7 @@ export class SupabaseTransactionRepository implements TransactionRepository {
   async listByDateRange({ start, endExclusive }: DateRange): Promise<Transaction[]> {
     const { data, error } = await this.client
       .from("transactions")
-      .select("id, kind, description, amount_cents, category, occurred_on")
+      .select("id, kind, description, amount_cents, category_id, occurred_on")
       .gte("occurred_on", start)
       .lt("occurred_on", endExclusive)
       .order("occurred_on", { ascending: false })
@@ -51,7 +51,7 @@ function toTransaction(row: TransactionRow): Transaction {
     kind: row.kind,
     description: row.description,
     amountCents: row.amount_cents,
-    category: row.category,
+    categoryId: row.category_id,
     occurredOn: row.occurred_on,
   };
 }
@@ -61,7 +61,7 @@ function toRow(input: TransactionInput) {
     kind: input.kind,
     description: input.description,
     amount_cents: input.amountCents,
-    category: input.category,
+    category_id: input.categoryId,
     occurred_on: input.occurredOn,
   };
 }

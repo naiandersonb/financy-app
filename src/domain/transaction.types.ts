@@ -5,7 +5,7 @@ export type Transaction = {
   kind: TransactionKind;
   description: string;
   amountCents: number;
-  category: string;
+  categoryId: string;
   /** Data no formato YYYY-MM-DD. */
   occurredOn: string;
 };

@@ -37,10 +37,10 @@ export async function saveBudget(
   });
 }
 
-export async function deleteBudget(category: string): Promise<Result> {
+export async function deleteBudget(categoryId: string): Promise<Result> {
   return runAndRevalidate("Não foi possível excluir o orçamento.", "/", async () => {
     const remove = await makeDeleteBudget();
-    await remove(category);
+    await remove(categoryId);
     return { ok: true, value: undefined };
   });
 }

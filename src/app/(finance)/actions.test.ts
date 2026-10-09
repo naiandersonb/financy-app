@@ -87,8 +87,8 @@ describe("saveBudget", () => {
   it("repassa o formulário ao caso de uso", async () => {
     const useCase = jest.fn().mockResolvedValue(success);
     jest.mocked(makeSaveBudget).mockResolvedValue(useCase);
-    expect(await saveBudget(null, formWith({ category: "Lazer", limit: "400" }))).toEqual(success);
-    expect(useCase).toHaveBeenCalledWith({ category: "Lazer", limit: "400" });
+    expect(await saveBudget(null, formWith({ categoryId: "cat-lazer", limit: "400" }))).toEqual(success);
+    expect(useCase).toHaveBeenCalledWith({ categoryId: "cat-lazer", limit: "400" });
   });
 
   it("devolve mensagem amigável em caso de falha", async () => {
@@ -104,13 +104,13 @@ describe("deleteBudget", () => {
   it("exclui pela categoria", async () => {
     const useCase = jest.fn().mockResolvedValue(undefined);
     jest.mocked(makeDeleteBudget).mockResolvedValue(useCase);
-    expect(await deleteBudget("Lazer")).toEqual(success);
-    expect(useCase).toHaveBeenCalledWith("Lazer");
+    expect(await deleteBudget("cat-lazer")).toEqual(success);
+    expect(useCase).toHaveBeenCalledWith("cat-lazer");
   });
 
   it("devolve mensagem amigável em caso de falha", async () => {
     jest.mocked(makeDeleteBudget).mockResolvedValue(jest.fn().mockRejectedValue(new Error("x")));
-    expect(await deleteBudget("Lazer")).toEqual({
+    expect(await deleteBudget("cat-lazer")).toEqual({
       ok: false,
       error: "Não foi possível excluir o orçamento.",
     });

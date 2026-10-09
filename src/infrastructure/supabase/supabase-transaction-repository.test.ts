@@ -6,14 +6,14 @@ const input = {
   kind: "expense" as const,
   description: "Mercado",
   amountCents: 15_050,
-  category: "Alimentação",
+  categoryId: "cat-alimentacao",
   occurredOn: "2026-10-08",
 };
 const row = {
   kind: "expense",
   description: "Mercado",
   amount_cents: 15_050,
-  category: "Alimentação",
+  category_id: "cat-alimentacao",
   occurred_on: "2026-10-08",
 };
 const dbError = { code: "42501", message: "permission denied", details: "linha com valores" };

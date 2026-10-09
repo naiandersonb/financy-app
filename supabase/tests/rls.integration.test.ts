@@ -1,27 +1,33 @@
 import {
   anonymousClient,
+  categoryIdOf,
   createTestUser,
   deleteTestUser,
   queryDatabase,
   type TestUser,
 } from "./local-supabase";
 
-const transactionOfA = {
-  kind: "expense",
-  description: "Aluguel de A",
-  amount_cents: 150_000,
-  category: "Moradia",
-  occurred_on: "2026-10-01",
-};
 
 describe("isolamento entre usuários (RLS)", () => {
   let userA: TestUser;
   let userB: TestUser;
   let transactionId: string;
+  let transactionOfA: Record<string, unknown>;
+  let leisureOfA: string;
+  let healthOfA: string;
 
   beforeAll(async () => {
     userA = await createTestUser("a");
     userB = await createTestUser("b");
+    leisureOfA = await categoryIdOf(userA, "expense", "Lazer");
+    healthOfA = await categoryIdOf(userA, "expense", "Saúde");
+    transactionOfA = {
+      kind: "expense",
+      description: "Aluguel de A",
+      amount_cents: 150_000,
+      category_id: await categoryIdOf(userA, "expense", "Moradia"),
+      occurred_on: "2026-10-01",
+    };
 
     const transaction = await userA.client
       .from("transactions")
@@ -33,7 +39,7 @@ describe("isolamento entre usuários (RLS)", () => {
 
     const budget = await userA.client
       .from("budgets")
-      .insert({ category: "Lazer", limit_cents: 40_000 });
+      .insert({ category_id: leisureOfA, limit_cents: 40_000 });
     if (budget.error) throw budget.error;
   });
 
@@ -56,14 +62,14 @@ describe("isolamento entre usuários (RLS)", () => {
       description: "Aluguel de A",
       amount_cents: 150_000,
     });
-    const budgets = await userA.client.from("budgets").select("category");
-    expect(budgets.data).toEqual([{ category: "Lazer" }]);
+    const budgets = await userA.client.from("budgets").select("category_id");
+    expect(budgets.data).toEqual([{ category_id: leisureOfA }]);
   });
 
   describe("B", () => {
     it("não lê lançamentos nem orçamentos de A", async () => {
       const transactions = await userB.client.from("transactions").select("id");
-      const budgets = await userB.client.from("budgets").select("category");
+      const budgets = await userB.client.from("budgets").select("category_id");
       expect(transactions).toMatchObject({ error: null, data: [] });
       expect(budgets).toMatchObject({ error: null, data: [] });
     });
@@ -87,8 +93,8 @@ describe("isolamento entre usuários (RLS)", () => {
       const budgets = await userB.client
         .from("budgets")
         .delete()
-        .eq("category", "Lazer")
-        .select("category");
+        .eq("category_id", leisureOfA)
+        .select("category_id");
       expect(transactions.data).toEqual([]);
       expect(budgets.data).toEqual([]);
       expect(await transactionAsSeenByA()).not.toBeNull();
@@ -100,7 +106,7 @@ describe("isolamento entre usuários (RLS)", () => {
         .insert({ ...transactionOfA, user_id: userA.id });
       const budget = await userB.client
         .from("budgets")
-        .insert({ user_id: userA.id, category: "Saúde", limit_cents: 1 });
+        .insert({ user_id: userA.id, category_id: healthOfA, limit_cents: 1 });
       expect(transaction.error?.code).toBe("42501");
       expect(budget.error?.code).toBe("42501");
     });
@@ -110,7 +116,7 @@ describe("isolamento entre usuários (RLS)", () => {
     it("não lê nada", async () => {
       const visitor = anonymousClient();
       expect((await visitor.from("transactions").select("id")).data).toEqual([]);
-      expect((await visitor.from("budgets").select("category")).data).toEqual([]);
+      expect((await visitor.from("budgets").select("category_id")).data).toEqual([]);
     });
 
     it("não grava nada", async () => {

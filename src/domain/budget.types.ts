@@ -1,4 +1,4 @@
 export type Budget = {
-  category: string;
+  categoryId: string;
   limitCents: number;
 };

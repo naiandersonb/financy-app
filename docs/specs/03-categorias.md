@@ -109,9 +109,9 @@ O selo sempre mostra o nome; a cor nunca é a única forma de identificar a cate
 - [ ] Dado que só resta uma categoria de Receita, quando tento removê-la, então a remoção é bloqueada.
 - [ ] Dado que já tenho 50 categorias, quando tento criar outra, então vejo "Limite de 50 categorias atingido".
 - [ ] O usuário A não vê nem usa as categorias do usuário B, nem em requisição forjada (RLS e chave estrangeira).
-- [ ] Não existe lista de categorias no código: `src/domain/fixed-categories.ts`, `categoriesFor` e `isValidCategory` foram apagados, e a busca por esses nomes em `src/` não retorna nada.
-- [ ] Os nomes e cores das categorias padrão existem em um único lugar: a migration `0002_categories.sql`.
-- [ ] `jest.config.ts` não tem mais exceção de cobertura para categorias.
+- [x] Não existe lista de categorias no código: `src/domain/fixed-categories.ts`, `categoriesFor` e `isValidCategory` foram apagados, e a busca por esses nomes em `src/` não retorna nada.
+- [x] Os nomes e cores das categorias padrão existem em um único lugar: a migration `0002_categories.sql`.
+- [x] `jest.config.ts` não tem mais exceção de cobertura para categorias.
 
 ## Modelo de dados
 

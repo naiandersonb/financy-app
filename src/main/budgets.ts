@@ -9,11 +9,11 @@ export async function makeListBudgets() {
 }
 
 export async function makeSaveBudget() {
-  const { auth, budgets } = await createRequestContext();
-  return (input: unknown) => saveBudget({ auth, budgets }, input);
+  const { auth, budgets, categories } = await createRequestContext();
+  return (input: unknown) => saveBudget({ auth, budgets, categories }, input);
 }
 
 export async function makeDeleteBudget() {
   const { budgets } = await createRequestContext();
-  return (category: string) => deleteBudget(budgets, category);
+  return (categoryId: string) => deleteBudget(budgets, categoryId);
 }

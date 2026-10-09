@@ -210,7 +210,7 @@ tabela "Testes" da constituição:
 
 | Exceção | Justificativa |
 |---------|---------------|
-| `src/domain/fixed-categories.ts` fora da cobertura e sem testes | Código temporário que será apagado na spec 03 (categorias passam a vir do banco). Escrever testes para ele seria trabalho descartado; ele não recebe novos usos até ser removido |
+| ~~`src/domain/fixed-categories.ts` fora da cobertura e sem testes~~ | Encerrada na [T-009](../tasks/T-009-referencias-por-id.md): o arquivo foi apagado e a exceção removida do `jest.config.ts` |
 
 ## Fora do escopo
 

@@ -17,12 +17,13 @@ import { KindSelector } from "@/presentation/components/kind-selector";
 import { Label } from "@/presentation/components/label";
 import { NativeSelect, NativeSelectOption } from "@/presentation/components/native-select";
 import {
-  categoriesFor,
   defaultDateInMonth,
+  type Category,
   type MonthKey,
   type Transaction,
   type TransactionKind,
 } from "@/domain";
+import { categoriesByKind } from "@/presentation/features/categories";
 import { centsToInputValue } from "@/presentation/formatters";
 import type { Result } from "@/shared";
 
@@ -34,11 +35,18 @@ export type SaveTransactionAction = (
 type TransactionDialogProps = {
   month: MonthKey;
   onSave: SaveTransactionAction;
+  /** Categorias do usuário, de receita e de despesa. */
+  categories: Category[];
   /** Quando informado, o diálogo edita este lançamento. */
   transaction?: Transaction;
 };
 
-export function TransactionDialog({ month, onSave, transaction }: TransactionDialogProps) {
+export function TransactionDialog({
+  month,
+  onSave,
+  categories,
+  transaction,
+}: TransactionDialogProps) {
   const [open, setOpen] = useState(false);
   const isEditing = Boolean(transaction);
 
@@ -63,6 +71,7 @@ export function TransactionDialog({ month, onSave, transaction }: TransactionDia
         <TransactionForm
           month={month}
           onSave={onSave}
+          categories={categories}
           transaction={transaction}
           onSaved={() => setOpen(false)}
         />
@@ -74,6 +83,7 @@ export function TransactionDialog({ month, onSave, transaction }: TransactionDia
 function TransactionForm({
   month,
   onSave,
+  categories,
   transaction,
   onSaved,
 }: TransactionDialogProps & { onSaved: () => void }) {
@@ -87,9 +97,9 @@ function TransactionForm({
     null,
   );
 
-  const categories = categoriesFor(kind);
-  const defaultCategory =
-    transaction?.kind === kind ? transaction.category : categories[0];
+  const categoriesOfKind = categoriesByKind(categories)[kind];
+  const defaultCategoryId =
+    transaction?.kind === kind ? transaction.categoryId : categoriesOfKind[0]?.id;
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
@@ -142,13 +152,13 @@ function TransactionForm({
         <NativeSelect
           key={kind}
           id="category"
-          name="category"
-          defaultValue={defaultCategory}
+          name="categoryId"
+          defaultValue={defaultCategoryId}
           className="w-full"
         >
-          {categories.map((category) => (
-            <NativeSelectOption key={category} value={category}>
-              {category}
+          {categoriesOfKind.map((category) => (
+            <NativeSelectOption key={category.id} value={category.id}>
+              {category.name}
             </NativeSelectOption>
           ))}
         </NativeSelect>

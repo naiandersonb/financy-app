@@ -26,6 +26,36 @@ describe("SupabaseCategoryRepository", () => {
     );
   });
 
+  describe("findById", () => {
+    it("busca uma única categoria pelo id", async () => {
+      const { client, calls } = createSupabaseClientMock({
+        data: { id: "c-1", kind: "income", name: "Salário", background_color: "#d1fae5", text_color: "#065f46" },
+        error: null,
+      });
+      expect(await new SupabaseCategoryRepository(client).findById("c-1")).toEqual({
+        id: "c-1",
+        kind: "income",
+        name: "Salário",
+        backgroundColor: "#d1fae5",
+        textColor: "#065f46",
+      });
+      expect(calls).toContainEqual(["eq", ["id", "c-1"]]);
+      expect(calls).toContainEqual(["maybeSingle", []]);
+    });
+
+    it("devolve null quando não encontra (inclusive categoria de outro usuário, escondida pelo RLS)", async () => {
+      const { client } = createSupabaseClientMock({ data: null, error: null });
+      expect(await new SupabaseCategoryRepository(client).findById("c-x")).toBeNull();
+    });
+
+    it("lança erro com contexto quando o banco falha", async () => {
+      const { client } = createSupabaseClientMock({ error: { code: "22P02", message: "x" } });
+      await expect(new SupabaseCategoryRepository(client).findById("c-1")).rejects.toThrow(
+        "Falha ao carregar categoria (código 22P02)",
+      );
+    });
+  });
+
   describe("count", () => {
     it("conta só pelo cabeçalho, sem trazer as linhas", async () => {
       const { client, calls } = createSupabaseClientMock({ count: 13, error: null });

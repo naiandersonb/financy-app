@@ -33,8 +33,6 @@ const config: Config = {
     "/index\\.ts$",
     "\\.types\\.ts$",
     "/src/application/ports/",
-    // Temporário: apagado na spec 03 (categorias passam a vir do banco).
-    "/src/domain/fixed-categories\\.ts$",
     ...SHADCN_GENERATED_COMPONENTS.map(
       (name) => `/src/presentation/components/${name}\\.tsx$`,
     ),

@@ -52,3 +52,19 @@ export function queryDatabase(sql: string): string {
     .toString()
     .trim();
 }
+
+/** Id da categoria do usuário com esse tipo e nome (as categorias padrão existem para todos). */
+export async function categoryIdOf(
+  user: TestUser,
+  kind: "income" | "expense",
+  name: string,
+): Promise<string> {
+  const { data, error } = await user.client
+    .from("categories")
+    .select("id")
+    .eq("kind", kind)
+    .eq("name", name)
+    .single();
+  if (error) throw new Error(`Categoria ${name} (${kind}) não encontrada`, { cause: error });
+  return data.id;
+}

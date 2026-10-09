@@ -1,5 +1,7 @@
 /** @jest-environment node */
 import { makeTransaction } from "@/domain/testing/make-transaction";
+import { HOUSING, SALARY, UNKNOWN_CATEGORY_ID } from "../testing/category-fixtures";
+import { InMemoryCategoryRepository } from "../testing/in-memory-category-repository";
 import { InMemoryTransactionRepository } from "../testing/in-memory-transaction-repository";
 import { deleteTransaction } from "./delete-transaction";
 import { listMonthTransactions } from "./list-month-transactions";
@@ -9,7 +11,7 @@ const validInput = {
   kind: "expense",
   description: "  Supermercado  ",
   amount: "150.5",
-  category: "Alimentação",
+  categoryId: HOUSING.id,
   occurredOn: "2026-10-08",
 };
 
@@ -29,13 +31,17 @@ describe("listMonthTransactions", () => {
 
 describe("saveTransaction", () => {
   let repository: InMemoryTransactionRepository;
+  let deps: { transactions: InMemoryTransactionRepository; categories: InMemoryCategoryRepository };
 
   beforeEach(() => {
     repository = new InMemoryTransactionRepository();
+    const categories = new InMemoryCategoryRepository();
+    categories.items.push(HOUSING, SALARY);
+    deps = { transactions: repository, categories };
   });
 
   it("cria um lançamento normalizado e em centavos", async () => {
-    const result = await saveTransaction(repository, validInput);
+    const result = await saveTransaction(deps, validInput);
     expect(result.ok).toBe(true);
     expect(repository.items).toEqual([
       {
@@ -43,7 +49,7 @@ describe("saveTransaction", () => {
         kind: "expense",
         description: "Supermercado",
         amountCents: 15_050,
-        category: "Alimentação",
+        categoryId: HOUSING.id,
         occurredOn: "2026-10-08",
       },
     ]);
@@ -51,7 +57,7 @@ describe("saveTransaction", () => {
 
   it("atualiza quando recebe id", async () => {
     repository.items.push(makeTransaction({ id: "abc" }));
-    await saveTransaction(repository, { ...validInput, id: "abc", amount: "10" });
+    await saveTransaction(deps, { ...validInput, id: "abc", amount: "10" });
     expect(repository.items).toHaveLength(1);
     expect(repository.items[0]).toMatchObject({ id: "abc", amountCents: 1_000 });
   });
@@ -64,17 +70,19 @@ describe("saveTransaction", () => {
     [{ amount: "0.001" }, "Informe um valor maior que zero."],
     [{ amount: "-5" }, "Informe um valor maior que zero."],
     [{ amount: "1,50" }, "Informe um valor maior que zero."],
-    [{ category: "Salário" }, "Escolha uma categoria válida."],
+    [{ categoryId: "não-é-uuid" }, "Escolha uma categoria válida."],
+    [{ categoryId: SALARY.id }, "Escolha uma categoria válida."],
+    [{ categoryId: UNKNOWN_CATEGORY_ID }, "Escolha uma categoria válida."],
     [{ occurredOn: "2026-02-30" }, "Informe uma data válida."],
     [{ occurredOn: undefined }, "Informe uma data válida."],
   ])("recusa %p sem gravar", async (override, message) => {
-    const result = await saveTransaction(repository, { ...validInput, ...override });
+    const result = await saveTransaction(deps, { ...validInput, ...override });
     expect(result).toEqual({ ok: false, error: message });
     expect(repository.items).toHaveLength(0);
   });
 
   it("aceita descrição com exatamente 120 caracteres", async () => {
-    const result = await saveTransaction(repository, {
+    const result = await saveTransaction(deps, {
       ...validInput,
       description: "x".repeat(120),
     });

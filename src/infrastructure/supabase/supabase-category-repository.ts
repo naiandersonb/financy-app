@@ -5,6 +5,7 @@ import { fail, succeed, type Result } from "@/shared";
 import { toDatabaseError } from "./database-error";
 
 const UNIQUE_VIOLATION = "23505";
+const CATEGORY_COLUMNS = "id, kind, name, background_color, text_color";
 
 type CategoryRow = {
   id: string;
@@ -20,17 +21,23 @@ export class SupabaseCategoryRepository implements CategoryRepository {
   async list(): Promise<Category[]> {
     const { data, error } = await this.client
       .from("categories")
-      .select("id, kind, name, background_color, text_color")
+      .select(CATEGORY_COLUMNS)
       .overrideTypes<CategoryRow[], { merge: false }>();
 
     if (error) throw toDatabaseError("Falha ao carregar categorias", error);
-    return data.map((row) => ({
-      id: row.id,
-      kind: row.kind,
-      name: row.name,
-      backgroundColor: row.background_color,
-      textColor: row.text_color,
-    }));
+    return data.map(toCategory);
+  }
+
+  async findById(id: string): Promise<Category | null> {
+    const { data, error } = await this.client
+      .from("categories")
+      .select(CATEGORY_COLUMNS)
+      .eq("id", id)
+      .maybeSingle()
+      .overrideTypes<CategoryRow | null, { merge: false }>();
+
+    if (error) throw toDatabaseError("Falha ao carregar categoria", error);
+    return data ? toCategory(data) : null;
   }
 
   async count(): Promise<number> {
@@ -53,4 +60,14 @@ export class SupabaseCategoryRepository implements CategoryRepository {
     if (error.code === UNIQUE_VIOLATION) return fail("duplicate-name");
     throw toDatabaseError("Falha ao criar categoria", error);
   }
+}
+
+function toCategory(row: CategoryRow): Category {
+  return {
+    id: row.id,
+    kind: row.kind,
+    name: row.name,
+    backgroundColor: row.background_color,
+    textColor: row.text_color,
+  };
 }

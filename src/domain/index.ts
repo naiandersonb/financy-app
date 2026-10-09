@@ -8,12 +8,6 @@ export {
 export type { Category } from "./category.types";
 export { spendingByCategory, type CategorySpending } from "./category-spending";
 export {
-  EXPENSE_CATEGORIES,
-  INCOME_CATEGORIES,
-  categoriesFor,
-  isValidCategory,
-} from "./fixed-categories";
-export {
   currentMonthKey,
   defaultDateInMonth,
   monthDateRange,

@@ -7,7 +7,7 @@ export function makeTransaction(overrides: Partial<Transaction> = {}): Transacti
     kind: "expense",
     description: "Teste",
     amountCents: 1000,
-    category: "Outros",
+    categoryId: "cat-outros",
     occurredOn: "2026-10-08",
     ...overrides,
   };

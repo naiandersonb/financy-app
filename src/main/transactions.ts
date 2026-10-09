@@ -14,8 +14,9 @@ export async function makeListMonthTransactions() {
 }
 
 export async function makeSaveTransaction() {
-  const { transactions } = await createRequestContext();
-  return (input: Parameters<typeof saveTransaction>[1]) => saveTransaction(transactions, input);
+  const { transactions, categories } = await createRequestContext();
+  return (input: Parameters<typeof saveTransaction>[1]) =>
+    saveTransaction({ transactions, categories }, input);
 }
 
 export async function makeDeleteTransaction() {

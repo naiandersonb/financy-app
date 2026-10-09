@@ -8,16 +8,16 @@ export class InMemoryBudgetRepository implements BudgetRepository {
 
   async list(): Promise<Budget[]> {
     const budgets = this.byUser.get(this.sessionUserId) ?? new Map<string, number>();
-    return [...budgets].map(([category, limitCents]) => ({ category, limitCents }));
+    return [...budgets].map(([categoryId, limitCents]) => ({ categoryId, limitCents }));
   }
 
-  async upsert(userId: string, { category, limitCents }: Budget): Promise<void> {
+  async upsert(userId: string, { categoryId, limitCents }: Budget): Promise<void> {
     const budgets = this.byUser.get(userId) ?? new Map<string, number>();
-    budgets.set(category, limitCents);
+    budgets.set(categoryId, limitCents);
     this.byUser.set(userId, budgets);
   }
 
-  async delete(category: string): Promise<void> {
-    this.byUser.get(this.sessionUserId)?.delete(category);
+  async delete(categoryId: string): Promise<void> {
+    this.byUser.get(this.sessionUserId)?.delete(categoryId);
   }
 }
