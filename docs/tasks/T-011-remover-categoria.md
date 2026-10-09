@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [03 — Categorias](../specs/03-categorias.md), regras 5 e 6 |
-| Status | Implementada (aguardando revisão) |
+| Status | Concluída |
 | Depende de | [T-009](T-009-referencias-por-id.md) |
 | Bloqueia | — |
 
