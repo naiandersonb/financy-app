@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [03 — Categorias](../specs/03-categorias.md), "Onde a categoria aparece" e "Telas e interações" (listagem) |
-| Status | Implementada (aguardando revisão) |
+| Status | Concluída (falta conferir no navegador o critério 1) |
 | Depende de | [T-005](T-005-tabela-categorias.md) |
 | Bloqueia | T-007 |
 
