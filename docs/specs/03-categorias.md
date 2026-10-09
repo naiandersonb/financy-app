@@ -139,7 +139,7 @@ As mudanças nas tabelas existentes ficam numa migration separada, `0003_categor
   coluna `kind text not null default 'expense' check (kind = 'expense')` e FK composta
   `(category_id, user_id, kind) → categories (id, user_id, kind) on delete restrict`, garantindo
   orçamento só para categoria de despesa.
-- **Categorias padrão:** função `public.create_default_categories()` (`security definer`,
+- **Categorias padrão:** função `private.create_default_categories()` (schema não exposto pela API) (`security definer`,
   `search_path` fixo) disparada por trigger `after insert on auth.users`. Cobre cadastro com senha e
   com Google.
 - **Dados existentes:** a migration cria as categorias padrão para os usuários que já existem e
