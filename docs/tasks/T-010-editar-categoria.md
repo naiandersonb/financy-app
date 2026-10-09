@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [03 — Categorias](../specs/03-categorias.md), regras 3 e 8; campo "Tipo" |
-| Status | Implementada (aguardando revisão) |
+| Status | Concluída |
 | Depende de | [T-008](T-008-previa-contraste.md) e [T-009](T-009-referencias-por-id.md) |
 | Bloqueia | — |
 
