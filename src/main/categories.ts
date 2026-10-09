@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createCategory, listCategories, updateCategory } from "@/application";
+import { createCategory, deleteCategory, listCategories, updateCategory } from "@/application";
 import { createRequestContext } from "./request-context";
 
 export async function makeListCategories() {
@@ -16,4 +16,9 @@ export async function makeCreateCategory() {
 export async function makeUpdateCategory() {
   const { categories } = await createRequestContext();
   return (input: unknown) => updateCategory(categories, input);
+}
+
+export async function makeDeleteCategory() {
+  const { categories } = await createRequestContext();
+  return (id: string) => deleteCategory(categories, id);
 }

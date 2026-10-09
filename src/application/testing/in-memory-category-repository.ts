@@ -4,10 +4,15 @@ import type {
   CategoryChanges,
   CategoryInput,
   CategoryRepository,
+  CategoryUsage,
 } from "../ports/category-repository";
 
 export class InMemoryCategoryRepository implements CategoryRepository {
   readonly items: Category[] = [];
+  /** Uso de cada categoria, preenchido pelo teste; sem entrada, a categoria está livre. */
+  readonly usageById = new Map<string, CategoryUsage>();
+  /** Simula outra requisição passando a usar a categoria entre a checagem e a remoção. */
+  becomesUsedBeforeDelete = false;
   private nextId = 1;
 
   async list(): Promise<Category[]> {
@@ -33,6 +38,19 @@ export class InMemoryCategoryRepository implements CategoryRepository {
     const current = this.items[index];
     if (this.hasName(current.kind, changes.name, id)) return fail("duplicate-name");
     this.items[index] = { ...current, ...changes };
+    return succeed();
+  }
+
+  async usage(id: string): Promise<CategoryUsage> {
+    return this.usageById.get(id) ?? { transactions: 0, hasBudget: false };
+  }
+
+  async delete(id: string): Promise<Result<void, "in-use">> {
+    if (this.becomesUsedBeforeDelete) return fail("in-use");
+    this.items.splice(
+      this.items.findIndex((item) => item.id === id),
+      1,
+    );
     return succeed();
   }
 

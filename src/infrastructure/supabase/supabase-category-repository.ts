@@ -1,10 +1,16 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CategoryChanges, CategoryInput, CategoryRepository } from "@/application";
+import type {
+  CategoryChanges,
+  CategoryInput,
+  CategoryRepository,
+  CategoryUsage,
+} from "@/application";
 import type { Category } from "@/domain";
 import { fail, succeed, type Result } from "@/shared";
 import { toDatabaseError } from "./database-error";
 
 const UNIQUE_VIOLATION = "23505";
+const FOREIGN_KEY_VIOLATION = "23503";
 const CATEGORY_COLUMNS = "id, kind, name, background_color, text_color";
 
 type CategoryRow = {
@@ -73,6 +79,30 @@ export class SupabaseCategoryRepository implements CategoryRepository {
     if (!error) return succeed();
     if (error.code === UNIQUE_VIOLATION) return fail("duplicate-name");
     throw toDatabaseError("Falha ao atualizar categoria", error);
+  }
+
+  async usage(id: string): Promise<CategoryUsage> {
+    const [transactions, budgets] = await Promise.all([
+      this.countReferences("transactions", id),
+      this.countReferences("budgets", id),
+    ]);
+    return { transactions, hasBudget: budgets > 0 };
+  }
+
+  async delete(id: string): Promise<Result<void, "in-use">> {
+    const { error } = await this.client.from("categories").delete().eq("id", id);
+    if (!error) return succeed();
+    if (error.code === FOREIGN_KEY_VIOLATION) return fail("in-use");
+    throw toDatabaseError("Falha ao remover categoria", error);
+  }
+
+  private async countReferences(table: "transactions" | "budgets", id: string): Promise<number> {
+    const { count, error } = await this.client
+      .from(table)
+      .select("category_id", { count: "exact", head: true })
+      .eq("category_id", id);
+    if (error) throw toDatabaseError(`Falha ao verificar uso da categoria em ${table}`, error);
+    return count ?? 0;
   }
 }
 

@@ -6,6 +6,9 @@ export type CategoryInput = Omit<Category, "id">;
 /** O tipo de uma categoria não muda depois de criada. */
 export type CategoryChanges = Omit<CategoryInput, "kind">;
 
+/** Onde a categoria é usada; qualquer uso impede a remoção. */
+export type CategoryUsage = { transactions: number; hasBudget: boolean };
+
 /** O RLS restringe tudo ao usuário da sessão. Falhas de infraestrutura são lançadas como exceção. */
 export interface CategoryRepository {
   list(): Promise<Category[]>;
@@ -17,4 +20,10 @@ export interface CategoryRepository {
   create(input: CategoryInput): Promise<Result<void, "duplicate-name">>;
   /** Falha prevista: o novo nome já existe no mesmo tipo. */
   update(id: string, changes: CategoryChanges): Promise<Result<void, "duplicate-name">>;
+  usage(id: string): Promise<CategoryUsage>;
+  /**
+   * Falha prevista: a categoria passou a ser usada entre a checagem de uso e a remoção
+   * (o banco recusa pela chave estrangeira).
+   */
+  delete(id: string): Promise<Result<void, "in-use">>;
 }

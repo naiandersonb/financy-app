@@ -1,6 +1,6 @@
 "use server";
 
-import { makeCreateCategory, makeUpdateCategory } from "@/main";
+import { makeCreateCategory, makeDeleteCategory, makeUpdateCategory } from "@/main";
 import type { Result } from "@/shared";
 import { runAndRevalidate } from "../run-action";
 
@@ -22,5 +22,12 @@ export async function updateCategory(
   return runAndRevalidate("Não foi possível salvar a categoria.", ["/", "/categories"], async () => {
     const update = await makeUpdateCategory();
     return update(Object.fromEntries(formData));
+  });
+}
+
+export async function deleteCategory(id: string): Promise<Result> {
+  return runAndRevalidate("Não foi possível remover a categoria.", "/categories", async () => {
+    const remove = await makeDeleteCategory();
+    return remove(id);
   });
 }

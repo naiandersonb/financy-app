@@ -95,20 +95,23 @@ O selo sempre mostra o nome; a cor nunca é a única forma de identificar a cate
 
 ## Critérios de aceite
 
+Marcado = verificado por teste (indicado ao lado). Os dois primeiros dependem de conferência
+no navegador com login.
+
 - [ ] Dado um usuário recém-cadastrado (por senha ou Google), quando abro `/categories`, então vejo as 13 categorias padrão com as cores da tabela.
 - [ ] Dado nome "Pets", tipo Despesa, fundo `#FDE68A` e texto `#78350F`, quando salvo, então "Pets" aparece em Despesas com essas cores.
-- [ ] Dado que já existe "Pets" em Despesas, quando crio "pets" em Despesas, então vejo "Já existe uma categoria com esse nome" e nada é criado.
-- [ ] Dado que já existe "Outros" em Despesas, quando crio "Outros" em Receitas, então é permitido.
-- [ ] Dado nome vazio ou com mais de 30 caracteres, então vejo um erro.
-- [ ] Dado cor inválida (ex.: `#12345`, `azul`) enviada ao servidor, então ela é rejeitada.
-- [ ] Dado fundo `#ffffff` e texto `#eeeeee`, então vejo o aviso de pouco contraste e não consigo salvar, nem forçando a requisição.
-- [ ] Quando altero a cor no seletor, o campo hexadecimal e a prévia se atualizam, e vice-versa.
-- [ ] Quando renomeio "Lazer" para "Diversão", então os lançamentos, gastos e orçamentos de todos os meses mostram "Diversão".
-- [ ] Dado uma categoria sem lançamentos nem orçamento, quando removo e confirmo, então ela some.
-- [ ] Dado uma categoria com lançamentos, quando tento remover, então vejo a mensagem da regra 5 e ela continua.
-- [ ] Dado que só resta uma categoria de Receita, quando tento removê-la, então a remoção é bloqueada.
-- [ ] Dado que já tenho 50 categorias, quando tento criar outra, então vejo "Limite de 50 categorias atingido".
-- [ ] O usuário A não vê nem usa as categorias do usuário B, nem em requisição forjada (RLS e chave estrangeira).
+- [x] Dado que já existe "Pets" em Despesas, quando crio "pets" em Despesas, então vejo "Já existe uma categoria com esse nome" e nada é criado. _(testes automatizado e de integração)_
+- [x] Dado que já existe "Outros" em Despesas, quando crio "Outros" em Receitas, então é permitido. _(testes automatizado e de integração)_
+- [x] Dado nome vazio ou com mais de 30 caracteres, então vejo um erro. _(testes automatizado e de integração)_
+- [x] Dado cor inválida (ex.: `#12345`, `azul`) enviada ao servidor, então ela é rejeitada. _(testes automatizado e de integração)_
+- [x] Dado fundo `#ffffff` e texto `#eeeeee`, então vejo o aviso de pouco contraste e não consigo salvar, nem forçando a requisição. _(teste automatizado)_
+- [x] Quando altero a cor no seletor, o campo hexadecimal e a prévia se atualizam, e vice-versa. _(teste automatizado)_
+- [x] Quando renomeio "Lazer" para "Diversão", então os lançamentos, gastos e orçamentos de todos os meses mostram "Diversão". _(teste de integração; a tela de gastos vem na spec 06)_
+- [x] Dado uma categoria sem lançamentos nem orçamento, quando removo e confirmo, então ela some. _(teste automatizado)_
+- [x] Dado uma categoria com lançamentos, quando tento remover, então vejo a mensagem da regra 5 e ela continua. _(testes automatizado e de integração)_
+- [x] Dado que só resta uma categoria de Receita, quando tento removê-la, então a remoção é bloqueada. _(teste automatizado)_
+- [x] Dado que já tenho 50 categorias, quando tento criar outra, então vejo "Limite de 50 categorias atingido". _(teste automatizado)_
+- [x] O usuário A não vê nem usa as categorias do usuário B, nem em requisição forjada (RLS e chave estrangeira). _(teste de integração)_
 - [x] Não existe lista de categorias no código: `src/domain/fixed-categories.ts`, `categoriesFor` e `isValidCategory` foram apagados, e a busca por esses nomes em `src/` não retorna nada.
 - [x] Os nomes e cores das categorias padrão existem em um único lugar: a migration `0002_categories.sql`.
 - [x] `jest.config.ts` não tem mais exceção de cobertura para categorias.

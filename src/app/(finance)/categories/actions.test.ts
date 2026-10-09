@@ -1,9 +1,13 @@
 /** @jest-environment node */
 import { revalidatePath } from "next/cache";
-import { makeCreateCategory, makeUpdateCategory } from "@/main";
-import { createCategory, updateCategory } from "./actions";
+import { makeCreateCategory, makeDeleteCategory, makeUpdateCategory } from "@/main";
+import { createCategory, deleteCategory, updateCategory } from "./actions";
 
-jest.mock("@/main", () => ({ makeCreateCategory: jest.fn(), makeUpdateCategory: jest.fn() }));
+jest.mock("@/main", () => ({
+  makeCreateCategory: jest.fn(),
+  makeUpdateCategory: jest.fn(),
+  makeDeleteCategory: jest.fn(),
+}));
 jest.mock("next/cache", () => ({ revalidatePath: jest.fn() }));
 
 describe("createCategory", () => {
@@ -47,5 +51,25 @@ describe("updateCategory", () => {
     expect(useCase).toHaveBeenCalledWith({ id: "c-1", name: "Diversão" });
     expect(revalidatePath).toHaveBeenCalledWith("/");
     expect(revalidatePath).toHaveBeenCalledWith("/categories");
+  });
+});
+
+describe("deleteCategory", () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it("remove pelo id e revalida a página de categorias", async () => {
+    const useCase = jest.fn().mockResolvedValue({ ok: true, value: undefined });
+    jest.mocked(makeDeleteCategory).mockResolvedValue(useCase);
+
+    expect(await deleteCategory("c-1")).toEqual({ ok: true, value: undefined });
+    expect(useCase).toHaveBeenCalledWith("c-1");
+    expect(revalidatePath).toHaveBeenCalledWith("/categories");
+  });
+
+  it("devolve o bloqueio do caso de uso sem revalidar", async () => {
+    const blocked = { ok: false, error: "Mantenha pelo menos uma categoria de receita." };
+    jest.mocked(makeDeleteCategory).mockResolvedValue(jest.fn().mockResolvedValue(blocked));
+    expect(await deleteCategory("c-1")).toEqual(blocked);
+    expect(revalidatePath).not.toHaveBeenCalled();
   });
 });

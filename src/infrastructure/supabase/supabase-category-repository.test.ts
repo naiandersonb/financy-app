@@ -143,4 +143,59 @@ describe("SupabaseCategoryRepository", () => {
       );
     });
   });
+
+  describe("usage", () => {
+    it("conta lançamentos e orçamentos que usam a categoria", async () => {
+      const { client, calls } = createSupabaseClientMock({ count: 2, error: null });
+      expect(await new SupabaseCategoryRepository(client).usage("c-1")).toEqual({
+        transactions: 2,
+        hasBudget: true,
+      });
+      expect(calls).toContainEqual(["from", ["transactions"]]);
+      expect(calls).toContainEqual(["from", ["budgets"]]);
+      expect(calls).toContainEqual(["eq", ["category_id", "c-1"]]);
+    });
+
+    it("trata contagem ausente como sem uso", async () => {
+      const { client } = createSupabaseClientMock({ count: null, error: null });
+      expect(await new SupabaseCategoryRepository(client).usage("c-1")).toEqual({
+        transactions: 0,
+        hasBudget: false,
+      });
+    });
+
+    it("lança erro com contexto quando o banco falha", async () => {
+      const { client } = createSupabaseClientMock({ error: { code: "42501", message: "x" } });
+      await expect(new SupabaseCategoryRepository(client).usage("c-1")).rejects.toThrow(
+        "Falha ao verificar uso da categoria em transactions (código 42501)",
+      );
+    });
+  });
+
+  describe("delete", () => {
+    it("remove pelo id", async () => {
+      const { client, calls } = createSupabaseClientMock({ error: null });
+      expect(await new SupabaseCategoryRepository(client).delete("c-1")).toEqual({
+        ok: true,
+        value: undefined,
+      });
+      expect(calls).toContainEqual(["delete", []]);
+      expect(calls).toContainEqual(["eq", ["id", "c-1"]]);
+    });
+
+    it("traduz a violação de chave estrangeira em categoria em uso", async () => {
+      const { client } = createSupabaseClientMock({ error: { code: "23503", message: "fk" } });
+      expect(await new SupabaseCategoryRepository(client).delete("c-1")).toEqual({
+        ok: false,
+        error: "in-use",
+      });
+    });
+
+    it("lança erro com contexto nas outras falhas", async () => {
+      const { client } = createSupabaseClientMock({ error: { code: "42501", message: "x" } });
+      await expect(new SupabaseCategoryRepository(client).delete("c-1")).rejects.toThrow(
+        "Falha ao remover categoria (código 42501)",
+      );
+    });
+  });
 });

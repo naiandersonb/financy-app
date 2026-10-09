@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { makeListCategories } from "@/main";
 import { CategoryDialog, CategoryList } from "@/presentation/features/categories";
-import { createCategory, updateCategory } from "./actions";
+import { createCategory, deleteCategory, updateCategory } from "./actions";
 
 export const metadata: Metadata = { title: "Categorias" };
 
@@ -15,7 +15,11 @@ export default async function CategoriesPage() {
         <h1 className="text-2xl font-semibold">Categorias</h1>
         <CategoryDialog onSave={createCategory} />
       </div>
-      <CategoryList categories={categories} onUpdate={updateCategory} />
+      <CategoryList
+        categories={categories}
+        onUpdate={updateCategory}
+        onDelete={deleteCategory}
+      />
     </main>
   );
 }

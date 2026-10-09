@@ -10,6 +10,7 @@ export type {
   CategoryChanges,
   CategoryInput,
   CategoryRepository,
+  CategoryUsage,
 } from "./ports/category-repository";
 export type {
   DateRange,
@@ -23,6 +24,7 @@ export {
 } from "./use-cases/complete-oauth-sign-in";
 export { createCategory } from "./use-cases/create-category";
 export { deleteBudget } from "./use-cases/delete-budget";
+export { deleteCategory } from "./use-cases/delete-category";
 export { getCurrentUser } from "./use-cases/get-current-user";
 export { deleteTransaction } from "./use-cases/delete-transaction";
 export { listBudgets } from "./use-cases/list-budgets";

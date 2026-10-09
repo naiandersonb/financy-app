@@ -37,3 +37,5 @@ export const categoryInputSchema = z
 export const categoryUpdateSchema = z
   .object({ id: z.uuid("Categoria não encontrada."), ...editableFields })
   .refine(readable, LOW_CONTRAST);
+
+export const categoryIdSchema = z.uuid("Categoria não encontrada.");
