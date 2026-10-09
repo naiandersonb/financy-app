@@ -51,6 +51,21 @@ describe("refreshSessionAndGuard", () => {
     expect(response.headers.get("location")).toBeNull();
   });
 
+  it("deixa visitante sem sessão acessar subcaminhos de rotas públicas", async () => {
+    mockSession({ authenticated: false });
+    const response = await refreshSessionAndGuard(request("/login/algo"));
+    expect(response.headers.get("location")).toBeNull();
+  });
+
+  it.each(["/loginx", "/cadastro-antigo"])(
+    "exige sessão em %s, que só começa com o nome de uma rota pública",
+    async (path) => {
+      mockSession({ authenticated: false });
+      const response = await refreshSessionAndGuard(request(path));
+      expect(response.headers.get("location")).toBe("http://localhost:3000/login");
+    },
+  );
+
   it("deixa usuário logado acessar rotas protegidas", async () => {
     mockSession({ authenticated: true });
     const response = await refreshSessionAndGuard(request("/"));

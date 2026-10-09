@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [02 — Autenticação](../specs/02-autenticacao.md), regras 4–6 e 11 |
-| Status | A fazer |
+| Status | Concluída |
 | Depende de | — |
 | Bloqueia | — (fazer junto ou antes da [T-001](T-001-login-google.md), que adiciona `/auth/callback` às rotas públicas) |
 
@@ -26,10 +26,10 @@ Considerar pública só a rota exata ou seus subcaminhos: `pathname === path` ou
 
 ## Passos
 
-- [ ] Ajustar a comparação em `session-proxy.ts`.
-- [ ] Testes em `session-proxy.test.ts`: `/login` e `/cadastro` continuam públicas; `/loginx` e `/cadastro-antigo` exigem sessão; `/login/algo` continua pública.
+- [x] Ajustar a comparação em `session-proxy.ts`.
+- [x] Testes em `session-proxy.test.ts`: `/login` e `/cadastro` continuam públicas; `/loginx` e `/cadastro-antigo` exigem sessão; `/login/algo` continua pública.
 
 ## Pronto quando
 
-- [ ] Visitante sem sessão em `/loginx` é redirecionado para `/login`.
-- [ ] Gate de qualidade verde, com a cobertura mantida.
+- [x] Visitante sem sessão em `/loginx` é redirecionado para `/login`.
+- [x] Gate de qualidade verde, com a cobertura mantida.

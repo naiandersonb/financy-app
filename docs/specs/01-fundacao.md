@@ -230,4 +230,4 @@ Encontrados ao implementar esta spec e ainda não resolvidos:
 | Risco | Impacto | Tarefa |
 |-------|---------|--------|
 | A trava de camadas do ESLint só reconhece imports com `@/`; um import relativo entre camadas (ex.: `../../infrastructure`) passa no lint | A regra de dependência pode ser violada sem aviso | [T-002](../tasks/T-002-lint-imports-relativos.md) |
-| O proxy considera pública qualquer rota que **comece** com `/login` ou `/cadastro` (ex.: `/loginx`) | Uma rota futura com esse prefixo ficaria acessível sem login | [T-003](../tasks/T-003-proxy-rotas-publicas.md) |
+| ~~O proxy considera pública qualquer rota que **comece** com `/login` ou `/cadastro` (ex.: `/loginx`)~~ | Resolvido | [T-003](../tasks/T-003-proxy-rotas-publicas.md) (concluída) |

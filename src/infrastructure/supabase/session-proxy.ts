@@ -28,9 +28,7 @@ export async function refreshSessionAndGuard(request: NextRequest) {
   // getClaims valida o JWT e renova o token expirado; não remova esta chamada.
   const { data } = await supabase.auth.getClaims();
   const isAuthenticated = Boolean(data?.claims);
-  const isPublicPath = PUBLIC_PATHS.some((path) =>
-    request.nextUrl.pathname.startsWith(path),
-  );
+  const isPublicPath = isPublic(request.nextUrl.pathname);
 
   if (!isAuthenticated && !isPublicPath) {
     return redirectPreservingCookies(request, response, "/login");
@@ -39,6 +37,11 @@ export async function refreshSessionAndGuard(request: NextRequest) {
     return redirectPreservingCookies(request, response, "/");
   }
   return response;
+}
+
+/** Rota pública exata ou subcaminho dela (`/login/x`), mas não prefixos como `/loginx`. */
+function isPublic(pathname: string): boolean {
+  return PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 }
 
 function redirectPreservingCookies(
