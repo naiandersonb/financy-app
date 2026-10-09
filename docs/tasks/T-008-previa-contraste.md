@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [03 — Categorias](../specs/03-categorias.md), regra 2 e "Telas e interações" |
-| Status | Implementada (aguardando revisão) |
+| Status | Concluída |
 | Depende de | [T-007](T-007-criar-categoria.md) |
 | Bloqueia | — |
 
