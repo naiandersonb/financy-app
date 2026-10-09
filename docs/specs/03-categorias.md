@@ -203,11 +203,12 @@ Ordem de implementação:
 
 1. [T-005 — Tabela de categorias e categorias padrão](../tasks/T-005-tabela-categorias.md)
 2. [T-006 — Página de categorias (listagem)](../tasks/T-006-listar-categorias.md)
-3. [T-007 — Criar categoria (com validação no servidor)](../tasks/T-007-criar-categoria.md)
-4. [T-008 — Prévia ao vivo e indicador de contraste](../tasks/T-008-previa-contraste.md)
-5. [T-009 — Lançamentos e orçamentos referenciam a categoria por id](../tasks/T-009-referencias-por-id.md)
-6. [T-010 — Editar categoria](../tasks/T-010-editar-categoria.md)
-7. [T-011 — Remover categoria (com bloqueios)](../tasks/T-011-remover-categoria.md)
+3. [T-013 — Extrair o seletor de tipo e o tratamento de erros das actions](../tasks/T-013-extrair-seletor-tipo-e-runner.md) (refatoração preparatória)
+4. [T-007 — Criar categoria (com validação no servidor)](../tasks/T-007-criar-categoria.md)
+5. [T-008 — Prévia ao vivo e indicador de contraste](../tasks/T-008-previa-contraste.md)
+6. [T-009 — Lançamentos e orçamentos referenciam a categoria por id](../tasks/T-009-referencias-por-id.md)
+7. [T-010 — Editar categoria](../tasks/T-010-editar-categoria.md)
+8. [T-011 — Remover categoria (com bloqueios)](../tasks/T-011-remover-categoria.md)
 
 Pré-requisito: [T-004 — Teste de integração do isolamento entre usuários (RLS)](../tasks/T-004-teste-integracao-rls.md).
 

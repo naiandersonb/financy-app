@@ -4,7 +4,7 @@
 |-------|-------|
 | Spec | [03 — Categorias](../specs/03-categorias.md), "Campos", regras 2, 3 e 7 |
 | Status | A fazer |
-| Depende de | [T-006](T-006-listar-categorias.md) |
+| Depende de | [T-006](T-006-listar-categorias.md) e [T-013](T-013-extrair-seletor-tipo-e-runner.md) |
 | Bloqueia | T-008 |
 
 ## Comportamento

@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/presentation/components/dialog";
 import { Input } from "@/presentation/components/input";
+import { KindSelector } from "@/presentation/components/kind-selector";
 import { Label } from "@/presentation/components/label";
 import { NativeSelect, NativeSelectOption } from "@/presentation/components/native-select";
 import {
@@ -23,7 +24,7 @@ import {
   type TransactionKind,
 } from "@/domain";
 import { centsToInputValue } from "@/presentation/formatters";
-import { cn, type Result } from "@/shared";
+import type { Result } from "@/shared";
 
 export type SaveTransactionAction = (
   previous: Result | null,
@@ -94,11 +95,7 @@ function TransactionForm({
     <form action={formAction} className="flex flex-col gap-4">
       {transaction && <input type="hidden" name="id" value={transaction.id} />}
 
-      <fieldset className="grid grid-cols-2 gap-2">
-        <legend className="sr-only">Tipo</legend>
-        <KindOption kind="expense" label="Despesa" selected={kind} onSelect={setKind} />
-        <KindOption kind="income" label="Receita" selected={kind} onSelect={setKind} />
-      </fieldset>
+      <KindSelector value={kind} onChange={setKind} />
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="description">Descrição</Label>
@@ -169,39 +166,5 @@ function TransactionForm({
         </Button>
       </DialogFooter>
     </form>
-  );
-}
-
-function KindOption({
-  kind,
-  label,
-  selected,
-  onSelect,
-}: {
-  kind: TransactionKind;
-  label: string;
-  selected: TransactionKind;
-  onSelect: (kind: TransactionKind) => void;
-}) {
-  const isSelected = kind === selected;
-  return (
-    <label
-      className={cn(
-        "flex h-9 cursor-pointer items-center justify-center rounded-md border text-sm font-medium transition-colors has-focus-visible:ring-3 has-focus-visible:ring-ring/50",
-        isSelected && kind === "expense" && "border-destructive/40 bg-destructive/10 text-destructive",
-        isSelected && kind === "income" && "border-primary/40 bg-primary/10 text-primary",
-        !isSelected && "text-muted-foreground hover:bg-muted",
-      )}
-    >
-      <input
-        type="radio"
-        name="kind"
-        value={kind}
-        checked={isSelected}
-        onChange={() => onSelect(kind)}
-        className="sr-only"
-      />
-      {label}
-    </label>
   );
 }
