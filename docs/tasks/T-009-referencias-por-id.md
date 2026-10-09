@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [03 — Categorias](../specs/03-categorias.md), "Modelo de dados" (mudanças nas tabelas existentes) e "Remoção da lista fixa de categorias" |
-| Status | Implementada (aguardando revisão) |
+| Status | Concluída |
 | Depende de | [T-006](T-006-listar-categorias.md) (usa `list-categories` e o `CategoryRepository`) |
 | Bloqueia | T-010, T-011 e as specs 04, 06 e 07 |
 
@@ -44,6 +44,11 @@ categorias some do código. O diálogo de lançamento passa a mostrar as categor
   antiga e os lançamentos continuam intactos.
 - `npm run test:integration`: 31 testes, incluindo categoria de outro tipo e de outro usuário
   recusadas pelo banco (`23503`) e categoria em uso protegida contra exclusão.
+
+- Projeto na nuvem: `0003` aplicada com `npx supabase db push` (depois de registrar a `0001` e a
+  `0002` com `migration repair`, já que tinham sido aplicadas pelo SQL Editor). Com a chave pública:
+  `category_id` existe, as colunas `category` antigas foram removidas e o visitante continua vendo 0
+  linhas nas três tabelas.
 
 ## Tamanho (exceção justificada)
 
