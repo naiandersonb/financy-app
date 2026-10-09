@@ -59,26 +59,29 @@ Cada pessoa tem uma conta própria e acessa somente os próprios dados financeir
 
 ## Critérios de aceite
 
-- [ ] Dado um e-mail novo e uma senha válida, quando envio o cadastro, então a conta é criada
-      e vejo a tela principal ou o aviso para confirmar o e-mail.
-- [ ] Dado uma senha com menos de 6 caracteres, quando envio o cadastro, então vejo um erro e nada é criado.
+Marcado = verificado por teste automatizado ou manual (indicado ao lado). Os demais ainda precisam
+de verificação manual ou de um teste que ainda não existe.
+
+- [x] Dado um e-mail novo e uma senha válida, quando envio o cadastro, então a conta é criada
+      e vejo a tela principal ou o aviso para confirmar o e-mail. _(teste manual)_
+- [x] Dado uma senha com menos de 6 caracteres, quando envio o cadastro, então vejo um erro e nada é criado. _(teste automatizado)_
 - [ ] Dado credenciais corretas, quando entro, então sou levado para `/`.
-- [ ] Dado credenciais incorretas, quando entro, então vejo "E-mail ou senha inválidos" e continuo em `/login`.
-- [ ] Dado que não estou logado, quando acesso `/`, então sou redirecionado para `/login`.
-- [ ] Dado que estou logado, quando clico em "Sair", então a sessão termina e vou para `/login`.
-- [ ] Enquanto o formulário é enviado, o botão fica desabilitado e mostra estado de carregamento.
+- [x] Dado credenciais incorretas, quando entro, então vejo "E-mail ou senha inválidos" e continuo em `/login`. _(teste automatizado)_
+- [x] Dado que não estou logado, quando acesso `/`, então sou redirecionado para `/login`. _(teste automatizado e manual)_
+- [x] Dado que estou logado, quando clico em "Sair", então a sessão termina e vou para `/login`. _(teste manual)_
+- [x] Enquanto o formulário é enviado, o botão fica desabilitado e mostra estado de carregamento. _(teste automatizado)_
 - [ ] O usuário A nunca consegue ler ou alterar dados do usuário B, nem chamando a API diretamente (RLS).
 
 ### Google
 
-- [ ] Quando clico em "Continuar com Google" em `/login` ou `/signup`, então sou levado à tela de consentimento do Google.
-- [ ] Dado que autorizo no Google pela primeira vez, então uma conta é criada e chego em `/` logado.
-- [ ] Dado que já entrei com o Google antes, quando entro de novo, então vejo os mesmos dados de antes.
-- [ ] Dado uma conta com senha e e-mail confirmado, quando entro com o Google usando o mesmo e-mail, então vejo os dados dessa conta.
-- [ ] Dado que cancelo no Google, então volto para `/login` e vejo "Não foi possível entrar com o Google. Tente novamente."
-- [ ] Dado um `code` inválido ou ausente em `/auth/callback`, então sou redirecionado para `/login?error=google`, sem sessão.
-- [ ] Dado `/auth/callback?code=...&next=https://site-malicioso.com` (ou `//site-malicioso.com`), então sou redirecionado para `/`, nunca para fora do app.
-- [ ] Dado que estou logado com o Google, quando clico em "Sair", então a sessão do app termina (sem deslogar do Google).
+- [x] Quando clico em "Continuar com Google" em `/login` ou `/signup`, então sou levado à tela de consentimento do Google. _(teste manual)_
+- [x] Dado que autorizo no Google pela primeira vez, então uma conta é criada e chego em `/` logado. _(teste manual)_
+- [x] Dado que já entrei com o Google antes, quando entro de novo, então vejo os mesmos dados de antes. _(teste manual)_
+- [x] Dado uma conta com senha e e-mail confirmado, quando entro com o Google usando o mesmo e-mail, então vejo os dados dessa conta. _(teste manual)_
+- [x] Dado que cancelo no Google, então volto para `/login` e vejo "Não foi possível entrar com o Google. Tente novamente." _(teste automatizado e manual)_
+- [x] Dado um `code` inválido ou ausente em `/auth/callback`, então sou redirecionado para `/login?error=google`, sem sessão. _(teste automatizado)_
+- [x] Dado `/auth/callback?code=...&next=https://site-malicioso.com` (ou `//site-malicioso.com`), então sou redirecionado para `/`, nunca para fora do app. _(teste automatizado)_
+- [x] Dado que estou logado com o Google, quando clico em "Sair", então a sessão do app termina (sem deslogar do Google). _(teste manual)_
 
 ## Notas técnicas
 

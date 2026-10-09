@@ -188,6 +188,27 @@ Regras complementares:
   apenas pelo painel do Supabase.
 - Variáveis de ambiente novas são documentadas em `.env.example`; segredos nunca são commitados.
 
+## Fluxo de trabalho
+
+### Tarefas curtas e revisáveis
+
+O trabalho é entregue em tarefas pequenas para que cada mudança possa ser revisada com atenção.
+
+- **Toda spec é quebrada em tarefas** (`docs/tasks/T-NNN-<slug>.md`) antes da implementação. Cada
+  tarefa entrega **um único comportamento** verificável e aponta para a spec e os critérios de aceite
+  que cobre.
+- **Limite de tamanho:** até ~300 linhas de código de produção alteradas e até ~10 arquivos de
+  produção por tarefa. Testes não entram na conta, para não desincentivar testar. Uma tarefa que
+  passe disso é dividida, ou a própria tarefa justifica por escrito por que não pode ser.
+- **Corte vertical:** a tarefa atravessa as camadas que precisar (de `domain` até `app`), em vez de
+  entregar uma camada isolada. Cada entrega funciona sozinha e não deixa código sem uso esperando a
+  próxima tarefa.
+- **Refatorações e renomeações** que tocam muitos arquivos (ex.: mover pastas, renomear rotas) ficam
+  em tarefas próprias, sem misturar com comportamento novo.
+- **Uma tarefa, um commit:** cada tarefa termina com o gate de qualidade verde e vira um commit.
+- **Aprovação antes do commit:** o agente apresenta o diff da tarefa e **nunca commita sem a
+  aprovação explícita** de quem revisa. Aprovar uma tarefa não aprova a seguinte.
+
 ## Governança
 
 - Esta constituição prevalece sobre preferências individuais e sobre outros documentos de
@@ -196,6 +217,8 @@ Regras complementares:
 - Toda spec em `docs/specs/` deve conter uma seção **"Conformidade com a constituição"** listando
   os princípios afetados, as camadas tocadas, a estratégia de testes para atingir a cobertura e
   qualquer exceção, com justificativa.
+- Toda spec lista as suas tarefas em uma seção **"Tarefas"**, com link para cada arquivo em
+  `docs/tasks/`.
 - Revisões de PR verificam: regra de dependência entre camadas, convenções de nome, testes dos
   critérios de aceite, cobertura acima de 90% e gate de qualidade verde.
 - **Emendas:** qualquer alteração neste arquivo é feita em PR próprio, descrevendo o motivo, e
@@ -208,4 +231,4 @@ Regras complementares:
 
 ---
 
-**Versão:** 1.2.0 · **Ratificada em:** 2026-10-08 · **Última emenda:** 2026-10-09
+**Versão:** 1.3.0 · **Ratificada em:** 2026-10-08 · **Última emenda:** 2026-10-09
