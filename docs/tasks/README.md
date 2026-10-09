@@ -25,3 +25,5 @@ Nome do arquivo: `T-<número com 3 dígitos>-<slug>.md`. Status possíveis: A fa
 | [T-011 — Remover categoria (com bloqueios)](T-011-remover-categoria.md) | 03 | A fazer |
 | [T-012 — Recusar chave secreta do Supabase na configuração do app](T-012-recusar-chave-secreta.md) | 01 | Concluída |
 | [T-013 — Extrair o seletor de tipo e o tratamento de erros das actions](T-013-extrair-seletor-tipo-e-runner.md) | 03 | Concluída |
+| [T-014 — Textos do diálogo em português](T-014-dialogo-em-portugues.md) | — | A fazer |
+| [T-015 — Diálogo de lançamento mantém os campos quando há erro](T-015-dialogo-lancamento-mantem-campos.md) | 04 | A fazer |
