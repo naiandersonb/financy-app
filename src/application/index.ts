@@ -6,7 +6,7 @@ export type {
   SignUpOutcome,
 } from "./ports/auth-gateway";
 export type { BudgetRepository } from "./ports/budget-repository";
-export type { CategoryRepository } from "./ports/category-repository";
+export type { CategoryInput, CategoryRepository } from "./ports/category-repository";
 export type {
   DateRange,
   TransactionInput,
@@ -17,6 +17,7 @@ export {
   completeOAuthSignIn,
   type OAuthCallbackParams,
 } from "./use-cases/complete-oauth-sign-in";
+export { createCategory } from "./use-cases/create-category";
 export { deleteBudget } from "./use-cases/delete-budget";
 export { getCurrentUser } from "./use-cases/get-current-user";
 export { deleteTransaction } from "./use-cases/delete-transaction";

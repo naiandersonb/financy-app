@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { makeListCategories } from "@/main";
-import { CategoryList } from "@/presentation/features/categories";
+import { CategoryDialog, CategoryList } from "@/presentation/features/categories";
+import { createCategory } from "./actions";
 
 export const metadata: Metadata = { title: "Categorias" };
 
@@ -10,7 +11,10 @@ export default async function CategoriesPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8">
-      <h1 className="text-2xl font-semibold">Categorias</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-semibold">Categorias</h1>
+        <CategoryDialog onSave={createCategory} />
+      </div>
       <CategoryList categories={categories} />
     </main>
   );

@@ -1,5 +1,10 @@
 export type { Budget } from "./budget.types";
 export { budgetStatuses, type BudgetStatus } from "./budget-status";
+export {
+  hasReadableContrast,
+  MAX_CATEGORIES_PER_USER,
+  MIN_CATEGORY_CONTRAST,
+} from "./category";
 export type { Category } from "./category.types";
 export { spendingByCategory, type CategorySpending } from "./category-spending";
 export {

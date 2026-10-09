@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type QueryResult = {
   data?: unknown;
+  count?: number | null;
   error: { code?: string; message: string; details?: string } | null;
 };
 
