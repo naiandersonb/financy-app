@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | Constituição, seção Convenções (textos de UI em pt-BR) e Acessibilidade |
-| Status | A fazer |
+| Status | Concluída |
 | Depende de | — |
 | Bloqueia | — |
 
@@ -22,15 +22,15 @@ inglês:
 - Como o arquivo deixa de ser um componente do shadcn intocado, ele sai da lista
   `SHADCN_GENERATED_COMPONENTS` do `jest.config.ts` e ganha testes próprios (botão "X" anunciado como
   "Fechar", rodapé com o botão "Fechar").
-- O diálogo de lançamento passa a mostrar "Fechar" (ou "Cancelar", para ficar igual ao diálogo de
-  categoria; decidir na revisão).
+- O diálogo de lançamento troca o botão de rodapé automático por um "Cancelar" próprio, igual ao
+  diálogo de categoria.
 
 ## Critérios de aceite
 
-- [ ] Nenhum texto "Close" visível ou anunciado no app (`grep` em `src/` não encontra).
-- [ ] `dialog.tsx` fora da exclusão de cobertura e com testes.
-- [ ] Gate de qualidade verde.
+- [x] Nenhum texto "Close" visível ou anunciado no app (`grep` em `src/` não encontra).
+- [x] `dialog.tsx` fora da exclusão de cobertura e com testes.
+- [x] Gate de qualidade verde.
 
 ## Tamanho
 
-1–2 arquivos de produção, ~5 linhas, mais os testes.
+Medido: 3 arquivos (incluindo `jest.config.ts`), ~6 linhas, mais os testes do `dialog.tsx`.

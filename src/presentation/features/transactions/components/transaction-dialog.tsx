@@ -10,6 +10,7 @@ import {
 import { Button } from "@/presentation/components/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -215,7 +216,8 @@ function TransactionForm({
         </p>
       )}
 
-      <DialogFooter showCloseButton>
+      <DialogFooter>
+        <DialogClose render={<Button type="button" variant="outline" />}>Cancelar</DialogClose>
         <Button type="submit" disabled={pending}>
           {pending ? "Salvando…" : "Salvar"}
         </Button>

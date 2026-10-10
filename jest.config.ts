@@ -9,7 +9,6 @@ const COVERAGE_MINIMUM = { lines: 91, branches: 91, functions: 91, statements: 9
 const SHADCN_GENERATED_COMPONENTS = [
   "button",
   "card",
-  "dialog",
   "input",
   "label",
   "native-select",
