@@ -111,6 +111,30 @@ describe("TransactionDialog", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
+  it("mantém todos os campos preenchidos quando o servidor devolve erro", async () => {
+    const user = userEvent.setup();
+    const onSave = jest
+      .fn()
+      .mockResolvedValue({ ok: false, error: "Não foi possível salvar o lançamento." });
+    render(<TransactionDialog categories={categories} month="2026-10" onSave={onSave} />);
+    await user.click(screen.getByRole("button", { name: "Novo lançamento" }));
+
+    await user.click(await screen.findByRole("radio", { name: "Receita" }));
+    await user.type(screen.getByLabelText("Descrição"), "Freela do site");
+    await user.type(screen.getByLabelText("Valor (R$)"), "800");
+    await user.clear(screen.getByLabelText("Data"));
+    await user.type(screen.getByLabelText("Data"), "2026-10-03");
+    await user.selectOptions(screen.getByLabelText("Categoria"), "Freelance");
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
+
+    await screen.findByRole("alert");
+    expect(screen.getByRole("radio", { name: "Receita" })).toBeChecked();
+    expect(screen.getByLabelText("Descrição")).toHaveValue("Freela do site");
+    expect(screen.getByLabelText("Valor (R$)")).toHaveValue(800);
+    expect(screen.getByLabelText("Data")).toHaveValue("2026-10-03");
+    expect(screen.getByLabelText("Categoria")).toHaveValue("c-freelance");
+  });
+
   it("indica carregamento enquanto salva", async () => {
     const user = userEvent.setup();
     let finish: (value: typeof success) => void = () => {};
@@ -157,5 +181,17 @@ describe("TransactionDialog", () => {
     await user.click(await screen.findByRole("radio", { name: "Despesa" }));
 
     expect(screen.getByLabelText("Categoria")).toHaveValue("c-alimentacao");
+  });
+
+  it("deixa a categoria vazia quando o tipo não tem nenhuma categoria", async () => {
+    const user = userEvent.setup();
+    const onlyExpenses = categories.filter((item) => item.kind === "expense");
+    render(<TransactionDialog categories={onlyExpenses} month="2026-10" onSave={jest.fn()} />);
+    await user.click(screen.getByRole("button", { name: "Novo lançamento" }));
+
+    await user.click(await screen.findByRole("radio", { name: "Receita" }));
+
+    expect(categoryOptions()).toEqual([]);
+    expect((screen.getByLabelText("Categoria") as HTMLSelectElement).value).toBe("");
   });
 });

@@ -43,11 +43,13 @@ describe("CategoryDialog", () => {
       jest.fn().mockResolvedValue({ ok: false, error: "Já existe uma categoria com esse nome." }),
     );
     await user.type(screen.getByLabelText("Nome"), "Lazer");
+    await user.click(screen.getByRole("radio", { name: "Receita" }));
     await user.click(screen.getByRole("button", { name: "Salvar" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Já existe uma categoria com esse nome.",
     );
+    expect(screen.getByRole("radio", { name: "Receita" })).toBeChecked();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     // Os campos mantêm o que o usuário digitou, para ele só corrigir o necessário.
     expect(screen.getByLabelText("Nome")).toHaveValue("Lazer");

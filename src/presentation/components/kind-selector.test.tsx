@@ -28,4 +28,22 @@ describe("KindSelector", () => {
     expect(screen.getByRole("radio", { name: "Despesa" })).toBeDisabled();
     expect(screen.getByRole("radio", { name: "Receita" })).toBeDisabled();
   });
+
+  it("mantém a escolha atual quando o formulário é resetado (o React 19 reseta ao fim da action)", () => {
+    const { rerender } = render(
+      <form aria-label="teste">
+        <KindSelector value="expense" onChange={jest.fn()} />
+      </form>,
+    );
+    rerender(
+      <form aria-label="teste">
+        <KindSelector value="income" onChange={jest.fn()} />
+      </form>,
+    );
+
+    (screen.getByRole("form", { name: "teste" }) as HTMLFormElement).reset();
+
+    expect(screen.getByRole("radio", { name: "Receita" })).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Despesa" })).not.toBeChecked();
+  });
 });

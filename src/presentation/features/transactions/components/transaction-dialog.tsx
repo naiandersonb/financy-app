@@ -1,7 +1,12 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { Pencil, Plus } from "lucide-react";
+import {
+  defaultDateInMonth,
+  type Category,
+  type MonthKey,
+  type Transaction,
+  type TransactionKind,
+} from "@/domain";
 import { Button } from "@/presentation/components/button";
 import {
   Dialog,
@@ -15,17 +20,15 @@ import {
 import { Input } from "@/presentation/components/input";
 import { KindSelector } from "@/presentation/components/kind-selector";
 import { Label } from "@/presentation/components/label";
-import { NativeSelect, NativeSelectOption } from "@/presentation/components/native-select";
 import {
-  defaultDateInMonth,
-  type Category,
-  type MonthKey,
-  type Transaction,
-  type TransactionKind,
-} from "@/domain";
+  NativeSelect,
+  NativeSelectOption,
+} from "@/presentation/components/native-select";
 import { categoriesByKind } from "@/presentation/features/categories";
 import { centsToInputValue } from "@/presentation/formatters";
 import type { Result } from "@/shared";
+import { Pencil, Plus } from "lucide-react";
+import { useActionState, useState } from "react";
 
 export type SaveTransactionAction = (
   previous: Result | null,
@@ -54,7 +57,13 @@ export function TransactionDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       {isEditing ? (
         <DialogTrigger
-          render={<Button variant="ghost" size="icon-sm" aria-label="Editar lançamento" />}
+          render={
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="Editar lançamento"
+            />
+          }
         >
           <Pencil />
         </DialogTrigger>
@@ -65,8 +74,12 @@ export function TransactionDialog({
       )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Editar lançamento" : "Novo lançamento"}</DialogTitle>
-          <DialogDescription>Registre uma receita ou despesa.</DialogDescription>
+          <DialogTitle>
+            {isEditing ? "Editar lançamento" : "Novo lançamento"}
+          </DialogTitle>
+          <DialogDescription>
+            Registre uma receita ou despesa.
+          </DialogDescription>
         </DialogHeader>
         <TransactionForm
           month={month}
@@ -87,7 +100,31 @@ function TransactionForm({
   transaction,
   onSaved,
 }: TransactionDialogProps & { onSaved: () => void }) {
-  const [kind, setKind] = useState<TransactionKind>(transaction?.kind ?? "expense");
+  const byKind = categoriesByKind(categories);
+  const initialCategoryFor = (target: TransactionKind) =>
+    transaction?.kind === target
+      ? transaction.categoryId
+      : (byKind[target][0]?.id ?? "");
+
+  const [kind, setKind] = useState<TransactionKind>(
+    transaction?.kind ?? "expense",
+  );
+  const [description, setDescription] = useState(
+    transaction?.description ?? "",
+  );
+  const [amount, setAmount] = useState(
+    transaction ? centsToInputValue(transaction.amountCents) : "",
+  );
+  const [occurredOn, setOccurredOn] = useState(
+    transaction?.occurredOn ?? defaultDateInMonth(month, new Date()),
+  );
+  const [categoryId, setCategoryId] = useState(initialCategoryFor(kind));
+
+  function changeKind(next: TransactionKind) {
+    setKind(next);
+    setCategoryId(initialCategoryFor(next));
+  }
+
   const [state, formAction, pending] = useActionState(
     async (previous: Result | null, formData: FormData) => {
       const result = await onSave(previous, formData);
@@ -97,15 +134,11 @@ function TransactionForm({
     null,
   );
 
-  const categoriesOfKind = categoriesByKind(categories)[kind];
-  const defaultCategoryId =
-    transaction?.kind === kind ? transaction.categoryId : categoriesOfKind[0]?.id;
-
   return (
     <form action={formAction} className="flex flex-col gap-4">
       {transaction && <input type="hidden" name="id" value={transaction.id} />}
 
-      <KindSelector value={kind} onChange={setKind} />
+      <KindSelector value={kind} onChange={changeKind} />
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="description">Descrição</Label>
@@ -114,7 +147,8 @@ function TransactionForm({
           name="description"
           required
           maxLength={120}
-          defaultValue={transaction?.description}
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
           placeholder="Ex.: Supermercado"
         />
       </div>
@@ -130,7 +164,8 @@ function TransactionForm({
             min="0.01"
             step="0.01"
             required
-            defaultValue={transaction ? centsToInputValue(transaction.amountCents) : undefined}
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
             placeholder="0,00"
           />
         </div>
@@ -141,22 +176,22 @@ function TransactionForm({
             name="occurredOn"
             type="date"
             required
-            defaultValue={transaction?.occurredOn ?? defaultDateInMonth(month, new Date())}
+            value={occurredOn}
+            onChange={(event) => setOccurredOn(event.target.value)}
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="category">Categoria</Label>
-        {/* key reinicia o valor padrão quando o tipo muda e a lista de categorias troca. */}
         <NativeSelect
-          key={kind}
           id="category"
           name="categoryId"
-          defaultValue={defaultCategoryId}
+          value={categoryId}
+          onChange={(event) => setCategoryId(event.target.value)}
           className="w-full"
         >
-          {categoriesOfKind.map((category) => (
+          {byKind[kind].map((category) => (
             <NativeSelectOption key={category.id} value={category.id}>
               {category.name}
             </NativeSelectOption>
