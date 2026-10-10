@@ -30,5 +30,5 @@ Nome do arquivo: `T-<número com 3 dígitos>-<slug>.md`. Status possíveis: A fa
 | [T-016 — Tela principal com a lista de lançamentos do mês](T-016-tela-lista-lancamentos.md) | 04 | Concluída |
 | [T-017 — Criar lançamento pela tela principal](T-017-criar-lancamento.md) | 04 | Concluída |
 | [T-018 — Editar lançamento pela lista](T-018-editar-lancamento.md) | 04 | Concluída |
-| [T-019 — Extrair o botão de exclusão com confirmação](T-019-extrair-confirmacao-de-exclusao.md) | 04 | A fazer |
+| [T-019 — Extrair o botão de exclusão com confirmação](T-019-extrair-confirmacao-de-exclusao.md) | 04 | Concluída |
 | [T-020 — Excluir lançamento com confirmação](T-020-excluir-lancamento.md) | 04 | A fazer |

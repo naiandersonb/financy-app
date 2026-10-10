@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [04 — Lançamentos](../specs/04-lancamentos.md) (preparação para a T-020) |
-| Status | A fazer |
+| Status | Concluída |
 | Depende de | — |
 | Bloqueia | T-020 |
 
@@ -18,14 +18,18 @@ comportamento** extrai um componente genérico.
 
 - `src/presentation/components/confirm-delete-button.tsx`: rótulo acessível, título, descrição,
   conteúdo extra (ex.: o selo) e a ação de exclusão por props.
-- `DeleteCategoryButton` passa a usá-lo.
+- `DeleteCategoryButton` passa a usá-lo. Ele **continua sendo componente de cliente** (`"use client"`):
+  é ele que monta a função `() => onDelete(category.id)`, e funções criadas no servidor não podem
+  ser passadas a componentes de cliente (o erro só apareceria em tempo de execução, não nos testes
+  nem no build).
 
 ## Critérios de aceite
 
-- [ ] Os testes atuais do `DeleteCategoryButton` continuam passando sem mudar de expectativa.
-- [ ] O componente genérico tem testes próprios.
-- [ ] Gate de qualidade verde.
+- [x] Os testes atuais do `DeleteCategoryButton` continuam passando sem mudar de expectativa.
+- [x] O componente genérico tem testes próprios.
+- [x] Gate de qualidade verde.
 
 ## Tamanho
 
-~2 arquivos de produção, ~90 linhas (a maior parte movida).
+Medido: 2 arquivos de produção; `confirm-delete-button.tsx` com ~90 linhas (movidas) e
+`delete-category-button.tsx` encolhendo de ~90 para ~30.
