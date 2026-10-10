@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [07 — Orçamento por categoria](../specs/07-orcamento-por-categoria.md), regras 4 e 5 e "Telas e interações" (lista, ordem, resumo, estado vazio) |
-| Status | A fazer |
+| Status | Concluída (falta conferir no navegador os critérios 8 e 9 da spec) |
 | Depende de | [T-023](T-023-gastos-por-categoria.md) (`get-month-overview`) |
 | Bloqueia | T-026, T-027, T-028 |
 
@@ -29,14 +29,14 @@ Ainda não há como criar limites pela tela (T-026); esta tarefa entrega o acomp
 
 ## Critérios de aceite
 
-- [ ] Lazer = R$ 400, gasto R$ 100 → 25%, "Restam R$ 300,00", barra primária. *(critério 1)*
-- [ ] Gasto R$ 340 (85%) → barra âmbar. *(critério 2)*
-- [ ] Gasto R$ 450 → barra vermelha cheia e "Excedeu R$ 50,00". *(critério 3)*
-- [ ] Limiares exatos: 79,9% normal; 80% atenção; 100% atenção; 100,1% estourado; gasto zero normal.
+- [x] Lazer = R$ 400, gasto R$ 100 → 25%, "Restam R$ 300,00", barra primária. *(critério 1)*
+- [x] Gasto R$ 340 (85%) → barra âmbar. *(critério 2)*
+- [x] Gasto R$ 450 → barra vermelha cheia e "Excedeu R$ 50,00". *(critério 3)*
+- [x] Limiares exatos: 79,9% normal; 80% atenção; 100% atenção; 100,1% estourado; gasto zero normal.
 - [ ] Trocar de mês recalcula os gastos e mantém os limites. *(critério 8)*
 - [ ] Criar uma despesa na categoria atualiza a barra sem recarregar. *(critério 9; as actions já revalidam `/`)*
-- [ ] Gate de qualidade verde.
+- [x] Gate de qualidade verde.
 
 ## Tamanho
 
-~6 arquivos de produção, ~170 linhas.
+Medido: 8 arquivos de produção (incluindo a página e o `main`), ~180 linhas.

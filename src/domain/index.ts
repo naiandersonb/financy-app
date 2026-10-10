@@ -1,5 +1,10 @@
 export type { Budget } from "./budget.types";
-export { budgetStatuses, type BudgetStatus } from "./budget-status";
+export {
+  BUDGET_WARNING_USAGE,
+  budgetStatuses,
+  type BudgetState,
+  type BudgetStatus,
+} from "./budget-status";
 export {
   compareCategoryNames,
   hasReadableContrast,

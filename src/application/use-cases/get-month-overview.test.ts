@@ -1,6 +1,7 @@
 /** @jest-environment node */
 import { makeTransaction } from "@/domain/testing/make-transaction";
 import { HOUSING, LEISURE, SALARY } from "../testing/category-fixtures";
+import { InMemoryBudgetRepository } from "../testing/in-memory-budget-repository";
 import { InMemoryCategoryRepository } from "../testing/in-memory-category-repository";
 import { InMemoryTransactionRepository } from "../testing/in-memory-transaction-repository";
 import { getMonthOverview } from "./get-month-overview";
@@ -8,11 +9,13 @@ import { getMonthOverview } from "./get-month-overview";
 describe("getMonthOverview", () => {
   let transactions: InMemoryTransactionRepository;
   let categories: InMemoryCategoryRepository;
+  let budgets: InMemoryBudgetRepository;
 
   beforeEach(() => {
     transactions = new InMemoryTransactionRepository();
     categories = new InMemoryCategoryRepository();
     categories.items.push(HOUSING, LEISURE, SALARY);
+    budgets = new InMemoryBudgetRepository("user-1");
   });
 
   it("devolve lançamentos, totais e gastos por categoria só do mês, com as categorias do usuário", async () => {
@@ -24,7 +27,7 @@ describe("getMonthOverview", () => {
       makeTransaction({ id: "nov-01", kind: "expense", amountCents: 999_999, occurredOn: "2026-11-01", categoryId: LEISURE.id }),
     );
 
-    const overview = await getMonthOverview({ transactions, categories }, "2026-10");
+    const overview = await getMonthOverview({ transactions, categories, budgets }, "2026-10");
 
     expect(overview.transactions.map((item) => item.id)).toEqual(["salario", "aluguel", "cinema"]);
     expect(overview.summary).toEqual({
@@ -39,12 +42,34 @@ describe("getMonthOverview", () => {
     ]);
   });
 
+  it("devolve a situação dos orçamentos calculada com os gastos do mês", async () => {
+    await budgets.upsert("user-1", { categoryId: LEISURE.id, limitCents: 40_000 });
+    transactions.items.push(
+      makeTransaction({ kind: "expense", amountCents: 10_000, occurredOn: "2026-10-10", categoryId: LEISURE.id }),
+      makeTransaction({ kind: "expense", amountCents: 99_999, occurredOn: "2026-09-10", categoryId: LEISURE.id }),
+    );
+
+    const overview = await getMonthOverview({ transactions, categories, budgets }, "2026-10");
+
+    expect(overview.budgets).toEqual([
+      {
+        categoryId: LEISURE.id,
+        limitCents: 40_000,
+        spentCents: 10_000,
+        remainingCents: 30_000,
+        usage: 0.25,
+        state: "ok",
+      },
+    ]);
+  });
+
   it("devolve totais zerados e nenhum gasto num mês sem lançamentos", async () => {
-    const overview = await getMonthOverview({ transactions, categories }, "2026-10");
+    const overview = await getMonthOverview({ transactions, categories, budgets }, "2026-10");
     expect(overview).toMatchObject({
       transactions: [],
       summary: { incomeCents: 0, expenseCents: 0, balanceCents: 0 },
       spending: [],
+      budgets: [],
     });
   });
 });
