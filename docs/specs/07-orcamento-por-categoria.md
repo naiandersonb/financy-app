@@ -80,6 +80,13 @@ com alerta claro quando o limite for ultrapassado.
 
 **Exceções:** nenhuma.
 
+## Tarefas
+
+1. [T-025 — Seção de orçamentos do mês (acompanhamento)](../tasks/T-025-secao-de-orcamentos.md)
+2. [T-026 — Definir limite de uma categoria](../tasks/T-026-definir-limite.md)
+3. [T-027 — Editar o valor de um limite](../tasks/T-027-editar-limite.md)
+4. [T-028 — Remover orçamento](../tasks/T-028-remover-orcamento.md)
+
 ## Fora do escopo
 
 Limite diferente por mês, rollover (sobra de um mês somando no próximo), notificações por
