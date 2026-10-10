@@ -27,3 +27,8 @@ Nome do arquivo: `T-<número com 3 dígitos>-<slug>.md`. Status possíveis: A fa
 | [T-013 — Extrair o seletor de tipo e o tratamento de erros das actions](T-013-extrair-seletor-tipo-e-runner.md) | 03 | Concluída |
 | [T-014 — Textos do diálogo em português](T-014-dialogo-em-portugues.md) | — | A fazer |
 | [T-015 — Diálogo de lançamento mantém os campos quando há erro](T-015-dialogo-lancamento-mantem-campos.md) | 04 | A fazer |
+| [T-016 — Tela principal com a lista de lançamentos do mês](T-016-tela-lista-lancamentos.md) | 04 | A fazer |
+| [T-017 — Criar lançamento pela tela principal](T-017-criar-lancamento.md) | 04 | A fazer |
+| [T-018 — Editar lançamento pela lista](T-018-editar-lancamento.md) | 04 | A fazer |
+| [T-019 — Extrair o botão de exclusão com confirmação](T-019-extrair-confirmacao-de-exclusao.md) | 04 | A fazer |
+| [T-020 — Excluir lançamento com confirmação](T-020-excluir-lancamento.md) | 04 | A fazer |

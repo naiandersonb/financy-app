@@ -72,7 +72,7 @@ categoria do novo tipo.
 |--------|----------|
 | `domain` | `transaction.ts` (`Transaction` com `categoryId`, `TransactionKind`) |
 | `application` | Porta `ports/transaction-repository.ts` (`listByMonth`, `create`, `update`, `delete`); schemas `schemas/amount-schema.ts` e `schemas/transaction-input-schema.ts` (`categoryId` como uuid); `save-transaction` confere, pelo `CategoryRepository` da spec 03, que a categoria é do usuário e do mesmo tipo; casos de uso `use-cases/list-month-transactions.ts`, `save-transaction.ts`, `delete-transaction.ts` |
-| `infrastructure` | `supabase/supabase-transaction-repository.ts` (mapeia `amount_cents`/`occurred_on`/`category_id` ↔ entidade; a listagem traz a categoria junto, via `select` com relacionamento, para exibir o selo) |
+| `infrastructure` | `supabase/supabase-transaction-repository.ts` (mapeia `amount_cents`/`occurred_on`/`category_id` ↔ entidade). O selo da categoria é montado na tela cruzando `categoryId` com a lista de categorias do usuário, que a página já carrega para o diálogo |
 | `main` | `makeListMonthTransactions`, `makeSaveTransaction`, `makeDeleteTransaction` |
 | `presentation` | `features/transactions/components/transaction-dialog.tsx` (recebe a lista de categorias por prop), `transaction-list.tsx` (usa `CategoryBadge` do barrel de `features/categories`), `delete-transaction-button.tsx`; `formatters/money.ts` e `formatters/date.ts` |
 | `app` | `(finance)/actions.ts` (`saveTransaction`, `deleteTransaction`, seguidas de `revalidatePath("/")`) |
@@ -93,6 +93,17 @@ categoria do novo tipo.
 | RLS | Migration com política `auth.uid() = user_id` |
 
 **Exceções:** nenhuma.
+
+## Tarefas
+
+Ordem de implementação:
+
+1. [T-016 — Tela principal com a lista de lançamentos do mês](../tasks/T-016-tela-lista-lancamentos.md)
+2. [T-015 — Diálogo de lançamento mantém os campos quando há erro](../tasks/T-015-dialogo-lancamento-mantem-campos.md)
+3. [T-017 — Criar lançamento pela tela principal](../tasks/T-017-criar-lancamento.md)
+4. [T-018 — Editar lançamento pela lista](../tasks/T-018-editar-lancamento.md)
+5. [T-019 — Extrair o botão de exclusão com confirmação](../tasks/T-019-extrair-confirmacao-de-exclusao.md) (refatoração preparatória)
+6. [T-020 — Excluir lançamento com confirmação](../tasks/T-020-excluir-lancamento.md)
 
 ## Fora do escopo
 

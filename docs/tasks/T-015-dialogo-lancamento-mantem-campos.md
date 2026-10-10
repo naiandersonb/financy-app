@@ -5,7 +5,7 @@
 | Spec | [04 — Lançamentos](../specs/04-lancamentos.md), "Telas e interações" (em erro, o diálogo continua aberto mostrando a mensagem) |
 | Status | A fazer |
 | Depende de | — (pode ser feita junto com a [T-009](T-009-referencias-por-id.md), que já altera esse diálogo) |
-| Bloqueia | — |
+| Bloqueia | [T-017](T-017-criar-lancamento.md) (antes de o diálogo aparecer na tela) |
 
 ## Problema
 
