@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [04 — Lançamentos](../specs/04-lancamentos.md), "Telas e interações" (lista e estado vazio) |
-| Status | A fazer |
+| Status | Concluída (falta conferir no navegador os critérios 1 e 2) |
 | Depende de | — |
 | Bloqueia | T-017, T-018, T-020 |
 
@@ -31,11 +31,14 @@ são da spec 05.
 
 - [ ] `/` mostra os lançamentos do mês atual, na ordem da spec.
 - [ ] `/?month=2026-09` mostra setembro; `/?month=2026-13` mostra o mês atual.
-- [ ] Valores no formato `R$ 1.234,56`, com sinal e cor por tipo (a cor não é a única pista: o sinal também aparece). *(critério 10)*
-- [ ] Mês sem lançamentos mostra o estado vazio. *(critério 9)*
-- [ ] Renomear ou recolorir uma categoria muda o selo dos lançamentos dela. *(critério 5)*
-- [ ] Gate de qualidade verde.
+- [x] Valores no formato `R$ 1.234,56`, com sinal e cor por tipo (a cor não é a única pista: o sinal também aparece). *(critério 10)*
+- [x] Mês sem lançamentos mostra o estado vazio. *(critério 9)*
+- [x] Renomear ou recolorir uma categoria muda o selo dos lançamentos dela. *(critério 5)*
+- [x] Gate de qualidade verde.
+
+Também removidos `public/next.svg` e `public/vercel.svg`, usados só pela página do modelo que esta
+tarefa substitui.
 
 ## Tamanho
 
-~5 arquivos de produção, ~150 linhas.
+Medido: 5 arquivos de produção, ~120 linhas.
