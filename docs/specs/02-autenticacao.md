@@ -55,7 +55,14 @@ Cada pessoa tem uma conta própria e acessa somente os próprios dados financeir
 - **Botão do Google**: segue as diretrizes de marca do Google (logo "G" oficial em SVG, texto
   "Continuar com Google", fundo branco com borda no tema claro). Fica desabilitado e mostra estado de
   carregamento enquanto redireciona.
-- **Cabeçalho da área logada**: mostra o e-mail do usuário e o botão "Sair".
+- **Cabeçalho da área logada**: mostra o avatar do usuário, o e-mail e o botão "Sair".
+  - **Avatar**: a foto da conta Google (`user_metadata.avatar_url`, que o Supabase preenche no login
+    social), redonda, 32px. Sem foto (cadastro com e-mail e senha) ou com uma URL de host não
+    permitido, mostra a inicial do e-mail num círculo. A foto é decorativa para leitores de tela
+    (o e-mail já está ao lado).
+  - O `user_metadata` pode ser alterado pelo próprio usuário via API, então a URL **não é
+    confiável**: só são exibidas imagens de hosts permitidos (hoje `lh3.googleusercontent.com`), que
+    também são os únicos liberados no `next/image`.
 
 ## Critérios de aceite
 
@@ -71,6 +78,12 @@ de verificação manual ou de um teste que ainda não existe.
 - [x] Dado que estou logado, quando clico em "Sair", então a sessão termina e vou para `/login`. _(teste manual)_
 - [x] Enquanto o formulário é enviado, o botão fica desabilitado e mostra estado de carregamento. _(teste automatizado)_
 - [x] O usuário A nunca consegue ler ou alterar dados do usuário B, nem chamando a API diretamente (RLS). _(teste de integração, [T-004](../tasks/T-004-teste-integracao-rls.md))_
+
+### Avatar
+
+- [ ] Dado que entrei com o Google, então vejo a foto da minha conta Google no cabeçalho.
+- [ ] Dado que entrei com e-mail e senha, então vejo a inicial do meu e-mail num círculo.
+- [ ] Dado um `avatar_url` com host não permitido (ex.: alterado via API), então vejo a inicial, e nenhuma requisição é feita a esse host.
 
 ### Google
 
@@ -144,4 +157,5 @@ Outros provedores sociais (Apple, GitHub etc.), vincular ou desvincular manualme
 
 - [T-001 — Login social com Google](../tasks/T-001-login-google.md)
 - [T-003 — Comparação exata das rotas públicas no proxy](../tasks/T-003-proxy-rotas-publicas.md)
+- [T-024 — Avatar do usuário no cabeçalho](../tasks/T-024-avatar-do-usuario.md)
 - [T-004 — Teste de integração do isolamento entre usuários (RLS)](../tasks/T-004-teste-integracao-rls.md)
