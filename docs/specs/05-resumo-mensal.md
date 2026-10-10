@@ -75,6 +75,11 @@ mostra o sinal de menos).
 
 **Exceções:** nenhuma.
 
+## Tarefas
+
+1. [T-021 — Seletor de mês](../tasks/T-021-seletor-de-mes.md)
+2. [T-022 — Cartões de receitas, despesas e saldo do mês](../tasks/T-022-cartoes-de-resumo.md)
+
 ## Fora do escopo
 
 Saldo acumulado entre meses, comparação com o mês anterior (% de variação), gráficos de evolução anual,
