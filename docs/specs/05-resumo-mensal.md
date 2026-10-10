@@ -47,8 +47,8 @@ mostra o sinal de menos).
 - [ ] Dado despesas maiores que as receitas, então o saldo aparece negativo e em vermelho.
 - [ ] Dado um mês sem lançamentos, então os três cartões mostram `R$ 0,00`.
 - [ ] Lançamentos de outros meses não entram nos totais (inclusive do último dia do mês anterior e do 1º dia do seguinte).
-- [ ] Quando clico em ‹ estando em janeiro de 2027, vou para dezembro de 2026 (virada de ano).
-- [ ] Quando acesso `/?month=2026-13`, vejo o mês atual.
+- [x] Quando clico em ‹ estando em janeiro de 2027, vou para dezembro de 2026 (virada de ano). _(teste automatizado)_
+- [x] Quando acesso `/?month=2026-13`, vejo o mês atual. _(teste automatizado)_
 - [ ] Depois de criar, editar ou excluir um lançamento, os totais se atualizam sem recarregar a página.
 
 ## Notas técnicas

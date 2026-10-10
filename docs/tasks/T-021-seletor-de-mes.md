@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [05 — Resumo mensal](../specs/05-resumo-mensal.md), "Seletor de mês" |
-| Status | A fazer |
+| Status | Concluída |
 | Depende de | [T-016](T-016-tela-lista-lancamentos.md) |
 | Bloqueia | — |
 
@@ -22,12 +22,12 @@ voltar/avançar do navegador funciona. Dá para ir a meses futuros.
 
 ## Critérios de aceite
 
-- [ ] Em janeiro de 2027, ‹ leva a `/?month=2026-12` e › a `/?month=2027-02` (virada de ano). *(critério 5)*
-- [ ] "Mês atual" aparece só quando o mês exibido não é o atual e leva a `/`.
-- [ ] As setas têm rótulo acessível ("Mês anterior: Dezembro de 2026").
-- [ ] `/?month=2026-13` mostra o mês atual. *(critério 6; já feito na T-016)*
-- [ ] Gate de qualidade verde.
+- [x] Em janeiro de 2027, ‹ leva a `/?month=2026-12` e › a `/?month=2027-02` (virada de ano). *(critério 5)*
+- [x] "Mês atual" aparece só quando o mês exibido não é o atual e leva a `/`.
+- [x] As setas têm rótulo acessível ("Mês anterior: Dezembro de 2026").
+- [x] `/?month=2026-13` mostra o mês atual. *(critério 6; já feito na T-016)*
+- [x] Gate de qualidade verde.
 
 ## Tamanho
 
-~2 arquivos de produção, ~70 linhas.
+Medido: 3 arquivos de produção (incluindo a página), ~60 linhas.
