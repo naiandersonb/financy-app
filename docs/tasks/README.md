@@ -34,3 +34,4 @@ Nome do arquivo: `T-<número com 3 dígitos>-<slug>.md`. Status possíveis: A fa
 | [T-020 — Excluir lançamento com confirmação](T-020-excluir-lancamento.md) | 04 | Concluída |
 | [T-021 — Seletor de mês](T-021-seletor-de-mes.md) | 05 | Concluída |
 | [T-022 — Cartões de receitas, despesas e saldo do mês](T-022-cartoes-de-resumo.md) | 05 | Concluída |
+| [T-023 — Gastos por categoria do mês](T-023-gastos-por-categoria.md) | 06 | A fazer |

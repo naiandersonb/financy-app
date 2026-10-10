@@ -67,6 +67,10 @@ Lazer          R$   230,00    7%  ██▍
 
 **Exceções:** nenhuma.
 
+## Tarefas
+
+1. [T-023 — Gastos por categoria do mês](../tasks/T-023-gastos-por-categoria.md)
+
 ## Fora do escopo
 
 Clicar na categoria para filtrar a lista, gráfico de pizza ou rosca, comparação com meses
