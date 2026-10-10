@@ -1,6 +1,7 @@
 export type { Budget } from "./budget.types";
 export { budgetStatuses, type BudgetStatus } from "./budget-status";
 export {
+  compareCategoryNames,
   hasReadableContrast,
   MAX_CATEGORIES_PER_USER,
   MIN_CATEGORY_CONTRAST,

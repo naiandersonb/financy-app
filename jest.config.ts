@@ -41,6 +41,7 @@ const config: Config = {
     global: COVERAGE_MINIMUM,
     "./src/presentation/features/auth/": COVERAGE_MINIMUM,
     "./src/presentation/features/categories/": COVERAGE_MINIMUM,
+    "./src/presentation/features/category-spending/": COVERAGE_MINIMUM,
     "./src/presentation/features/monthly-summary/": COVERAGE_MINIMUM,
     "./src/presentation/features/transactions/": COVERAGE_MINIMUM,
   },

@@ -39,9 +39,9 @@ Lazer          R$   230,00    7%  ██▍
 
 ## Critérios de aceite
 
-- [ ] Dado despesas de R$ 300 em Alimentação e R$ 100 em Lazer, então vejo Alimentação 75% e Lazer 25%, nessa ordem.
-- [ ] Receitas nunca aparecem nesta seção.
-- [ ] Dado um mês só com receitas, então vejo o estado vazio.
+- [x] Dado despesas de R$ 300 em Alimentação e R$ 100 em Lazer, então vejo Alimentação 75% e Lazer 25%, nessa ordem. _(teste automatizado)_
+- [x] Receitas nunca aparecem nesta seção. _(teste automatizado)_
+- [x] Dado um mês só com receitas, então vejo o estado vazio. _(teste automatizado)_
 - [ ] Quando edito a categoria de uma despesa, então os valores das duas categorias se atualizam.
 - [ ] Quando renomeio ou recolorizo uma categoria, então a linha dela mostra o novo selo.
 - [ ] Quando troco de mês, então a seção mostra os gastos do novo mês.

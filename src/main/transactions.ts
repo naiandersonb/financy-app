@@ -9,8 +9,8 @@ import type { MonthKey } from "@/domain";
 import { createRequestContext } from "./request-context";
 
 export async function makeGetMonthOverview() {
-  const { transactions } = await createRequestContext();
-  return (month: MonthKey) => getMonthOverview(transactions, month);
+  const { transactions, categories } = await createRequestContext();
+  return (month: MonthKey) => getMonthOverview({ transactions, categories }, month);
 }
 
 export async function makeSaveTransaction() {

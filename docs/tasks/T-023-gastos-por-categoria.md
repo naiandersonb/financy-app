@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [06 — Gastos por categoria](../specs/06-gastos-por-categoria.md) (inteira) |
-| Status | A fazer |
+| Status | Concluída (falta conferir no navegador os critérios 4 a 6 da spec) |
 | Depende de | [T-022](T-022-cartoes-de-resumo.md) (caso de uso `get-month-overview`) |
 | Bloqueia | — |
 
@@ -28,13 +28,13 @@ Maior gasto primeiro; empate em ordem alfabética. Receitas não entram. Mês se
 
 ## Critérios de aceite
 
-- [ ] R$ 300 em Alimentação e R$ 100 em Lazer → Alimentação 75% e Lazer 25%, nessa ordem. *(critério 1)*
-- [ ] Empate de valor → ordem alfabética pelo nome da categoria.
-- [ ] Receitas nunca aparecem. *(critério 2)*
-- [ ] Mês só com receitas → estado vazio. *(critério 3)*
+- [x] R$ 300 em Alimentação e R$ 100 em Lazer → Alimentação 75% e Lazer 25%, nessa ordem. *(critério 1)*
+- [x] Empate de valor → ordem alfabética pelo nome da categoria.
+- [x] Receitas nunca aparecem. *(critério 2)*
+- [x] Mês só com receitas → estado vazio. *(critério 3)*
 - [ ] Editar a categoria de uma despesa atualiza as duas linhas; renomear ou recolorir muda o selo; trocar de mês mostra os gastos do novo mês. *(critérios 4–6: a seção é recalculada a cada renderização da página, que as actions revalidam)*
-- [ ] Gate de qualidade verde.
+- [x] Gate de qualidade verde.
 
 ## Tamanho
 
-~7 arquivos de produção, ~140 linhas.
+Medido: 7 arquivos de produção, ~150 linhas.

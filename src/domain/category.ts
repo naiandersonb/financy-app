@@ -10,3 +10,10 @@ export function hasReadableContrast(backgroundColor: string, textColor: string):
   const ratio = contrastRatio(backgroundColor, textColor);
   return ratio !== null && ratio >= MIN_CATEGORY_CONTRAST;
 }
+
+const byName = new Intl.Collator("pt-BR", { sensitivity: "base" });
+
+/** Ordem alfabética do português: acentos e maiúsculas não alteram a posição. */
+export function compareCategoryNames(first: string, second: string): number {
+  return byName.compare(first, second);
+}
