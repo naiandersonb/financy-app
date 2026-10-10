@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [04 — Lançamentos](../specs/04-lancamentos.md), regra 2 e "Editar abre o mesmo diálogo já preenchido" |
-| Status | A fazer |
+| Status | Concluída (falta conferir no navegador os critérios 1 e 2) |
 | Depende de | [T-017](T-017-criar-lancamento.md) |
 | Bloqueia | — |
 
@@ -15,15 +15,16 @@ reflete a mudança; se a data mudar para outro mês, o lançamento sai da lista 
 ## Escopo
 
 `presentation`: botão de edição (o `TransactionDialog` em modo edição já existe) em cada linha do
-`transaction-list.tsx`, recebendo a action e as categorias por prop; `app`: a página repassa
-`saveTransaction`.
+`transaction-list.tsx`, recebendo a action, o mês e as categorias por prop; o rótulo acessível passa
+a incluir a descrição ("Editar lançamento Aluguel"), para distinguir as linhas; `app`: a página
+repassa `saveTransaction`.
 
 ## Critérios de aceite
 
 - [ ] Editar o valor → a lista mostra o novo valor. *(critério 6; os totais vêm na spec 05)*
 - [ ] Mudar a data para outro mês → o lançamento some do mês atual. *(critério 7)*
-- [ ] Gate de qualidade verde.
+- [x] Gate de qualidade verde.
 
 ## Tamanho
 
-~2 arquivos de produção, ~40 linhas.
+Medido: 3 arquivos de produção, ~25 linhas.

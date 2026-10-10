@@ -55,13 +55,13 @@ export function TransactionDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {isEditing ? (
+      {transaction ? (
         <DialogTrigger
           render={
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label="Editar lançamento"
+              aria-label={`Editar lançamento ${transaction.description}`}
             />
           }
         >

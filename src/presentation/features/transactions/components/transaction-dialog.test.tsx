@@ -160,7 +160,7 @@ describe("TransactionDialog", () => {
     const onSave = jest.fn().mockResolvedValue(success);
     render(<TransactionDialog categories={categories} month="2026-10" onSave={onSave} transaction={existing} />);
 
-    await user.click(screen.getByRole("button", { name: "Editar lançamento" }));
+    await user.click(screen.getByRole("button", { name: "Editar lançamento Salário de outubro" }));
 
     expect(await screen.findByRole("dialog", { name: "Editar lançamento" })).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: "Receita" })).toBeChecked();
@@ -176,7 +176,7 @@ describe("TransactionDialog", () => {
   it("ao trocar o tipo na edição, volta para a primeira categoria do novo tipo", async () => {
     const user = userEvent.setup();
     render(<TransactionDialog categories={categories} month="2026-10" onSave={jest.fn()} transaction={existing} />);
-    await user.click(screen.getByRole("button", { name: "Editar lançamento" }));
+    await user.click(screen.getByRole("button", { name: "Editar lançamento Salário de outubro" }));
 
     await user.click(await screen.findByRole("radio", { name: "Despesa" }));
 

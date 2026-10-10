@@ -1,16 +1,25 @@
-import type { Category, Transaction } from "@/domain";
+import type { Category, MonthKey, Transaction } from "@/domain";
 import { CategoryBadge } from "@/presentation/features/categories";
 import { formatDayLabel } from "@/presentation/formatters";
 import { cn } from "@/shared";
 import { signedAmount } from "../view-models/signed-amount";
+import { TransactionDialog, type SaveTransactionAction } from "./transaction-dialog";
 
 type TransactionListProps = {
   /** Já na ordem de exibição (data mais recente primeiro). */
   transactions: Transaction[];
   categories: Category[];
+  /** Mês exibido; usado pelo diálogo de edição. */
+  month: MonthKey;
+  onUpdate: SaveTransactionAction;
 };
 
-export function TransactionList({ transactions, categories }: TransactionListProps) {
+export function TransactionList({
+  transactions,
+  categories,
+  month,
+  onUpdate,
+}: TransactionListProps) {
   if (transactions.length === 0) {
     return (
       <p className="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground">
@@ -28,7 +37,7 @@ export function TransactionList({ transactions, categories }: TransactionListPro
         return (
           <li
             key={transaction.id}
-            className="grid grid-cols-[auto_1fr_auto] items-center gap-x-4 gap-y-1 px-4 py-3"
+            className="grid grid-cols-[auto_1fr_auto_auto] items-center gap-x-4 gap-y-1 px-4 py-3"
           >
             <time
               dateTime={transaction.occurredOn}
@@ -52,6 +61,12 @@ export function TransactionList({ transactions, categories }: TransactionListPro
             >
               {amount.text}
             </span>
+            <TransactionDialog
+              month={month}
+              transaction={transaction}
+              categories={categories}
+              onSave={onUpdate}
+            />
           </li>
         );
       })}

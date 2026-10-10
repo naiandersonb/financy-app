@@ -23,7 +23,12 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
         <h1 className="text-2xl font-semibold">{formatMonthLabel(month)}</h1>
         <TransactionDialog month={month} categories={categories} onSave={saveTransaction} />
       </div>
-      <TransactionList transactions={transactions} categories={categories} />
+      <TransactionList
+        transactions={transactions}
+        categories={categories}
+        month={month}
+        onUpdate={saveTransaction}
+      />
     </main>
   );
 }
