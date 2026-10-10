@@ -48,6 +48,23 @@ export class SupabaseAuthGateway implements AuthGateway {
     // getClaims valida o JWT; getSession não é confiável no servidor.
     const { data, error } = await this.client.auth.getClaims();
     if (error || !data) return null;
-    return { id: data.claims.sub, email: data.claims.email ?? null };
+    return {
+      id: data.claims.sub,
+      email: data.claims.email ?? null,
+      name: nameFrom(data.claims.user_metadata),
+      avatarUrl: avatarFrom(data.claims.user_metadata),
+    };
   }
+}
+
+/** O Supabase guarda o nome da conta Google em `full_name` (às vezes em `name`). */
+function nameFrom(metadata: Record<string, unknown> | undefined): string | null {
+  const name = metadata?.full_name ?? metadata?.name;
+  return typeof name === "string" && name.trim() ? name.trim() : null;
+}
+
+/** O Supabase guarda a foto do Google em `avatar_url` (e às vezes em `picture`). */
+function avatarFrom(metadata: Record<string, unknown> | undefined): string | null {
+  const url = metadata?.avatar_url ?? metadata?.picture;
+  return typeof url === "string" && url.length > 0 ? url : null;
 }

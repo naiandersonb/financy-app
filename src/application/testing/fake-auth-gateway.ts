@@ -10,6 +10,8 @@ import type {
 export class FakeAuthGateway implements AuthGateway {
   readonly accounts = new Map<string, string>();
   sessionUserId: string | null = null;
+  name: string | null = null;
+  avatarUrl: string | null = null;
   signUpOutcome: SignUpOutcome = "signed-in";
   failNextSignUp = false;
   failNextOAuth = false;
@@ -49,6 +51,13 @@ export class FakeAuthGateway implements AuthGateway {
 
   /** Na sessão falsa, o id do usuário é o próprio e-mail. */
   async currentUser(): Promise<CurrentUser | null> {
-    return this.sessionUserId ? { id: this.sessionUserId, email: this.sessionUserId } : null;
+    return this.sessionUserId
+      ? {
+          id: this.sessionUserId,
+          email: this.sessionUserId,
+          name: this.name,
+          avatarUrl: this.avatarUrl,
+        }
+      : null;
   }
 }

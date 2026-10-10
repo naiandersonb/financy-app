@@ -138,12 +138,45 @@ describe("SupabaseAuthGateway", () => {
       expect(await gatewayWith({ getClaims }).currentUser()).toEqual({
         id: "user-1",
         email: "ana@exemplo.com",
+        name: null,
+        avatarUrl: null,
       });
+    });
+
+    it.each([
+      [{ full_name: "Ana Souza" }, "Ana Souza"],
+      [{ name: "  Ana  " }, "Ana"],
+      [{ full_name: "   " }, null],
+      [{ full_name: 42 }, null],
+    ])("lê o nome do user_metadata %p", async (metadata, expected) => {
+      const getClaims = jest.fn().mockResolvedValue({
+        data: { claims: { sub: "user-1", user_metadata: metadata } },
+        error: null,
+      });
+      expect((await gatewayWith({ getClaims }).currentUser())?.name).toBe(expected);
+    });
+
+    it.each([
+      [{ avatar_url: "https://lh3.googleusercontent.com/a/foto" }, "https://lh3.googleusercontent.com/a/foto"],
+      [{ picture: "https://lh3.googleusercontent.com/a/foto-2" }, "https://lh3.googleusercontent.com/a/foto-2"],
+      [{ avatar_url: "" }, null],
+      [{ avatar_url: 42 }, null],
+    ])("lê a foto do user_metadata %p", async (metadata, expected) => {
+      const getClaims = jest.fn().mockResolvedValue({
+        data: { claims: { sub: "user-1", user_metadata: metadata } },
+        error: null,
+      });
+      expect((await gatewayWith({ getClaims }).currentUser())?.avatarUrl).toBe(expected);
     });
 
     it("retorna e-mail nulo quando a conta não tem e-mail nas claims", async () => {
       const getClaims = jest.fn().mockResolvedValue({ data: { claims: { sub: "user-1" } }, error: null });
-      expect(await gatewayWith({ getClaims }).currentUser()).toEqual({ id: "user-1", email: null });
+      expect(await gatewayWith({ getClaims }).currentUser()).toEqual({
+        id: "user-1",
+        email: null,
+        name: null,
+        avatarUrl: null,
+      });
     });
 
     it.each([

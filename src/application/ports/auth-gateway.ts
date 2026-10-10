@@ -5,7 +5,14 @@ export type Credentials = { email: string; password: string };
 /** Depois do cadastro, o usuário já entra ou precisa confirmar o e-mail antes. */
 export type SignUpOutcome = "signed-in" | "confirmation-required";
 
-export type CurrentUser = { id: string; email: string | null };
+export type CurrentUser = {
+  id: string;
+  email: string | null;
+  /** Nome vindo do provedor social (ex.: Google); `null` no cadastro com e-mail e senha. */
+  name: string | null;
+  /** Foto do provedor social (ex.: Google). Vem de dado editável pelo usuário: não é confiável. */
+  avatarUrl: string | null;
+};
 
 export type OAuthProvider = "google";
 
