@@ -47,8 +47,8 @@ com alerta claro quando o limite for ultrapassado.
 - [x] Dado que defino Lazer = R$ 400 e gastei R$ 100 em Lazer no mês, então vejo 25%, "Restam R$ 300,00", barra primária. _(teste automatizado)_
 - [x] Dado gasto de R$ 340 (85%), então a barra fica âmbar. _(teste automatizado)_
 - [x] Dado gasto de R$ 450, então vejo a barra vermelha cheia e "Excedeu R$ 50,00". _(teste automatizado)_
-- [ ] Dado que Lazer já tem orçamento, então Lazer não aparece na lista do diálogo "Definir limite".
-- [ ] Dado um limite `0` ou negativo, então vejo um erro e nada é gravado.
+- [x] Dado que Lazer já tem orçamento, então Lazer não aparece na lista do diálogo "Definir limite". _(teste automatizado)_
+- [x] Dado um limite `0` ou negativo, então vejo um erro e nada é gravado. _(teste automatizado)_
 - [ ] Quando edito o limite de Lazer para R$ 500, então todos os meses passam a usar R$ 500.
 - [ ] Quando removo um orçamento e confirmo, então ele some e os lançamentos continuam intactos.
 - [ ] Quando troco de mês, então os valores gastos refletem o novo mês e os limites continuam os mesmos.

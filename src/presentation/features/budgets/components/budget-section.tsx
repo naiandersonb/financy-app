@@ -1,18 +1,19 @@
-import type { ReactNode } from "react";
 import type { BudgetStatus, Category } from "@/domain";
+import { categoriesWithoutBudget } from "../view-models/categories-without-budget";
+import { BudgetDialog, type SaveBudgetAction } from "./budget-dialog";
 import { BudgetItem } from "./budget-item";
 
 type BudgetSectionProps = {
   /** Já ordenado: estourados primeiro, depois do maior para o menor uso. */
   budgets: BudgetStatus[];
   categories: Category[];
-  /** Ações da seção (ex.: "Definir limite"), no cabeçalho. */
-  actions?: ReactNode;
+  onSave: SaveBudgetAction;
 };
 
-export function BudgetSection({ budgets, categories, actions }: BudgetSectionProps) {
+export function BudgetSection({ budgets, categories, onSave }: BudgetSectionProps) {
   const categoryById = new Map(categories.map((category) => [category.id, category]));
   const overCount = budgets.filter((budget) => budget.state === "over").length;
+  const available = categoriesWithoutBudget(categories, budgets);
 
   return (
     <section aria-labelledby="orcamentos" className="rounded-xl border bg-card p-4">
@@ -20,7 +21,7 @@ export function BudgetSection({ budgets, categories, actions }: BudgetSectionPro
         <h2 id="orcamentos" className="text-sm font-semibold">
           Orçamentos
         </h2>
-        {actions}
+        {available.length > 0 && <BudgetDialog categories={available} onSave={onSave} />}
       </div>
       {overCount > 0 && (
         <p role="status" className="mb-3 text-sm font-medium text-destructive">

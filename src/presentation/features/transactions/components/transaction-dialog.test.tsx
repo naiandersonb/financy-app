@@ -210,4 +210,19 @@ describe("TransactionDialog", () => {
     expect(badge().map((item) => item.textContent)).toEqual(["Moradia"]);
     expect(badge()[0]).toHaveStyle({ backgroundColor: "#dbeafe", color: "#1e3a8a" });
   });
+
+  it("mantém a categoria escolhida (sem trocar o tipo) quando o servidor devolve erro", async () => {
+    const user = userEvent.setup();
+    const onSave = jest.fn().mockResolvedValue({ ok: false, error: "Erro." });
+    render(<TransactionDialog categories={categories} month="2026-10" onSave={onSave} />);
+    await user.click(screen.getByRole("button", { name: "Novo lançamento" }));
+
+    await user.type(await screen.findByLabelText("Descrição"), "Aluguel");
+    await user.type(screen.getByLabelText("Valor (R$)"), "1500");
+    await user.selectOptions(screen.getByLabelText("Categoria"), "Moradia");
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
+
+    await screen.findByRole("alert");
+    expect(screen.getByLabelText("Categoria")).toHaveValue("c-moradia");
+  });
 });

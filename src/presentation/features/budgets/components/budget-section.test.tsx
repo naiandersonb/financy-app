@@ -27,7 +27,7 @@ function section() {
 describe("BudgetSection", () => {
   it("mostra os orçamentos na ordem recebida", () => {
     render(
-      <BudgetSection
+      <BudgetSection onSave={jest.fn()}
         categories={categories}
         budgets={[status("c-b", "over"), status("c-a", "warning"), status("c-c", "ok")]}
       />,
@@ -43,22 +43,31 @@ describe("BudgetSection", () => {
     [[status("c-a", "over")], "1 categoria acima do limite"],
     [[status("c-a", "over"), status("c-b", "over")], "2 categorias acima do limite"],
   ])("resume os estouros", (budgets, message) => {
-    render(<BudgetSection categories={categories} budgets={budgets} />);
+    render(<BudgetSection onSave={jest.fn()} categories={categories} budgets={budgets} />);
     expect(section().getByRole("status")).toHaveTextContent(message);
   });
 
   it("não mostra o resumo sem estouros", () => {
-    render(<BudgetSection categories={categories} budgets={[status("c-a", "warning")]} />);
+    render(<BudgetSection onSave={jest.fn()} categories={categories} budgets={[status("c-a", "warning")]} />);
     expect(section().queryByRole("status")).not.toBeInTheDocument();
   });
 
-  it("mostra o estado vazio sem limites e as ações no cabeçalho", () => {
-    render(
-      <BudgetSection categories={categories} budgets={[]} actions={<button>Definir limite</button>} />,
-    );
+  it("mostra o estado vazio e o botão Definir limite quando não há limites", () => {
+    render(<BudgetSection onSave={jest.fn()} categories={categories} budgets={[]} />);
     expect(
       section().getByText("Nenhum limite definido. Defina limites para acompanhar seus gastos."),
     ).toBeInTheDocument();
     expect(section().getByRole("button", { name: "Definir limite" })).toBeInTheDocument();
+  });
+
+  it("esconde o botão Definir limite quando todas as despesas já têm orçamento", () => {
+    render(
+      <BudgetSection
+        onSave={jest.fn()}
+        categories={categories}
+        budgets={[status("c-a", "ok"), status("c-b", "ok"), status("c-c", "ok")]}
+      />,
+    );
+    expect(section().queryByRole("button", { name: "Definir limite" })).not.toBeInTheDocument();
   });
 });

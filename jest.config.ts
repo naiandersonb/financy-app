@@ -11,7 +11,6 @@ const SHADCN_GENERATED_COMPONENTS = [
   "card",
   "input",
   "label",
-  "native-select",
   "progress",
 ];
 

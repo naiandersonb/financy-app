@@ -4,7 +4,7 @@ import { BudgetSection } from "@/presentation/features/budgets";
 import { CategoryBreakdown } from "@/presentation/features/category-spending";
 import { MonthNavigator, SummaryCards } from "@/presentation/features/monthly-summary";
 import { TransactionDialog, TransactionList } from "@/presentation/features/transactions";
-import { deleteTransaction, saveTransaction } from "./actions";
+import { deleteTransaction, saveBudget, saveTransaction } from "./actions";
 
 export default async function HomePage({ searchParams }: PageProps<"/">) {
   const { month: monthParam } = await searchParams;
@@ -22,7 +22,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
       </div>
       <SummaryCards summary={summary} />
       <CategoryBreakdown spending={spending} categories={categories} />
-      <BudgetSection budgets={budgets} categories={categories} />
+      <BudgetSection budgets={budgets} categories={categories} onSave={saveBudget} />
       <TransactionList
         transactions={transactions}
         categories={categories}
