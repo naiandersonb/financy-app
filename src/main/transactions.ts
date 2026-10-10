@@ -2,15 +2,15 @@ import "server-only";
 
 import {
   deleteTransaction,
-  listMonthTransactions,
+  getMonthOverview,
   saveTransaction,
 } from "@/application";
 import type { MonthKey } from "@/domain";
 import { createRequestContext } from "./request-context";
 
-export async function makeListMonthTransactions() {
+export async function makeGetMonthOverview() {
   const { transactions } = await createRequestContext();
-  return (month: MonthKey) => listMonthTransactions(transactions, month);
+  return (month: MonthKey) => getMonthOverview(transactions, month);
 }
 
 export async function makeSaveTransaction() {

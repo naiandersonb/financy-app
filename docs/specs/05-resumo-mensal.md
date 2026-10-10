@@ -42,11 +42,11 @@ mostra o sinal de menos).
 
 ## Critérios de aceite
 
-- [ ] Dado receitas de R$ 5.000,00 e despesas de R$ 3.200,50 no mês, então os cartões mostram
-      `R$ 5.000,00`, `R$ 3.200,50` e saldo `R$ 1.799,50`.
-- [ ] Dado despesas maiores que as receitas, então o saldo aparece negativo e em vermelho.
-- [ ] Dado um mês sem lançamentos, então os três cartões mostram `R$ 0,00`.
-- [ ] Lançamentos de outros meses não entram nos totais (inclusive do último dia do mês anterior e do 1º dia do seguinte).
+- [x] Dado receitas de R$ 5.000,00 e despesas de R$ 3.200,50 no mês, então os cartões mostram
+      `R$ 5.000,00`, `R$ 3.200,50` e saldo `R$ 1.799,50`. _(teste automatizado)_
+- [x] Dado despesas maiores que as receitas, então o saldo aparece negativo e em vermelho. _(teste automatizado)_
+- [x] Dado um mês sem lançamentos, então os três cartões mostram `R$ 0,00`. _(teste automatizado)_
+- [x] Lançamentos de outros meses não entram nos totais (inclusive do último dia do mês anterior e do 1º dia do seguinte). _(teste automatizado)_
 - [x] Quando clico em ‹ estando em janeiro de 2027, vou para dezembro de 2026 (virada de ano). _(teste automatizado)_
 - [x] Quando acesso `/?month=2026-13`, vejo o mês atual. _(teste automatizado)_
 - [ ] Depois de criar, editar ou excluir um lançamento, os totais se atualizam sem recarregar a página.

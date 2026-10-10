@@ -16,6 +16,6 @@ export {
 } from "./categories";
 export {
   makeDeleteTransaction,
-  makeListMonthTransactions,
+  makeGetMonthOverview,
   makeSaveTransaction,
 } from "./transactions";

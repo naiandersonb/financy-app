@@ -29,6 +29,7 @@ export { getCurrentUser } from "./use-cases/get-current-user";
 export { deleteTransaction } from "./use-cases/delete-transaction";
 export { listBudgets } from "./use-cases/list-budgets";
 export { listCategories } from "./use-cases/list-categories";
+export { getMonthOverview, type MonthOverview } from "./use-cases/get-month-overview";
 export { listMonthTransactions } from "./use-cases/list-month-transactions";
 export { saveBudget } from "./use-cases/save-budget";
 export { saveTransaction } from "./use-cases/save-transaction";
