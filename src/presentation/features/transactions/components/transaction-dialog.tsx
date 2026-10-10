@@ -24,7 +24,7 @@ import {
   NativeSelect,
   NativeSelectOption,
 } from "@/presentation/components/native-select";
-import { categoriesByKind } from "@/presentation/features/categories";
+import { CategoryBadge, categoriesByKind } from "@/presentation/features/categories";
 import { centsToInputValue } from "@/presentation/formatters";
 import type { Result } from "@/shared";
 import { Pencil, Plus } from "lucide-react";
@@ -120,6 +120,9 @@ function TransactionForm({
   );
   const [categoryId, setCategoryId] = useState(initialCategoryFor(kind));
 
+  // Só visual: o nome já está no seletor, o selo mostra as cores da categoria escolhida.
+  const selectedCategory = byKind[kind].find((category) => category.id === categoryId);
+
   function changeKind(next: TransactionKind) {
     setKind(next);
     setCategoryId(initialCategoryFor(next));
@@ -184,19 +187,26 @@ function TransactionForm({
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="category">Categoria</Label>
-        <NativeSelect
-          id="category"
-          name="categoryId"
-          value={categoryId}
-          onChange={(event) => setCategoryId(event.target.value)}
-          className="w-full"
-        >
-          {byKind[kind].map((category) => (
-            <NativeSelectOption key={category.id} value={category.id}>
-              {category.name}
-            </NativeSelectOption>
-          ))}
-        </NativeSelect>
+        <div className="flex items-center gap-3">
+          <NativeSelect
+            id="category"
+            name="categoryId"
+            value={categoryId}
+            onChange={(event) => setCategoryId(event.target.value)}
+            className="min-w-0 flex-1"
+          >
+            {byKind[kind].map((category) => (
+              <NativeSelectOption key={category.id} value={category.id}>
+                {category.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          {selectedCategory && (
+            <span aria-hidden="true">
+              <CategoryBadge category={selectedCategory} />
+            </span>
+          )}
+        </div>
       </div>
 
       {state && !state.ok && (

@@ -194,4 +194,20 @@ describe("TransactionDialog", () => {
     expect(categoryOptions()).toEqual([]);
     expect((screen.getByLabelText("Categoria") as HTMLSelectElement).value).toBe("");
   });
+
+  it("mostra ao lado do seletor o selo da categoria escolhida, com as cores dela", async () => {
+    const user = userEvent.setup();
+    const colorful = categories.map((item) =>
+      item.id === "c-moradia" ? { ...item, backgroundColor: "#dbeafe", textColor: "#1e3a8a" } : item,
+    );
+    render(<TransactionDialog categories={colorful} month="2026-10" onSave={jest.fn()} />);
+    await user.click(screen.getByRole("button", { name: "Novo lançamento" }));
+    const badge = () => screen.getAllByText(/^(Alimentação|Moradia)$/, { selector: "span" });
+
+    expect(badge().map((item) => item.textContent)).toEqual(["Alimentação"]);
+
+    await user.selectOptions(screen.getByLabelText("Categoria"), "Moradia");
+    expect(badge().map((item) => item.textContent)).toEqual(["Moradia"]);
+    expect(badge()[0]).toHaveStyle({ backgroundColor: "#dbeafe", color: "#1e3a8a" });
+  });
 });

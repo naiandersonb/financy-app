@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Spec | [04 — Lançamentos](../specs/04-lancamentos.md), "Campos", "Categorias" e regras 3 e 5 |
-| Status | A fazer |
+| Status | Concluída (falta conferir no navegador o critério 1) |
 | Depende de | [T-016](T-016-tela-lista-lancamentos.md) e [T-015](T-015-dialogo-lancamento-mantem-campos.md) |
 | Bloqueia | T-018 |
 
@@ -23,12 +23,12 @@ A validação no servidor, o caso de uso e a action já existem e têm testes (s
 ## Critérios de aceite
 
 - [ ] Formulário correto → o lançamento aparece na lista do mês da sua data. *(critério 1)*
-- [ ] Valor `0`, negativo ou com mais de 2 casas → erro, nada gravado. *(critério 2)*
-- [ ] Descrição vazia ou com mais de 120 caracteres → erro. *(critério 3)*
-- [ ] Categoria de outro tipo ou de outro usuário (requisição forjada) → recusada pelo servidor. *(critério 4; já coberto pelos testes do caso de uso e de integração)*
-- [ ] O selo ao lado do seletor acompanha a categoria escolhida.
-- [ ] Gate de qualidade verde.
+- [x] Valor `0`, negativo ou com mais de 2 casas → erro, nada gravado. *(critério 2)*
+- [x] Descrição vazia ou com mais de 120 caracteres → erro. *(critério 3)*
+- [x] Categoria de outro tipo ou de outro usuário (requisição forjada) → recusada pelo servidor. *(critério 4; já coberto pelos testes do caso de uso e de integração)*
+- [x] O selo ao lado do seletor acompanha a categoria escolhida.
+- [x] Gate de qualidade verde.
 
 ## Tamanho
 
-~2 arquivos de produção, ~40 linhas.
+Medido: 2 arquivos de produção, ~30 linhas.
