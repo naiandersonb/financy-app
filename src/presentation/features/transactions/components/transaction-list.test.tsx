@@ -33,7 +33,7 @@ function transaction(overrides: Partial<Transaction>): Transaction {
 describe("TransactionList", () => {
   it("mostra data, descrição, selo da categoria e valor com sinal, na ordem recebida", () => {
     render(
-      <TransactionList month="2026-10" onUpdate={jest.fn()}
+      <TransactionList month="2026-10" onUpdate={jest.fn()} onDelete={jest.fn()}
         categories={[housing, salary]}
         transactions={[
           transaction({
@@ -65,19 +65,19 @@ describe("TransactionList", () => {
   });
 
   it("marca a data em formato de máquina", () => {
-    render(<TransactionList month="2026-10" onUpdate={jest.fn()} categories={[housing]} transactions={[transaction({})]} />);
+    render(<TransactionList month="2026-10" onUpdate={jest.fn()} onDelete={jest.fn()} categories={[housing]} transactions={[transaction({})]} />);
     expect(screen.getByText("01 de out")).toHaveAttribute("datetime", "2026-10-01");
   });
 
   it("mostra o estado vazio quando o mês não tem lançamentos", () => {
-    render(<TransactionList month="2026-10" onUpdate={jest.fn()} categories={[housing]} transactions={[]} />);
+    render(<TransactionList month="2026-10" onUpdate={jest.fn()} onDelete={jest.fn()} categories={[housing]} transactions={[]} />);
     expect(screen.getByText("Nenhum lançamento neste mês.")).toBeInTheDocument();
     expect(screen.queryByRole("list")).not.toBeInTheDocument();
   });
 
   it("indica quando a categoria não está na lista recebida", () => {
     render(
-      <TransactionList month="2026-10" onUpdate={jest.fn()} categories={[]} transactions={[transaction({ categoryId: "c-x" })]} />,
+      <TransactionList month="2026-10" onUpdate={jest.fn()} onDelete={jest.fn()} categories={[]} transactions={[transaction({ categoryId: "c-x" })]} />,
     );
     expect(screen.getByText("Sem categoria")).toBeInTheDocument();
   });
@@ -89,6 +89,7 @@ describe("TransactionList", () => {
       <TransactionList
         month="2026-10"
         onUpdate={onUpdate}
+        onDelete={jest.fn()}
         categories={[housing, salary]}
         transactions={[transaction({ id: "t-9", description: "Aluguel", amountCents: 150_000 })]}
       />,
@@ -105,5 +106,18 @@ describe("TransactionList", () => {
     const sent = Object.fromEntries(onUpdate.mock.calls[0][1] as FormData);
     expect(sent).toMatchObject({ id: "t-9", amount: "1600" });
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+  });
+
+  it("oferece excluir cada lançamento", () => {
+    render(
+      <TransactionList
+        month="2026-10"
+        onUpdate={jest.fn()}
+        onDelete={jest.fn()}
+        categories={[housing]}
+        transactions={[transaction({ description: "Aluguel" })]}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Excluir lançamento Aluguel" })).toBeInTheDocument();
   });
 });

@@ -3,6 +3,7 @@ import { CategoryBadge } from "@/presentation/features/categories";
 import { formatDayLabel } from "@/presentation/formatters";
 import { cn } from "@/shared";
 import { signedAmount } from "../view-models/signed-amount";
+import { DeleteTransactionButton, type DeleteTransactionAction } from "./delete-transaction-button";
 import { TransactionDialog, type SaveTransactionAction } from "./transaction-dialog";
 
 type TransactionListProps = {
@@ -12,6 +13,7 @@ type TransactionListProps = {
   /** Mês exibido; usado pelo diálogo de edição. */
   month: MonthKey;
   onUpdate: SaveTransactionAction;
+  onDelete: DeleteTransactionAction;
 };
 
 export function TransactionList({
@@ -19,6 +21,7 @@ export function TransactionList({
   categories,
   month,
   onUpdate,
+  onDelete,
 }: TransactionListProps) {
   if (transactions.length === 0) {
     return (
@@ -61,12 +64,15 @@ export function TransactionList({
             >
               {amount.text}
             </span>
-            <TransactionDialog
-              month={month}
-              transaction={transaction}
-              categories={categories}
-              onSave={onUpdate}
-            />
+            <div className="flex items-center">
+              <TransactionDialog
+                month={month}
+                transaction={transaction}
+                categories={categories}
+                onSave={onUpdate}
+              />
+              <DeleteTransactionButton transaction={transaction} onDelete={onDelete} />
+            </div>
           </li>
         );
       })}

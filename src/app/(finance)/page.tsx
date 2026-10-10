@@ -2,7 +2,7 @@ import { currentMonthKey, parseMonthKey } from "@/domain";
 import { makeListCategories, makeListMonthTransactions } from "@/main";
 import { TransactionDialog, TransactionList } from "@/presentation/features/transactions";
 import { formatMonthLabel } from "@/presentation/formatters";
-import { saveTransaction } from "./actions";
+import { deleteTransaction, saveTransaction } from "./actions";
 
 export default async function HomePage({ searchParams }: PageProps<"/">) {
   const { month: monthParam } = await searchParams;
@@ -28,6 +28,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
         categories={categories}
         month={month}
         onUpdate={saveTransaction}
+        onDelete={deleteTransaction}
       />
     </main>
   );

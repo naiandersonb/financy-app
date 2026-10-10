@@ -55,16 +55,20 @@ categoria do novo tipo.
 
 ## Critérios de aceite
 
+Marcado = verificado por teste (indicado ao lado). Os abertos são fluxos de ponta a ponta na tela
+(criar, editar, mudar de mês, excluir), que dependem de conferência no navegador com login; cada
+passo deles já tem teste de componente, caso de uso e action.
+
 - [ ] Dado o formulário preenchido corretamente, quando salvo, então o lançamento aparece na lista do mês da sua data.
-- [ ] Dado um valor `0`, negativo ou com mais de 2 casas, quando salvo, então vejo um erro e nada é gravado.
-- [ ] Dado uma descrição vazia ou com mais de 120 caracteres, quando salvo, então vejo um erro.
-- [ ] Dado uma categoria que não pertence ao tipo escolhido ou a outro usuário (requisição forjada), então o servidor rejeita.
-- [ ] Quando renomeio ou recolorizo uma categoria, então os lançamentos dela mostram o novo nome e as novas cores.
+- [x] Dado um valor `0`, negativo ou com mais de 2 casas, quando salvo, então vejo um erro e nada é gravado. _(teste automatizado)_
+- [x] Dado uma descrição vazia ou com mais de 120 caracteres, quando salvo, então vejo um erro. _(teste automatizado)_
+- [x] Dado uma categoria que não pertence ao tipo escolhido ou a outro usuário (requisição forjada), então o servidor rejeita. _(testes automatizado e de integração)_
+- [x] Quando renomeio ou recolorizo uma categoria, então os lançamentos dela mostram o novo nome e as novas cores. _(testes automatizado e de integração)_
 - [ ] Dado um lançamento existente, quando edito o valor e salvo, então a lista e os totais refletem o novo valor.
 - [ ] Dado um lançamento existente, quando mudo a data para outro mês, então ele some do mês atual.
 - [ ] Dado um lançamento, quando clico em excluir e confirmo, então ele some; se cancelo, nada muda.
-- [ ] Dado um mês sem lançamentos, então vejo o estado vazio.
-- [ ] Valores aparecem no formato `R$ 1.234,56`.
+- [x] Dado um mês sem lançamentos, então vejo o estado vazio. _(teste automatizado)_
+- [x] Valores aparecem no formato `R$ 1.234,56`. _(teste automatizado)_
 
 ## Notas técnicas
 
